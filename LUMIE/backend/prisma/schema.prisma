@@ -1,0 +1,142 @@
+// ============================================================
+// Prisma Schema - Lumié Smart Warehouse
+// Database: MySQL (lumie_warehouse)
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// BẢNG: roles
+// Lưu trữ các vai trò trong hệ thống (WAREHOUSE_MANAGER, WAREHOUSE_STAFF)
+// ============================================================
+model Role {
+  id          Int      @id @default(autoincrement())
+  role_name   String   @unique @db.VarChar(50)
+  description String?  @db.VarChar(255)
+  created_at  DateTime @default(now())
+
+  // Quan hệ: Một role có nhiều users
+  users       User[]
+
+  @@map("roles")
+}
+
+// ============================================================
+// BẢNG: warehouses
+// Lưu trữ thông tin các kho hàng
+// ============================================================
+model Warehouse {
+  id              Int      @id @default(autoincrement())
+  warehouse_code  String   @unique @db.VarChar(20)
+  warehouse_name  String   @db.VarChar(100)
+  address         String?  @db.VarChar(255)
+  description     String?  @db.Text
+  status          WarehouseStatus @default(ACTIVE)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Quan hệ: Một kho có nhiều nhân viên
+  users           User[]
+
+  @@map("warehouses")
+}
+
+// ============================================================
+// BẢNG: users
+// Lưu trữ thông tin tài khoản người dùng
+// ============================================================
+model User {
+  id                    Int       @id @default(autoincrement())
+  full_name             String    @db.VarChar(100)
+  email                 String    @unique @db.VarChar(150)
+  password_hash         String    @db.VarChar(255)
+  phone                 String?   @db.VarChar(20)
+
+  // Quan hệ với role
+  role_id               Int
+  role                  Role      @relation(fields: [role_id], references: [id])
+
+  // Quan hệ với warehouse (có thể NULL)
+  warehouse_id          Int?
+  warehouse             Warehouse? @relation(fields: [warehouse_id], references: [id])
+
+  // Trạng thái tài khoản
+  status                UserStatus @default(ACTIVE)
+
+  // Bảo mật đăng nhập
+  failed_login_attempts Int       @default(0)
+  locked_until          DateTime?
+  last_login            DateTime?
+
+  // Yêu cầu đổi mật khẩu lần đầu
+  must_change_password  Boolean   @default(false)
+
+  // Timestamps
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @updatedAt
+  deleted_at            DateTime? // Xóa mềm (soft delete)
+
+  // Quan hệ với các bảng khác
+  refresh_tokens        RefreshToken[]
+  audit_logs_created    AuditLog[] @relation("AuditLogCreatedBy")
+
+  @@map("users")
+}
+
+// ============================================================
+// BẢNG: refresh_tokens
+// Quản lý refresh token để duy trì phiên đăng nhập an toàn
+// ============================================================
+model RefreshToken {
+  id         Int       @id @default(autoincrement())
+  user_id    Int
+  user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  token_hash String    @unique @db.VarChar(255)
+  expires_at DateTime
+  revoked_at DateTime? // NULL = còn hiệu lực
+  created_at DateTime  @default(now())
+
+  @@index([user_id])
+  @@map("refresh_tokens")
+}
+
+// ============================================================
+// BẢNG: audit_logs
+// Ghi lại lịch sử thao tác quản trị quan trọng
+// ============================================================
+model AuditLog {
+  id          Int      @id @default(autoincrement())
+  user_id     Int?     // Người thực hiện thao tác (NULL nếu hệ thống)
+  actor       User?    @relation("AuditLogCreatedBy", fields: [user_id], references: [id])
+  action      String   @db.VarChar(100) // Ví dụ: CREATE_USER, DISABLE_USER, RESET_PASSWORD
+  description String?  @db.Text         // Mô tả chi tiết
+  target_id   Int?                       // ID của đối tượng bị tác động
+  target_type String?  @db.VarChar(50)  // Loại đối tượng (user, warehouse, v.v.)
+  ip_address  String?  @db.VarChar(45)  // IPv4 hoặc IPv6
+  created_at  DateTime @default(now())
+
+  @@index([user_id])
+  @@map("audit_logs")
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  LOCKED
+}
+
+enum WarehouseStatus {
+  ACTIVE
+  INACTIVE
+}

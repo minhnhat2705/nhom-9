@@ -1,0 +1,40 @@
+# Node modules
+node_modules/
+**/node_modules/
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+frontend/dist/
+frontend/build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Prisma generated
+backend/prisma/migrations/**/*.sql
+
+# Uploaded files (nếu có)
+uploads/
+
+# Coverage
+coverage/
