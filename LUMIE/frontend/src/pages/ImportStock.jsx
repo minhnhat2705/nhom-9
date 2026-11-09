@@ -1,2 +1,2 @@
-import OrderPage from './OrderPage';
-export default function ImportStock(){ return <OrderPage kind="inbound" />; }
+import InboundOrders from './InboundOrders';
+export default InboundOrders;

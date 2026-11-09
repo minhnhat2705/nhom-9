@@ -60,17 +60,17 @@ router.post('/stock-thresholds/bulk', auth, requireRole('MANAGER'), thresholdCon
 const workflow = require('../controllers/workflowController');
 router.get('/inbound-orders', auth, workflow.listInbound);
 router.get('/inbound-orders/:id', auth, workflow.getInbound);
-router.post('/inbound-orders', auth, requireRole('STAFF'), workflow.createInbound);
+router.post('/inbound-orders', auth, workflow.createInbound);
 router.post('/inbound-orders/:id/approve', auth, requireRole('MANAGER'), workflow.approveInbound);
 router.post('/inbound-orders/:id/reject', auth, requireRole('MANAGER'), workflow.rejectInbound);
 router.get('/outbound-orders', auth, workflow.listOutbound);
 router.get('/outbound-orders/:id', auth, workflow.getOutbound);
-router.post('/outbound-orders', auth, requireRole('STAFF'), workflow.createOutbound);
+router.post('/outbound-orders', auth, workflow.createOutbound);
 router.post('/outbound-orders/:id/approve', auth, requireRole('MANAGER'), workflow.approveOutbound);
 router.post('/outbound-orders/:id/reject', auth, requireRole('MANAGER'), workflow.rejectOutbound);
 router.get('/transfer-orders', auth, workflow.listTransfers);
 router.get('/transfer-orders/:id', auth, workflow.getTransfer);
-router.post('/transfer-orders', auth, requireRole('STAFF'), workflow.createTransfer);
+router.post('/transfer-orders', auth, workflow.createTransfer);
 router.post('/transfer-orders/:id/approve', auth, requireRole('MANAGER'), workflow.approveTransfer);
 router.post('/transfer-orders/:id/reject', auth, requireRole('MANAGER'), workflow.rejectTransfer);
 router.post('/transfer-orders/:id/confirm-received', auth, workflow.confirmTransferReceived);
@@ -84,4 +84,45 @@ router.post('/notifications/:id/read', auth, workflow.markRead);
 router.post('/notifications/:id/resolve', auth, workflow.resolveNotification);
 router.delete('/notifications/:id', auth, workflow.deleteNotification);
 router.get('/dashboard', auth, workflow.getDashboard);
+
+// V2 Routes
+const v2 = require('../controllers/v2Controller');
+
+// Stocktake
+router.get('/stocktakes', auth, v2.getStocktakes);
+router.get('/stocktakes/:id', auth, v2.getStocktakeById);
+router.post('/stocktakes', auth, requireRole('MANAGER'), v2.createStocktake);
+router.put('/stocktakes/:id/items', auth, v2.submitStocktakeItems);
+router.post('/stocktakes/:id/approve', auth, requireRole('MANAGER'), v2.approveStocktake);
+router.post('/stocktakes/:id/recount', auth, requireRole('MANAGER'), v2.requestRecount);
+
+// Sales History
+router.get('/sales-history', auth, requireRole('MANAGER'), v2.getSalesHistory);
+router.post('/sales-history/import', auth, requireRole('MANAGER'), ...v2.importSalesHistory);
+
+// Forecast
+router.get('/forecasts', auth, requireRole('MANAGER'), v2.getForecasts);
+router.post('/forecasts/run', auth, requireRole('MANAGER'), v2.runForecast);
+router.get('/forecasts/accuracy', auth, requireRole('MANAGER'), v2.getForecastAccuracy);
+
+// Reorder Suggestions
+router.get('/reorder-suggestions', auth, requireRole('MANAGER'), v2.getSuggestions);
+router.post('/reorder-suggestions/run', auth, requireRole('MANAGER'), v2.runSuggestions);
+router.put('/reorder-suggestions/:id/adjust', auth, requireRole('MANAGER'), v2.adjustSuggestion);
+router.post('/reorder-suggestions/:id/approve', auth, requireRole('MANAGER'), v2.approveSuggestion);
+router.post('/reorder-suggestions/:id/reject', auth, requireRole('MANAGER'), v2.rejectSuggestion);
+
+// Purchase Orders
+router.get('/purchase-orders', auth, requireRole('MANAGER'), v2.getPurchaseOrders);
+router.get('/purchase-orders/:id', auth, requireRole('MANAGER'), v2.getPurchaseOrderById);
+router.post('/purchase-orders/from-suggestions', auth, requireRole('MANAGER'), v2.createPurchaseOrdersFromSuggestions);
+router.get('/purchase-orders/:id/export-pdf', auth, requireRole('MANAGER'), v2.exportPOPDF);
+router.get('/purchase-orders/:id/export-excel', auth, requireRole('MANAGER'), v2.exportPOExcel);
+
+// Reports & Dashboard
+router.get('/reports/period', auth, requireRole('MANAGER'), v2.getPeriodReport);
+router.get('/reports/export-inventory-excel', auth, requireRole('MANAGER'), v2.exportInventoryExcel);
+router.get('/reports/export-period-excel', auth, requireRole('MANAGER'), v2.exportPeriodExcel);
+router.post('/alerts/scan', auth, requireRole('MANAGER'), v2.scanAlerts);
+
 module.exports = router;

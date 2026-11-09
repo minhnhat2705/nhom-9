@@ -151,6 +151,7 @@ async def health_check():
     tags=["Forecast"],
     summary="Run forecast for a single variant + warehouse",
 )
+@app.post("/api/v1/forecast/run", response_model=ForecastResponse, tags=["Forecast"])
 async def run_forecast(payload: ForecastRequest):
     """
     Trigger a full Prophet forecasting pipeline for the given
@@ -269,6 +270,15 @@ async def get_accuracy(variant_id: int, warehouse_id: int):
         )
 
 
+@app.get(
+    "/api/v1/forecast/accuracy",
+    tags=["Accuracy"],
+    summary="Backtesting MAPE / WAPE with query parameters",
+)
+async def get_accuracy_v1(variant_id: int, warehouse_id: int):
+    return await get_accuracy(variant_id, warehouse_id)
+
+
 # ===========================================================================
 # REORDER SUGGESTIONS
 # ===========================================================================
@@ -278,6 +288,7 @@ async def get_accuracy(variant_id: int, warehouse_id: int):
     tags=["Reorder"],
     summary="Calculate reorder suggestions for a warehouse",
 )
+@app.post("/api/v1/reorder/generate", tags=["Reorder"])
 async def calculate_reorder_suggestions(payload: ReorderCalculateRequest):
     """
     For every active variant in *warehouse_id* that has a stock threshold
@@ -298,6 +309,28 @@ async def calculate_reorder_suggestions(payload: ReorderCalculateRequest):
         }
     except Exception as exc:
         logger.error("Reorder calculation failed: %s", exc, exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(exc)
+        )
+
+
+# ===========================================================================
+# ALERTS SCAN
+# ===========================================================================
+
+@app.post("/alerts/scan", tags=["Alerts"], summary="Scan all inventory for stockout, slow-moving, size-break")
+@app.post("/api/v1/alerts/scan", tags=["Alerts"])
+async def scan_smart_alerts(warehouse_id: Optional[int] = None):
+    logger.info("POST /alerts/scan warehouse=%s", warehouse_id)
+    try:
+        result = reorder_service.scan_alerts(warehouse_id)
+        return {
+            "success": True,
+            "message": "Quét cảnh báo thông minh hoàn tất",
+            "counts": result,
+        }
+    except Exception as exc:
+        logger.error("Scan alerts failed: %s", exc, exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(exc)
         )

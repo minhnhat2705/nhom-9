@@ -254,6 +254,153 @@ class ReorderService:
 
         return round(available / avg_daily, 2)
 
+    def scan_alerts(self, warehouse_id: Optional[int] = None) -> Dict[str, Any]:
+        """
+        Scan and generate intelligent alerts:
+        1. FORECAST_STOCKOUT: days_of_supply < supplier.lead_time_days
+        2. SLOW_MOVING: days_of_supply > 90 or no sales in 60 days
+        3. SIZE_BREAK: core sizes out of stock while total product stock > 0
+        """
+        created_counts = {
+            "forecast_stockout": 0,
+            "slow_moving": 0,
+            "size_break": 0,
+        }
+
+        # 1. FORECAST_STOCKOUT scan
+        wh_clause = "AND i.warehouse_id = :wid" if warehouse_id else ""
+        stockout_rows = db_service.execute_query(
+            f"""
+            SELECT
+                i.variant_id, i.warehouse_id, i.actual_stock, i.reserved_stock,
+                pv.sku, p.name AS product_name, s.lead_time_days, s.name AS supplier_name
+            FROM inventory i
+            JOIN product_variants pv ON pv.id = i.variant_id
+            JOIN products p ON p.id = pv.product_id
+            LEFT JOIN suppliers s ON s.id = p.supplier_id
+            WHERE pv.status = 'ACTIVE' AND p.status = 'ACTIVE'
+              {wh_clause}
+            """,
+            {"wid": warehouse_id} if warehouse_id else {},
+        )
+
+        for row in stockout_rows:
+            vid = row["variant_id"]
+            wid = row["warehouse_id"]
+            lead_time = int(row.get("lead_time_days") or 7)
+            dos = self.get_days_of_supply(vid, wid)
+
+            if dos is not None and dos < lead_time:
+                # Check if alert already open
+                existing = db_service.execute_query(
+                    """
+                    SELECT id FROM alerts
+                    WHERE variant_id = :vid AND warehouse_id = :wid
+                      AND alert_type = 'FORECAST_STOCKOUT' AND status = 'OPEN'
+                    """,
+                    {"vid": vid, "wid": wid},
+                )
+                if not existing:
+                    msg = f"SKU {row['sku']} sắp hết hàng trong {dos:.1f} ngày (thời gian giao hàng NCC: {lead_time} ngày)"
+                    db_service.execute_update(
+                        """
+                        INSERT INTO alerts (alert_type, variant_id, warehouse_id, severity, status, days_of_supply, message, created_at)
+                        VALUES ('FORECAST_STOCKOUT', :vid, :wid, 'HIGH', 'OPEN', :dos, :msg, NOW())
+                        """,
+                        {"vid": vid, "wid": wid, "dos": dos, "msg": msg},
+                    )
+                    created_counts["forecast_stockout"] += 1
+
+        # 2. SLOW_MOVING scan
+        slow_rows = db_service.execute_query(
+            f"""
+            SELECT
+                i.variant_id, i.warehouse_id, i.actual_stock, pv.sku, p.name AS product_name, p.cost_price,
+                DATEDIFF(CURDATE(), COALESCE(
+                    (SELECT MAX(sh.sale_date) FROM sales_history sh WHERE sh.variant_id = pv.id AND sh.warehouse_id = i.warehouse_id),
+                    p.created_at
+                )) AS days_no_sale
+            FROM inventory i
+            JOIN product_variants pv ON pv.id = i.variant_id
+            JOIN products p ON p.id = pv.product_id
+            WHERE i.actual_stock > 0 AND pv.status = 'ACTIVE' AND p.status = 'ACTIVE'
+              {wh_clause}
+            """,
+            {"wid": warehouse_id} if warehouse_id else {},
+        )
+
+        for row in slow_rows:
+            vid = row["variant_id"]
+            wid = row["warehouse_id"]
+            days_no_sale = int(row.get("days_no_sale") or 0)
+            dos = self.get_days_of_supply(vid, wid)
+            stagnant = float(row.get("actual_stock", 0)) * float(row.get("cost_price", 0))
+
+            if (dos is not None and dos > 90) or days_no_sale >= 60:
+                existing = db_service.execute_query(
+                    """
+                    SELECT id FROM alerts
+                    WHERE variant_id = :vid AND warehouse_id = :wid
+                      AND alert_type = 'SLOW_MOVING' AND status = 'OPEN'
+                    """,
+                    {"vid": vid, "wid": wid},
+                )
+                if not existing:
+                    reason = f"tồn kho đủ bán {dos:.0f} ngày" if dos and dos > 90 else f"{days_no_sale} ngày không có lượt bán"
+                    msg = f"SKU {row['sku']} tồn đọng/bán chậm ({reason}), vốn đọng: {stagnant:,.0f} đ"
+                    db_service.execute_update(
+                        """
+                        INSERT INTO alerts (alert_type, variant_id, warehouse_id, severity, status, days_of_supply, stagnant_capital, message, created_at)
+                        VALUES ('SLOW_MOVING', :vid, :wid, 'MEDIUM', 'OPEN', :dos, :stagnant, :msg, NOW())
+                        """,
+                        {"vid": vid, "wid": wid, "dos": dos, "stagnant": stagnant, "msg": msg},
+                    )
+                    created_counts["slow_moving"] += 1
+
+        # 3. SIZE_BREAK scan
+        sb_rows = db_service.execute_query(
+            f"""
+            SELECT
+                p.id AS product_id, p.name AS product_name, p.code AS product_code,
+                i.warehouse_id,
+                GROUP_CONCAT(DISTINCT CASE WHEN pv.size IN ('M','L') AND i.actual_stock = 0 THEN pv.size END) AS broken_sizes,
+                SUM(i.actual_stock) AS total_stock
+            FROM products p
+            JOIN product_variants pv ON pv.product_id = p.id
+            JOIN inventory i ON i.variant_id = pv.id
+            WHERE p.status = 'ACTIVE' AND pv.status = 'ACTIVE'
+              {wh_clause}
+            GROUP BY p.id, p.name, p.code, i.warehouse_id
+            HAVING broken_sizes IS NOT NULL AND total_stock > 0
+            """,
+            {"wid": warehouse_id} if warehouse_id else {},
+        )
+
+        for row in sb_rows:
+            pid = row["product_id"]
+            wid = row["warehouse_id"]
+            broken = row.get("broken_sizes") or "M/L"
+            existing = db_service.execute_query(
+                """
+                SELECT id FROM alerts
+                WHERE product_id = :pid AND warehouse_id = :wid
+                  AND alert_type = 'SIZE_BREAK' AND status = 'OPEN'
+                """,
+                {"pid": pid, "wid": wid},
+            )
+            if not existing:
+                msg = f"Mẫu {row['product_name']} ({row['product_code']}) bị đứt size chủ lực ({broken} đã hết hàng)"
+                db_service.execute_update(
+                    """
+                    INSERT INTO alerts (alert_type, product_id, warehouse_id, severity, status, message, created_at)
+                    VALUES ('SIZE_BREAK', :pid, :wid, 'HIGH', 'OPEN', :msg, NOW())
+                    """,
+                    {"pid": pid, "wid": wid, "msg": msg},
+                )
+                created_counts["size_break"] += 1
+
+        return created_counts
+
     # ------------------------------------------------------------------
     # Private — data fetchers
     # ------------------------------------------------------------------

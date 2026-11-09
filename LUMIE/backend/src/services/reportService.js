@@ -272,4 +272,122 @@ const generateInOutStockReport = async (warehouseId, startDate, endDate) => {
   return rows;
 };
 
-module.exports = { exportToExcel, exportToPDF, generateInventoryReport, generateInOutStockReport };
+/**
+ * Generate Purchase Order PDF
+ */
+const generatePOPDF = (po, items) => {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    const doc = new PDFDocument({ margin: 40, size: 'A4' });
+
+    doc.on('data', chunk => chunks.push(chunk));
+    doc.on('end', () => resolve(Buffer.concat(chunks)));
+    doc.on('error', reject);
+
+    // Header
+    doc.fontSize(20).text('DON DAT HANG (PURCHASE ORDER)', { align: 'center' });
+    doc.moveDown(0.5);
+    doc.fontSize(12).text(`Ma don: ${po.po_number || ''}`, { align: 'center' });
+    doc.moveDown(1);
+
+    // Info section
+    doc.fontSize(10);
+    doc.text(`Nha cung cap: ${po.supplier_name || 'N/A'}`);
+    doc.text(`Email: ${po.supplier_email || 'N/A'} | SDT: ${po.supplier_phone || 'N/A'}`);
+    doc.text(`Kho nhan hang: ${po.warehouse_name || 'N/A'}`);
+    doc.text(`Dia chi kho: ${po.warehouse_address || 'N/A'}`);
+    doc.text(`Ngay tao: ${po.created_at ? new Date(po.created_at).toLocaleDateString('vi-VN') : new Date().toLocaleDateString('vi-VN')}`);
+    doc.moveDown(1);
+
+    // Table Header
+    const colX = [40, 140, 300, 360, 420, 490];
+    let y = doc.y;
+    doc.rect(40, y, 515, 20).fill('#1A3C5E');
+    doc.fillColor('#FFFFFF').fontSize(9);
+    doc.text('SKU', colX[0] + 5, y + 5);
+    doc.text('Ten san pham', colX[1] + 5, y + 5);
+    doc.text('Size/Mau', colX[2] + 5, y + 5);
+    doc.text('SL', colX[3] + 5, y + 5);
+    doc.text('Don gia', colX[4] + 5, y + 5);
+    doc.text('Thanh tien', colX[5] + 5, y + 5);
+    y += 20;
+
+    // Table Rows
+    doc.fillColor('#000000');
+    let total = 0;
+    (items || []).forEach((item, idx) => {
+      const subtotal = Number(item.quantity || 0) * Number(item.unit_cost || 0);
+      total += subtotal;
+      if (idx % 2 === 1) {
+        doc.rect(40, y, 515, 20).fill('#F0F4F8');
+        doc.fillColor('#000000');
+      }
+      doc.text(item.sku || '', colX[0] + 5, y + 5, { width: 95, ellipsis: true });
+      doc.text(item.product_name || '', colX[1] + 5, y + 5, { width: 155, ellipsis: true });
+      doc.text(`${item.size || ''}/${item.color || ''}`, colX[2] + 5, y + 5, { width: 55 });
+      doc.text(String(item.quantity || 0), colX[3] + 5, y + 5, { width: 55 });
+      doc.text(Number(item.unit_cost || 0).toLocaleString('vi-VN') + 'd', colX[4] + 5, y + 5, { width: 65 });
+      doc.text(subtotal.toLocaleString('vi-VN') + 'd', colX[5] + 5, y + 5, { width: 65 });
+      y += 20;
+    });
+
+    // Summary
+    doc.moveDown(1);
+    doc.fontSize(12).text(`TONG CONG: ${total.toLocaleString('vi-VN')} VND`, { align: 'right' });
+    doc.end();
+  });
+};
+
+/**
+ * Generate Purchase Order Excel
+ */
+const generatePOExcel = async (po, items) => {
+  const workbook = new ExcelJS.Workbook();
+  const sheet = workbook.addWorksheet('DonDatHang');
+
+  sheet.columns = [
+    { header: 'STT', key: 'stt', width: 8 },
+    { header: 'Mã SKU', key: 'sku', width: 22 },
+    { header: 'Tên sản phẩm', key: 'product_name', width: 32 },
+    { header: 'Size', key: 'size', width: 10 },
+    { header: 'Màu', key: 'color', width: 14 },
+    { header: 'Số lượng đặt', key: 'quantity', width: 16 },
+    { header: 'Đơn giá (VNĐ)', key: 'unit_cost', width: 18 },
+    { header: 'Thành tiền (VNĐ)', key: 'subtotal', width: 20 },
+  ];
+
+  const headerRow = sheet.getRow(1);
+  headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+  headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1A3C5E' } };
+
+  let totalAmount = 0;
+  (items || []).forEach((item, idx) => {
+    const subtotal = Number(item.quantity || 0) * Number(item.unit_cost || 0);
+    totalAmount += subtotal;
+    sheet.addRow({
+      stt: idx + 1,
+      sku: item.sku,
+      product_name: item.product_name,
+      size: item.size,
+      color: item.color,
+      quantity: item.quantity,
+      unit_cost: item.unit_cost,
+      subtotal: subtotal,
+    });
+  });
+
+  sheet.addRow({
+    stt: '',
+    sku: '',
+    product_name: 'TỔNG CỘNG',
+    size: '',
+    color: '',
+    quantity: '',
+    unit_cost: '',
+    subtotal: totalAmount,
+  });
+
+  return await workbook.xlsx.writeBuffer();
+};
+
+module.exports = { exportToExcel, exportToPDF, generateInventoryReport, generateInOutStockReport, generatePOPDF, generatePOExcel };
