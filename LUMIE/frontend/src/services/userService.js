@@ -58,6 +58,14 @@ const userService = {
     const response = await api.post(`/users/${id}/reset-password`, { newPassword });
     return response.data;
   },
+
+  /**
+   * Xóa nhân viên
+   */
+  deleteUser: async (id) => {
+    const response = await api.delete(`/users/${id}`);
+    return response.data;
+  },
 };
 
 export default userService;

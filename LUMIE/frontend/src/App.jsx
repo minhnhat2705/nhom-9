@@ -23,11 +23,13 @@ import ChangePasswordPage from './pages/profile/ChangePassword';
 
 // Component chuyển hướng thông minh theo role
 const HomeRedirect = () => {
-  const { isAuthenticated, isManager, loading } = useAuth();
+  const { isAuthenticated, isManager, isStaff, loading } = useAuth();
   
   if (loading) return null;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
-  return <Navigate to={isManager ? '/manager/dashboard' : '/staff/dashboard'} replace />;
+  if (isManager) return <Navigate to="/manager/dashboard" replace />;
+  if (isStaff) return <Navigate to="/staff/dashboard" replace />;
+  return <Navigate to="/login" replace />;
 };
 
 function App() {

@@ -270,6 +270,59 @@ const resetUserPassword = async (id, newPassword, actorId, ipAddress) => {
   return { success: true, message: 'Đặt lại mật khẩu thành công' };
 };
 
+/**
+ * Xóa nhân viên (Soft delete - đánh dấu deleted_at và chuyển trạng thái INACTIVE)
+ */
+const deleteUser = async (id, actorId, ipAddress) => {
+  const user = await prisma.user.findUnique({
+    where: { id: parseInt(id), deleted_at: null },
+    include: { role: true },
+  });
+
+  if (!user) {
+    return { success: false, message: 'Không tìm thấy nhân viên' };
+  }
+
+  // Không cho phép xóa Quản lý kho
+  if (user.role.role_name === 'WAREHOUSE_MANAGER') {
+    return { success: false, message: 'Không thể xóa tài khoản Quản lý kho' };
+  }
+
+  // Không cho phép tự xóa chính mình
+  if (parseInt(id) === actorId) {
+    return { success: false, message: 'Không thể tự xóa tài khoản của chính mình' };
+  }
+
+  // Soft delete: cập nhật deleted_at và status
+  await prisma.user.update({
+    where: { id: parseInt(id) },
+    data: {
+      deleted_at: new Date(),
+      status: 'INACTIVE',
+    },
+  });
+
+  // Thu hồi toàn bộ refresh token để buộc logout ngay lập tức
+  await prisma.refreshToken.updateMany({
+    where: { user_id: parseInt(id), revoked_at: null },
+    data: { revoked_at: new Date() },
+  });
+
+  // Ghi audit log
+  await prisma.auditLog.create({
+    data: {
+      user_id: actorId,
+      action: 'DELETE_USER',
+      description: `Xóa tài khoản nhân viên: ${user.full_name} (${user.email})`,
+      target_id: parseInt(id),
+      target_type: 'user',
+      ip_address: ipAddress,
+    },
+  });
+
+  return { success: true, message: 'Xóa nhân viên thành công' };
+};
+
 module.exports = {
   getUsers,
   getUserById,
@@ -277,4 +330,5 @@ module.exports = {
   updateUser,
   updateUserStatus,
   resetUserPassword,
+  deleteUser,
 };

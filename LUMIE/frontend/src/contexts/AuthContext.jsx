@@ -68,6 +68,8 @@ export const AuthProvider = ({ children }) => {
     setUser(prev => ({ ...prev, ...updatedData }));
   }, []);
 
+  const userRole = typeof user?.role === 'string' ? user.role : user?.role?.role_name;
+
   const value = {
     user,
     loading,
@@ -75,8 +77,8 @@ export const AuthProvider = ({ children }) => {
     logout,
     updateUser,
     isAuthenticated: !!user,
-    isManager: user?.role === 'WAREHOUSE_MANAGER',
-    isStaff: user?.role === 'WAREHOUSE_STAFF',
+    isManager: userRole === 'WAREHOUSE_MANAGER',
+    isStaff: userRole === 'WAREHOUSE_STAFF',
   };
 
   return (

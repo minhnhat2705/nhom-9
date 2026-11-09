@@ -158,6 +158,30 @@ const resetUserPassword = async (req, res, next) => {
   }
 };
 
+/**
+ * DELETE /api/users/:id
+ * Xóa nhân viên (chỉ Quản lý)
+ */
+const deleteUser = async (req, res, next) => {
+  try {
+    const ipAddress = req.ip || req.socket.remoteAddress;
+
+    const result = await userService.deleteUser(
+      req.params.id,
+      req.user.id,
+      ipAddress
+    );
+
+    if (!result.success) {
+      return errorResponse(res, result.message, 400);
+    }
+
+    return successResponse(res, null, result.message);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getUsers,
   getUserById,
@@ -165,4 +189,5 @@ module.exports = {
   updateUser,
   updateUserStatus,
   resetUserPassword,
+  deleteUser,
 };

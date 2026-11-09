@@ -125,14 +125,15 @@ Frontend chạy tại: **http://localhost:5173**
 
 Mở trình duyệt: **http://localhost:5173**
 
-### Tài khoản kiểm thử:
+### Tài khoản đăng nhập hệ thống:
 
-| Vai trò | Email | Mật khẩu | Chuyển hướng sau đăng nhập |
-|---------|-------|----------|--------------------------|
-| Quản lý kho | manager@lumie.vn | Manager@123 | /manager/dashboard |
-| Nhân viên kho | nhanvien01@lumie.vn | Staff@123 | /staff/dashboard |
-| Nhân viên kho (HCM) | nhanvien02@lumie.vn | Staff@123 | /staff/dashboard |
-| Vô hiệu hóa (kiểm thử) | nhanvien.inactive@lumie.vn | Inactive@123 | Không thể đăng nhập |
+| Vai trò | Họ tên | Email | Mật khẩu | Chuyển hướng sau đăng nhập |
+|---------|--------|-------|----------|--------------------------|
+| **Quản lý kho** | Phạm Doãn Nho | `quanly@lumie.vn` | `quanly123` | `/manager/dashboard` |
+| **Nhân viên kho 1** | Bùi Minh Nhật | `nhanvien01@lumie.vn` | `nhanvien123` | `/staff/dashboard` |
+| **Nhân viên kho 2** | Hoàng Nguyễn Quỳnh Anh | `nhanvien02@lumie.vn` | `nhanvien123` | `/staff/dashboard` |
+| **Nhân viên kho 3** | Đào Tùng Lâm | `nhanvien03@lumie.vn` | `nhanvien123` | `/staff/dashboard` |
+| **Nhân viên kho 4** | Nguyễn Phi Hùng | `nhanvien04@lumie.vn` | `nhanvien123` | `/staff/dashboard` |
 
 ---
 

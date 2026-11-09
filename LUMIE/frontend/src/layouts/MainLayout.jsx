@@ -1,195 +1,296 @@
 /**
- * src/layouts/MainLayout.jsx - Layout chính với Sidebar
- * 
- * Layout dùng cho tất cả các trang nội bộ.
- * Bao gồm: Sidebar + Header + Content area
+ * src/layouts/MainLayout.jsx - Layout chính với Sidebar cố định chiều cao & Logo to căn giữa
  */
 
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
-// Icon SVG đơn giản
-const Icons = {
-  Dashboard: () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7h6v6H3zM3 15h6v6H3zM15 3h6v6h-6zM15 11h6v10h-6z" />
-    </svg>
-  ),
-  Users: () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-    </svg>
-  ),
-  Lock: () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-    </svg>
-  ),
-  Logout: () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-    </svg>
-  ),
-  Menu: () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-  ),
-  Close: () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
-    </svg>
-  ),
-};
-
-// Menu items theo role
-const managerMenuItems = [
-  { label: 'Tổng quan', path: '/manager/dashboard', icon: Icons.Dashboard },
-  { label: 'Quản lý nhân viên', path: '/manager/employees', icon: Icons.Users },
-];
-
-const staffMenuItems = [
-  { label: 'Tổng quan', path: '/staff/dashboard', icon: Icons.Dashboard },
-];
+// Import logo từ thư mục src/assets/image
+import logoImage from '../assets/image/logo.png';
 
 const MainLayout = ({ children }) => {
-  const { user, logout, isManager } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [loggingOut, setLoggingOut] = useState(false);
 
-  const menuItems = isManager ? managerMenuItems : staffMenuItems;
-
-  const handleLogout = async () => {
-    if (loggingOut) return;
-    setLoggingOut(true);
+  // State quản lý thu gọn Sidebar trên Desktop (lưu vào localStorage để giữ nguyên khi chuyển trang)
+  const [isCollapsed, setIsCollapsed] = useState(() => {
     try {
-      await logout();
-      navigate('/login', { replace: true });
+      return localStorage.getItem('lumie_sidebar_collapsed') === 'true';
     } catch {
-      navigate('/login', { replace: true });
+      return false;
+    }
+  });
+
+  // State quản lý mở menu trên Mobile
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+  // State xác nhận đăng xuất
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  // Hàm chuyển đổi trạng thái thu gọn và lưu vào localStorage
+  const toggleCollapse = () => {
+    setIsCollapsed((prev) => {
+      const nextState = !prev;
+      try {
+        localStorage.setItem('lumie_sidebar_collapsed', String(nextState));
+      } catch (err) {
+        console.error(err);
+      }
+      return nextState;
+    });
+  };
+
+  const isManager = (typeof user?.role === 'string' ? user.role : user?.role?.role_name) === 'WAREHOUSE_MANAGER';
+
+  // Danh sách menu theo quyền
+  const menuItems = isManager
+    ? [
+        {
+          name: 'Tổng quan',
+          path: '/manager/dashboard',
+          icon: (
+            <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+          ),
+        },
+        {
+          name: 'Quản lý nhân viên',
+          path: '/manager/employees',
+          icon: (
+            <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          ),
+        },
+      ]
+    : [
+        {
+          name: 'Tổng quan',
+          path: '/staff/dashboard',
+          icon: (
+            <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+          ),
+        },
+      ];
+
+  const handleConfirmLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      if (logout) await logout();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoggingOut(false);
+      setShowLogoutModal(false);
+      navigate('/login');
     }
   };
 
-  const isActive = (path) => location.pathname === path;
+  // Lấy chữ cái đầu của tên user
+  const userInitial = (user?.fullName || user?.full_name || user?.name || user?.email || 'P').charAt(0).toUpperCase();
 
   return (
-    <div className="flex h-screen bg-lumie-gray-50 overflow-hidden">
-      {/* Overlay mobile */}
-      {sidebarOpen && (
+    <div className="h-screen flex bg-gradient-to-br from-[#F9F8FF] via-[#FDFCFB] to-[#F3E8FF]/60 overflow-hidden">
+      {/* Overlay mờ trên Mobile khi mở Sidebar */}
+      {isMobileOpen && (
         <div
-          className="fixed inset-0 bg-black/30 z-20 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 bg-black/30 backdrop-blur-xs z-30 lg:hidden transition-opacity duration-300"
+          onClick={() => setIsMobileOpen(false)}
         />
       )}
 
-      {/* ===== SIDEBAR ===== */}
-      <aside className={`
-        fixed lg:static inset-y-0 left-0 z-30
-        w-64 bg-white border-r border-gray-100 flex flex-col
-        transform transition-transform duration-200 ease-in-out
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}>
-        {/* Logo */}
-        <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100">
-          <div className="w-9 h-9 bg-lumie-black rounded-xl flex items-center justify-center flex-shrink-0">
-            <span className="text-white text-sm font-light tracking-widest">L</span>
-          </div>
-          <div>
-            <p className="text-sm font-medium tracking-widest text-lumie-black uppercase">Lumié</p>
-            <p className="text-xs text-gray-400">Smart Warehouse</p>
-          </div>
+      {/* ============================================================
+          SIDEBAR BÊN TRÁI
+          - h-full flex flex-col: Luôn cố định 100% chiều cao màn hình
+          - Footer (Đổi mật khẩu & Đăng xuất) luôn ghim chắc chắn ở dưới cùng
+         ============================================================ */}
+      <aside
+        className={`fixed lg:static inset-y-0 left-0 z-40 h-full flex flex-col bg-gradient-to-b from-[#F5F3FF] via-[#F8F6FF] to-[#EDE9FE]/90 border-r border-purple-100/80 transition-all duration-300 ease-in-out shrink-0 overflow-hidden shadow-lg lg:shadow-none ${
+          isMobileOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0'
+        } ${isCollapsed ? 'lg:w-20' : 'lg:w-64'}`}
+      >
+        {/* ===== HEADER THANH BÊN (LOGO TO RA & CĂN GIỮA) ===== */}
+        <div className="h-20 flex items-center justify-center border-b border-purple-100/80 px-4 shrink-0 transition-all">
+          <Link to="/" className="flex items-center justify-center w-full overflow-hidden" title="Lumié Smart Warehouse">
+            {isCollapsed ? (
+              /* KHI THU GỌN: CHỈ HIỆN DUY NHẤT LOGO CHỮ L TO ĐẸP CĂN GIỮA */
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#7C3AED] to-[#4C1D95] flex items-center justify-center text-white font-bold text-2xl shadow-md shadow-purple-500/30 transition-transform duration-200 hover:scale-105 active:scale-95 shrink-0">
+                L
+              </div>
+            ) : (
+              /* KHI MỞ RỘNG: HIỆN LOGO LUMIÉ TO HƠN & CĂN GIỮA HOÀN TOÀN */
+              <div className="flex items-center justify-center w-full py-1">
+                <img
+                  src={logoImage}
+                  alt="LUMIÉ"
+                  className="h-11 sm:h-12 w-auto max-w-[200px] object-contain transition-transform duration-200 hover:scale-105"
+                />
+              </div>
+            )}
+          </Link>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 px-3 py-4 overflow-y-auto">
-          <ul className="space-y-1">
-            {menuItems.map((item) => (
-              <li key={item.path}>
-                <Link
-                  to={item.path}
-                  onClick={() => setSidebarOpen(false)}
-                  className={`
-                    flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
-                    transition-all duration-150
-                    ${isActive(item.path)
-                      ? 'bg-lumie-black text-white'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-lumie-black'
-                    }
-                  `}
-                >
-                  <item.icon />
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+        {/* ===== DANH SÁCH MENU CHÍNH (CUỘN RIÊNG BIỆT NẾU MENU DÀI) ===== */}
+        <nav className="flex-1 p-3 space-y-2 overflow-y-auto overflow-x-hidden">
+          {menuItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={() => setIsMobileOpen(false)}
+                title={isCollapsed ? item.name : ''}
+                className={`flex items-center rounded-xl text-sm font-medium transition-all duration-200 ${
+                  isCollapsed ? 'justify-center p-3' : 'px-3.5 py-3 gap-3'
+                } ${
+                  isActive
+                    ? 'bg-gradient-to-r from-[#7C3AED] to-[#4F46E5] text-white shadow-md shadow-purple-500/25'
+                    : 'text-[#1E1B4B] hover:bg-white/70 hover:text-[#6D28D9]'
+                }`}
+              >
+                {item.icon}
+                {!isCollapsed && <span className="truncate whitespace-nowrap">{item.name}</span>}
+              </Link>
+            );
+          })}
         </nav>
 
-        {/* Footer Sidebar */}
-        <div className="p-3 border-t border-gray-100 space-y-1">
+        {/* ===== CHÂN THANH BÊN (LUÔN CỐ ĐỊNH Ở ĐÁY: ĐỔI MẬT KHẨU & ĐĂNG XUẤT) ===== */}
+        <div className="p-3 border-t border-purple-100/80 space-y-1.5 shrink-0 bg-gradient-to-b from-transparent to-[#EDE9FE]/50">
           <Link
             to="/profile/change-password"
-            onClick={() => setSidebarOpen(false)}
-            className={`
-              flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
-              transition-all duration-150
-              ${isActive('/profile/change-password')
-                ? 'bg-lumie-black text-white'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-lumie-black'
-              }
-            `}
+            onClick={() => setIsMobileOpen(false)}
+            title={isCollapsed ? 'Đổi mật khẩu' : ''}
+            className={`flex items-center rounded-xl text-sm font-medium text-gray-600 hover:bg-white/70 hover:text-[#1E1B4B] transition-all ${
+              isCollapsed ? 'justify-center p-2.5' : 'px-3.5 py-2.5 gap-3'
+            }`}
           >
-            <Icons.Lock />
-            Đổi mật khẩu
+            <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            {!isCollapsed && <span className="truncate whitespace-nowrap">Đổi mật khẩu</span>}
           </Link>
 
           <button
-            onClick={handleLogout}
-            disabled={loggingOut}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all duration-150 disabled:opacity-50"
+            onClick={() => setShowLogoutModal(true)}
+            title={isCollapsed ? 'Đăng xuất' : ''}
+            className={`w-full flex items-center rounded-xl text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all cursor-pointer ${
+              isCollapsed ? 'justify-center p-2.5' : 'px-3.5 py-2.5 gap-3'
+            }`}
           >
-            <Icons.Logout />
-            {loggingOut ? 'Đang đăng xuất...' : 'Đăng xuất'}
+            <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            {!isCollapsed && <span className="truncate whitespace-nowrap">Đăng xuất</span>}
           </button>
         </div>
       </aside>
 
-      {/* ===== MAIN CONTENT ===== */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Header */}
-        <header className="bg-white border-b border-gray-100 px-4 lg:px-6 py-4 flex items-center justify-between flex-shrink-0">
-          {/* Mobile menu toggle */}
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="lg:hidden p-2 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            {sidebarOpen ? <Icons.Close /> : <Icons.Menu />}
-          </button>
+      {/* ============================================================
+          PHẦN NỘI DUNG BÊN PHẢI (MAIN CONTENT - CUỘN ĐỘC LẬP)
+         ============================================================ */}
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-y-auto transition-all duration-300">
+        {/* TOP HEADER (CỐ ĐỊNH Ở ĐẦU KHI CUỘN NỘI DUNG) */}
+        <header className="h-20 bg-white/90 backdrop-blur-md border-b border-gray-100 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-20 shrink-0 transition-all">
+          {/* NÚT THU GỌN DUY NHẤT Ở BÊN NGOÀI (ICON 3 GẠCH HAMBURGER) */}
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={() => {
+                if (window.innerWidth < 1024) {
+                  setIsMobileOpen(!isMobileOpen);
+                } else {
+                  toggleCollapse();
+                }
+              }}
+              className="flex items-center justify-center w-10 h-10 rounded-xl bg-purple-50 hover:bg-purple-100 text-[#6D28D9] border border-purple-100/80 transition-all cursor-pointer shadow-2xs hover:scale-105 active:scale-95"
+              title={isCollapsed ? 'Mở rộng thanh bên' : 'Thu gọn thanh bên'}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
 
-          {/* User info */}
-          <div className="flex items-center gap-3 ml-auto">
-            <div className="text-right hidden sm:block">
-              <p className="text-sm font-medium text-lumie-black">{user?.full_name}</p>
-              <p className="text-xs text-gray-400">
-                {user?.role === 'WAREHOUSE_MANAGER' ? 'Quản lý kho' : 'Nhân viên kho'}
+          {/* Thông tin User góc phải */}
+          <div className="flex items-center gap-3.5">
+            <div className="text-right">
+              <p className="text-sm font-semibold text-[#1E1B4B]">
+                {user?.fullName || user?.full_name || user?.name || 'Phạm Doãn Nho'}
+              </p>
+              <p className="text-xs text-gray-500">
+                {isManager ? 'Quản lý kho' : 'Nhân viên kho'}
               </p>
             </div>
-            <div className="w-9 h-9 bg-lumie-black rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-white text-sm font-medium">
-                {user?.full_name?.charAt(0)?.toUpperCase() || 'U'}
-              </span>
+            <div className="w-10 h-10 rounded-full bg-[#1E1B4B] text-white flex items-center justify-center font-semibold text-sm shadow-sm">
+              {userInitial}
             </div>
           </div>
         </header>
 
-        {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
+        {/* Nội dung trang (Dashboard, Quản lý nhân viên,...) */}
+        <main className="flex-1 p-6 sm:p-8 lg:p-10 relative">
           {children}
         </main>
       </div>
+
+      {/* ============================================================
+          MODAL XÁC NHẬN ĐĂNG XUẤT
+         ============================================================ */}
+      {showLogoutModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs transition-opacity duration-200"
+          onClick={() => !isLoggingOut && setShowLogoutModal(false)}
+        >
+          <div
+            className="bg-white rounded-3xl border border-purple-100/80 shadow-2xl shadow-purple-950/20 w-full max-w-sm p-6 sm:p-7 text-center transition-all scale-100"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Icon cảnh báo đăng xuất */}
+            <div className="w-14 h-14 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center mx-auto mb-4 ring-8 ring-red-50/50">
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.75}
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                />
+              </svg>
+            </div>
+
+            <h3 className="text-lg font-bold text-[#1E1B4B] mb-1.5">
+              Xác nhận đăng xuất
+            </h3>
+            <p className="text-xs sm:text-sm text-gray-500 mb-6 leading-relaxed">
+              Bạn có chắc chắn muốn đăng xuất khỏi phiên làm việc này không?
+            </p>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setShowLogoutModal(false)}
+                disabled={isLoggingOut}
+                className="flex-1 py-2.5 px-4 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-semibold transition-colors cursor-pointer disabled:opacity-50"
+              >
+                Hủy bỏ
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmLogout}
+                disabled={isLoggingOut}
+                className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white text-sm font-semibold shadow-md shadow-red-500/25 transition-all cursor-pointer disabled:opacity-50"
+              >
+                {isLoggingOut ? 'Đang thoát...' : 'Đăng xuất'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

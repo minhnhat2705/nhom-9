@@ -42,7 +42,6 @@ const authenticate = async (req, res, next) => {
     // (tránh trường hợp user bị vô hiệu hóa nhưng token chưa hết hạn)
     const user = await prisma.user.findUnique({
       where: { id: payload.id },
-      include: { role: true },
       select: {
         id: true,
         full_name: true,

@@ -1,8 +1,14 @@
 /**
  * src/pages/manager/Employees.jsx - Trang Quản lý Nhân viên
  * 
- * Placeholder - sẽ được xây dựng đầy đủ ở Bước 9.
- * Hiện tại có cấu trúc cơ bản để kiểm tra routing hoạt động.
+ * Thực hiện US-04, US-05, US-06, US-07:
+ *   US-04: Thêm tài khoản nhân viên kho (UserFormModal - mode tạo mới)
+ *   US-05: Xem và tìm kiếm danh sách tài khoản (bảng + search + filter)
+ *   US-06: Sửa thông tin tài khoản nhân viên kho (UserFormModal - mode chỉnh sửa)
+ *   US-07: Xóa/vô hiệu hóa tài khoản nhân viên kho (nút Vô hiệu hóa / Kích hoạt)
+ * 
+ * Tính năng bổ sung:
+ *   - Đặt lại mật khẩu (Reset Password) cho nhân viên
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -13,15 +19,23 @@ import warehouseService from '../../services/warehouseService';
 // ===== SUB-COMPONENTS =====
 
 const StatusBadge = ({ status }) => {
-  const map = {
-    ACTIVE: 'badge-active',
-    INACTIVE: 'badge-inactive',
-    LOCKED: 'badge-locked',
+  const styles = {
+    ACTIVE: 'bg-[#E6F4EA] text-[#1E8E3E]',
+    INACTIVE: 'bg-gray-100 text-gray-600',
+    LOCKED: 'bg-red-50 text-red-600',
   };
-  const labels = { ACTIVE: 'Hoạt động', INACTIVE: 'Vô hiệu hóa', LOCKED: 'Đã khóa' };
+  const labels = {
+    ACTIVE: 'Hoạt động',
+    INACTIVE: 'Vô hiệu hóa',
+    LOCKED: 'Đã khóa',
+  };
 
   return (
-    <span className={map[status] || 'badge-inactive'}>
+    <span
+      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+        styles[status] || styles.INACTIVE
+      }`}
+    >
       {labels[status] || status}
     </span>
   );
@@ -55,7 +69,7 @@ const UserFormModal = ({ isOpen, onClose, onSuccess, warehouses, editUser = null
       }
       setErrors({});
     }
-  }, [isOpen, editUser]);
+  }, [isOpen, editUser, isEdit]);
 
   if (!isOpen) return null;
 
@@ -75,7 +89,10 @@ const UserFormModal = ({ isOpen, onClose, onSuccess, warehouses, editUser = null
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = validate();
-    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
 
     setLoading(true);
     try {
@@ -105,33 +122,44 @@ const UserFormModal = ({ isOpen, onClose, onSuccess, warehouses, editUser = null
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md" onClick={e => e.stopPropagation()}>
+    <div
+      className="fixed inset-0 bg-[#1E1B4B]/40 backdrop-blur-xs z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(88,28,135,0.18)] border border-purple-50 w-full max-w-md overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
-          <h3 className="text-base font-medium text-lumie-black">
+          <h3 className="text-base font-bold text-[#1E1B4B]">
             {isEdit ? 'Chỉnh sửa thông tin' : 'Thêm nhân viên mới'}
           </h3>
-          <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
-            <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+          <button
+            onClick={onClose}
+            className="p-1.5 hover:bg-purple-50 text-gray-400 hover:text-[#6D28D9] rounded-lg transition-colors cursor-pointer"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {errors.submit && (
-            <div className="p-3 bg-red-50 border border-red-100 rounded-lg text-sm text-red-600">
+            <div className="p-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
               {errors.submit}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Họ và tên *</label>
+            <label className="block text-sm font-medium text-[#1E1B4B] mb-1.5">Họ và tên *</label>
             <input
               type="text"
               value={form.full_name}
-              onChange={e => setForm(p => ({ ...p, full_name: e.target.value }))}
-              className={`input-base ${errors.full_name ? 'border-red-300' : ''}`}
+              onChange={(e) => setForm((p) => ({ ...p, full_name: e.target.value }))}
+              className={`w-full px-4 py-2.5 bg-white border rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all ${
+                errors.full_name ? 'border-red-300' : 'border-gray-200'
+              }`}
               placeholder="Nguyễn Văn A"
             />
             {errors.full_name && <p className="text-xs text-red-500 mt-1">{errors.full_name}</p>}
@@ -139,12 +167,14 @@ const UserFormModal = ({ isOpen, onClose, onSuccess, warehouses, editUser = null
 
           {!isEdit && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Email *</label>
+              <label className="block text-sm font-medium text-[#1E1B4B] mb-1.5">Email *</label>
               <input
                 type="email"
                 value={form.email}
-                onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
-                className={`input-base ${errors.email ? 'border-red-300' : ''}`}
+                onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
+                className={`w-full px-4 py-2.5 bg-white border rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all ${
+                  errors.email ? 'border-red-300' : 'border-gray-200'
+                }`}
                 placeholder="email@lumie.vn"
               />
               {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
@@ -152,49 +182,65 @@ const UserFormModal = ({ isOpen, onClose, onSuccess, warehouses, editUser = null
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Số điện thoại</label>
+            <label className="block text-sm font-medium text-[#1E1B4B] mb-1.5">Số điện thoại</label>
             <input
               type="tel"
               value={form.phone}
-              onChange={e => setForm(p => ({ ...p, phone: e.target.value }))}
-              className="input-base"
+              onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
+              className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all"
               placeholder="0912345678"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Kho phụ trách</label>
+            <label className="block text-sm font-medium text-[#1E1B4B] mb-1.5">Kho phụ trách</label>
             <select
               value={form.warehouse_id}
-              onChange={e => setForm(p => ({ ...p, warehouse_id: e.target.value }))}
-              className="input-base"
+              onChange={(e) => setForm((p) => ({ ...p, warehouse_id: e.target.value }))}
+              className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all"
             >
               <option value="">— Chưa phân công —</option>
-              {warehouses.map(w => (
-                <option key={w.id} value={w.id}>{w.warehouse_name}</option>
+              {warehouses.map((w) => (
+                <option key={w.id} value={w.id}>
+                  {w.warehouse_name}
+                </option>
               ))}
             </select>
           </div>
 
           {!isEdit && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Mật khẩu tạm thời *</label>
+              <label className="block text-sm font-medium text-[#1E1B4B] mb-1.5">Mật khẩu tạm thời *</label>
               <input
                 type="text"
                 value={form.password}
-                onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
-                className={`input-base ${errors.password ? 'border-red-300' : ''}`}
+                onChange={(e) => setForm((p) => ({ ...p, password: e.target.value }))}
+                className={`w-full px-4 py-2.5 bg-white border rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all ${
+                  errors.password ? 'border-red-300' : 'border-gray-200'
+                }`}
                 placeholder="Ít nhất 8 ký tự, có chữ và số"
               />
               {errors.password && <p className="text-xs text-red-500 mt-1">{errors.password}</p>}
-              <p className="text-xs text-gray-400 mt-1">Nhân viên sẽ được yêu cầu đổi khi đăng nhập lần đầu</p>
+              <p className="text-xs text-gray-400 mt-1">
+                Nhân viên sẽ được yêu cầu đổi khi đăng nhập lần đầu
+              </p>
             </div>
           )}
 
           <div className="flex gap-3 pt-2">
-            <button type="button" onClick={onClose} className="btn-secondary flex-1">Hủy</button>
-            <button type="submit" disabled={loading} className="btn-primary flex-1">
-              {loading ? 'Đang lưu...' : (isEdit ? 'Lưu thay đổi' : 'Tạo tài khoản')}
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-sm font-medium text-gray-700 transition-colors cursor-pointer"
+            >
+              Hủy
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#4F46E5] hover:from-[#6D28D9] hover:to-[#4338CA] text-white text-sm font-medium shadow-md shadow-purple-500/20 transition-all disabled:opacity-50 cursor-pointer"
+            >
+              {loading ? 'Đang lưu...' : isEdit ? 'Lưu thay đổi' : 'Tạo tài khoản'}
             </button>
           </div>
         </form>
@@ -204,24 +250,146 @@ const UserFormModal = ({ isOpen, onClose, onSuccess, warehouses, editUser = null
 };
 
 // Modal xác nhận
-const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, confirmLabel = 'Xác nhận', danger = false, loading = false }) => {
+const ConfirmModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  message,
+  confirmLabel = 'Xác nhận',
+  danger = false,
+  loading = false,
+}) => {
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6" onClick={e => e.stopPropagation()}>
-        <h3 className="text-base font-medium text-lumie-black mb-2">{title}</h3>
-        <p className="text-sm text-gray-500 mb-6">{message}</p>
+    <div
+      className="fixed inset-0 bg-[#1E1B4B]/40 backdrop-blur-xs z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(88,28,135,0.18)] border border-purple-50 w-full max-w-sm p-6"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h3 className="text-base font-bold text-[#1E1B4B] mb-2">{title}</h3>
+        <p className="text-sm text-gray-500 mb-6 leading-relaxed">{message}</p>
         <div className="flex gap-3">
-          <button onClick={onClose} className="btn-secondary flex-1">Hủy</button>
+          <button
+            onClick={onClose}
+            className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-sm font-medium text-gray-700 transition-colors cursor-pointer"
+          >
+            Hủy
+          </button>
           <button
             onClick={onConfirm}
             disabled={loading}
-            className={`flex-1 px-6 py-3 rounded-lg text-sm font-medium text-white transition-all duration-200 disabled:opacity-50
-              ${danger ? 'bg-red-500 hover:bg-red-600' : 'bg-lumie-black hover:bg-lumie-gray-800'}`}
+            className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-all duration-200 disabled:opacity-50 cursor-pointer ${
+              danger
+                ? 'bg-red-500 hover:bg-red-600 shadow-md shadow-red-500/20'
+                : 'bg-gradient-to-r from-[#7C3AED] to-[#4F46E5] hover:from-[#6D28D9] hover:to-[#4338CA] shadow-md shadow-purple-500/20'
+            }`}
           >
             {loading ? 'Đang xử lý...' : confirmLabel}
           </button>
         </div>
+      </div>
+    </div>
+  );
+};
+
+// Modal đặt lại mật khẩu
+const ResetPasswordModal = ({ isOpen, onClose, onSuccess, user }) => {
+  const [newPassword, setNewPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setNewPassword('');
+      setError('');
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!newPassword || newPassword.length < 8) {
+      setError('Mật khẩu phải có ít nhất 8 ký tự');
+      return;
+    }
+    setLoading(true);
+    try {
+      await userService.resetPassword(user.id, newPassword);
+      onSuccess();
+      onClose();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Đã xảy ra lỗi. Vui lòng thử lại.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 bg-[#1E1B4B]/40 backdrop-blur-xs z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(88,28,135,0.18)] border border-purple-50 w-full max-w-sm overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between p-6 border-b border-gray-100">
+          <h3 className="text-base font-bold text-[#1E1B4B]">Đặt lại mật khẩu</h3>
+          <button
+            onClick={onClose}
+            className="p-1.5 hover:bg-purple-50 text-gray-400 hover:text-[#6D28D9] rounded-lg transition-colors cursor-pointer"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <p className="text-sm text-gray-500 leading-relaxed">
+            Đặt mật khẩu mới cho{' '}
+            <span className="font-semibold text-[#1E1B4B]">{user?.full_name}</span>. Nhân viên sẽ
+            được yêu cầu đổi mật khẩu khi đăng nhập lần tiếp theo.
+          </p>
+          {error && (
+            <div className="p-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
+              {error}
+            </div>
+          )}
+          <div>
+            <label className="block text-sm font-medium text-[#1E1B4B] mb-1.5">Mật khẩu mới *</label>
+            <input
+              type="text"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className={`w-full px-4 py-2.5 bg-white border rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all ${
+                error ? 'border-red-300' : 'border-gray-200'
+              }`}
+              placeholder="Nhập mật khẩu mới (ít nhất 8 ký tự)"
+              autoComplete="new-password"
+            />
+          </div>
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-sm font-medium text-gray-700 transition-colors cursor-pointer"
+            >
+              Hủy
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#4F46E5] hover:from-[#6D28D9] hover:to-[#4338CA] text-white text-sm font-medium shadow-md shadow-purple-500/20 transition-all disabled:opacity-50 cursor-pointer"
+            >
+              {loading ? 'Đang lưu...' : 'Đặt lại mật khẩu'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
@@ -239,6 +407,7 @@ const EmployeesPage = () => {
 
   const [formModal, setFormModal] = useState({ open: false, editUser: null });
   const [confirmModal, setConfirmModal] = useState({ open: false, type: '', user: null });
+  const [resetPasswordModal, setResetPasswordModal] = useState({ open: false, user: null });
   const [actionLoading, setActionLoading] = useState(false);
   const [notification, setNotification] = useState(null);
 
@@ -247,20 +416,25 @@ const EmployeesPage = () => {
     setTimeout(() => setNotification(null), 4000);
   };
 
-  const fetchUsers = useCallback(async (page = 1) => {
-    setLoading(true);
-    try {
-      const data = await userService.getUsers({ page, limit: 10, search, status: statusFilter });
-      setUsers(data.items);
-      setPagination(data.pagination);
-    } catch {
-      showNotification('Không thể tải danh sách nhân viên', 'error');
-    } finally {
-      setLoading(false);
-    }
-  }, [search, statusFilter]);
+  const fetchUsers = useCallback(
+    async (page = 1) => {
+      setLoading(true);
+      try {
+        const data = await userService.getUsers({ page, limit: 10, search, status: statusFilter });
+        setUsers(data.items);
+        setPagination(data.pagination);
+      } catch {
+        showNotification('Không thể tải danh sách nhân viên', 'error');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [search, statusFilter]
+  );
 
-  useEffect(() => { fetchUsers(1); }, [fetchUsers]);
+  useEffect(() => {
+    fetchUsers(1);
+  }, [fetchUsers]);
 
   useEffect(() => {
     warehouseService.getWarehouses().then(setWarehouses).catch(() => {});
@@ -271,13 +445,20 @@ const EmployeesPage = () => {
     setSearch(searchInput);
   };
 
-  const handleStatusChange = async () => {
+  const handleConfirmAction = async () => {
     if (!confirmModal.user) return;
     setActionLoading(true);
     try {
-      const newStatus = confirmModal.user.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
-      await userService.updateUserStatus(confirmModal.user.id, newStatus);
-      showNotification(newStatus === 'INACTIVE' ? 'Đã vô hiệu hóa tài khoản' : 'Đã kích hoạt tài khoản');
+      if (confirmModal.type === 'status') {
+        const newStatus = confirmModal.user.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+        await userService.updateUserStatus(confirmModal.user.id, newStatus);
+        showNotification(
+          newStatus === 'INACTIVE' ? 'Đã vô hiệu hóa tài khoản' : 'Đã kích hoạt tài khoản'
+        );
+      } else if (confirmModal.type === 'delete') {
+        await userService.deleteUser(confirmModal.user.id);
+        showNotification('Đã xóa nhân viên thành công');
+      }
       setConfirmModal({ open: false, type: '', user: null });
       fetchUsers(pagination.page);
     } catch (err) {
@@ -291,8 +472,13 @@ const EmployeesPage = () => {
     <MainLayout>
       {/* Notifications */}
       {notification && (
-        <div className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-xl shadow-lg text-sm font-medium transition-all
-          ${notification.type === 'error' ? 'bg-red-50 text-red-700 border border-red-100' : 'bg-green-50 text-green-700 border border-green-100'}`}>
+        <div
+          className={`fixed top-5 right-5 z-50 px-4 py-3 rounded-xl shadow-lg text-sm font-medium transition-all ${
+            notification.type === 'error'
+              ? 'bg-red-50 text-red-700 border border-red-100'
+              : 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+          }`}
+        >
           {notification.message}
         </div>
       )}
@@ -301,32 +487,46 @@ const EmployeesPage = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-semibold text-lumie-black">Quản lý nhân viên</h1>
+            <h1 className="text-2xl sm:text-[26px] font-bold text-[#1E1B4B]">
+              Quản lý nhân viên
+            </h1>
             <p className="text-sm text-gray-500 mt-1">
               {pagination.total} nhân viên kho
             </p>
           </div>
           <button
             onClick={() => setFormModal({ open: true, editUser: null })}
-            className="btn-primary"
+            className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#4F46E5] hover:from-[#6D28D9] hover:to-[#4338CA] text-white text-sm font-medium shadow-md shadow-purple-500/25 hover:shadow-lg hover:shadow-purple-500/35 transition-all duration-200 cursor-pointer"
           >
-            + Thêm nhân viên
+            <span>+ Thêm nhân viên</span>
           </button>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-4 mb-4 flex flex-col sm:flex-row gap-3">
-          <form onSubmit={handleSearch} className="flex gap-2 flex-1">
+        <div className="bg-white rounded-2xl border border-purple-50 shadow-[0_8px_24px_rgba(88,28,135,0.05)] p-4 mb-5 flex flex-col sm:flex-row gap-3">
+          <form onSubmit={handleSearch} className="flex gap-2.5 flex-1">
             <input
               type="text"
               placeholder="Tìm theo tên hoặc email..."
               value={searchInput}
-              onChange={e => setSearchInput(e.target.value)}
-              className="input-base flex-1"
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="flex-1 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all"
             />
-            <button type="submit" className="btn-primary px-4">Tìm</button>
+            <button
+              type="submit"
+              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#1E1B4B] to-[#312E81] hover:from-[#312E81] hover:to-[#4338CA] text-white text-sm font-medium shadow-sm transition-all cursor-pointer"
+            >
+              Tìm
+            </button>
             {search && (
-              <button type="button" onClick={() => { setSearch(''); setSearchInput(''); }} className="btn-secondary px-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setSearch('');
+                  setSearchInput('');
+                }}
+                className="px-4 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-sm font-medium text-gray-600 transition-colors cursor-pointer"
+              >
                 Xóa
               </button>
             )}
@@ -334,8 +534,8 @@ const EmployeesPage = () => {
 
           <select
             value={statusFilter}
-            onChange={e => setStatusFilter(e.target.value)}
-            className="input-base w-auto sm:w-44"
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-[#1E1B4B] font-medium focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all w-auto sm:w-48 cursor-pointer"
           >
             <option value="">Tất cả trạng thái</option>
             <option value="ACTIVE">Hoạt động</option>
@@ -344,10 +544,10 @@ const EmployeesPage = () => {
         </div>
 
         {/* Table */}
-        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-2xl border border-purple-50 shadow-[0_8px_24px_rgba(88,28,135,0.06)] overflow-hidden">
           {loading ? (
             <div className="p-12 text-center">
-              <div className="w-8 h-8 border-2 border-lumie-black border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+              <div className="w-8 h-8 border-2 border-[#7C3AED] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
               <p className="text-sm text-gray-400">Đang tải...</p>
             </div>
           ) : users.length === 0 ? (
@@ -359,24 +559,39 @@ const EmployeesPage = () => {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-100">
-                    <th className="text-left text-xs font-medium text-gray-400 uppercase tracking-wider px-6 py-4">Nhân viên</th>
-                    <th className="text-left text-xs font-medium text-gray-400 uppercase tracking-wider px-6 py-4 hidden md:table-cell">Kho phụ trách</th>
-                    <th className="text-left text-xs font-medium text-gray-400 uppercase tracking-wider px-6 py-4">Trạng thái</th>
-                    <th className="text-right text-xs font-medium text-gray-400 uppercase tracking-wider px-6 py-4">Thao tác</th>
+                    <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-6 py-4">
+                      Nhân viên
+                    </th>
+                    <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-6 py-4 hidden md:table-cell">
+                      Kho phụ trách
+                    </th>
+                    <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-6 py-4">
+                      Trạng thái
+                    </th>
+                    <th className="text-right text-xs font-semibold text-gray-500 uppercase tracking-wider px-6 py-4">
+                      Thao tác
+                    </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {users.map(user => (
-                    <tr key={user.id} className="hover:bg-gray-50/50 transition-colors">
+                <tbody className="divide-y divide-gray-100">
+                  {users.map((user) => (
+                    <tr
+                      key={user.id}
+                      className="hover:bg-purple-50/30 transition-colors"
+                    >
                       <td className="px-6 py-4">
                         <div>
-                          <p className="text-sm font-medium text-lumie-black">{user.full_name}</p>
-                          <p className="text-xs text-gray-400 mt-0.5">{user.email}</p>
-                          {user.phone && <p className="text-xs text-gray-400">{user.phone}</p>}
+                          <p className="text-sm font-semibold text-[#1E1B4B]">
+                            {user.full_name}
+                          </p>
+                          <p className="text-xs text-gray-500 mt-0.5">{user.email}</p>
+                          {user.phone && (
+                            <p className="text-xs text-gray-500">{user.phone}</p>
+                          )}
                         </div>
                       </td>
                       <td className="px-6 py-4 hidden md:table-cell">
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-700">
                           {user.warehouse ? user.warehouse.warehouse_name : '—'}
                         </p>
                       </td>
@@ -387,19 +602,35 @@ const EmployeesPage = () => {
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => setFormModal({ open: true, editUser: user })}
-                            className="text-xs text-gray-500 hover:text-lumie-black px-2 py-1 hover:bg-gray-100 rounded-lg transition-colors"
+                            className="text-xs font-medium text-gray-600 hover:text-[#1E1B4B] px-2.5 py-1.5 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
                           >
                             Sửa
                           </button>
                           <button
-                            onClick={() => setConfirmModal({ open: true, type: 'status', user })}
-                            className={`text-xs px-2 py-1 rounded-lg transition-colors
-                              ${user.status === 'ACTIVE'
-                                ? 'text-red-500 hover:bg-red-50'
-                                : 'text-green-600 hover:bg-green-50'
-                              }`}
+                            onClick={() => setResetPasswordModal({ open: true, user })}
+                            className="text-xs font-medium text-[#4F46E5] hover:text-[#3730A3] px-2.5 py-1.5 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer"
+                          >
+                            Đặt lại MK
+                          </button>
+                          <button
+                            onClick={() =>
+                              setConfirmModal({ open: true, type: 'status', user })
+                            }
+                            className={`text-xs font-medium px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer ${
+                              user.status === 'ACTIVE'
+                                ? 'text-[#B45309] hover:bg-amber-50'
+                                : 'text-emerald-600 hover:bg-emerald-50'
+                            }`}
                           >
                             {user.status === 'ACTIVE' ? 'Vô hiệu hóa' : 'Kích hoạt'}
+                          </button>
+                          <button
+                            onClick={() =>
+                              setConfirmModal({ open: true, type: 'delete', user })
+                            }
+                            className="text-xs font-medium text-[#DC2626] hover:text-red-700 px-2.5 py-1.5 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                          >
+                            Xóa
                           </button>
                         </div>
                       </td>
@@ -413,21 +644,21 @@ const EmployeesPage = () => {
           {/* Pagination */}
           {pagination.totalPages > 1 && (
             <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-gray-500">
                 Trang {pagination.page} / {pagination.totalPages} ({pagination.total} kết quả)
               </p>
               <div className="flex gap-2">
                 <button
                   onClick={() => fetchUsers(pagination.page - 1)}
                   disabled={pagination.page === 1}
-                  className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  className="px-3.5 py-1.5 text-sm font-medium text-[#1E1B4B] border border-gray-200 rounded-xl hover:bg-purple-50/50 hover:border-purple-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 >
                   ← Trước
                 </button>
                 <button
                   onClick={() => fetchUsers(pagination.page + 1)}
                   disabled={pagination.page === pagination.totalPages}
-                  className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  className="px-3.5 py-1.5 text-sm font-medium text-[#1E1B4B] border border-gray-200 rounded-xl hover:bg-purple-50/50 hover:border-purple-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 >
                   Tiếp →
                 </button>
@@ -441,24 +672,53 @@ const EmployeesPage = () => {
       <UserFormModal
         isOpen={formModal.open}
         onClose={() => setFormModal({ open: false, editUser: null })}
-        onSuccess={() => { showNotification(formModal.editUser ? 'Cập nhật thành công' : 'Tạo tài khoản thành công'); fetchUsers(1); }}
+        onSuccess={() => {
+          showNotification(
+            formModal.editUser ? 'Cập nhật thành công' : 'Tạo tài khoản thành công'
+          );
+          fetchUsers(1);
+        }}
         warehouses={warehouses}
         editUser={formModal.editUser}
       />
 
       <ConfirmModal
-        isOpen={confirmModal.open && confirmModal.type === 'status'}
+        isOpen={confirmModal.open}
         onClose={() => setConfirmModal({ open: false, type: '', user: null })}
-        onConfirm={handleStatusChange}
+        onConfirm={handleConfirmAction}
         loading={actionLoading}
-        danger={confirmModal.user?.status === 'ACTIVE'}
-        title={confirmModal.user?.status === 'ACTIVE' ? 'Vô hiệu hóa tài khoản' : 'Kích hoạt tài khoản'}
+        danger={confirmModal.type === 'delete' || confirmModal.user?.status === 'ACTIVE'}
+        title={
+          confirmModal.type === 'delete'
+            ? 'Xác nhận xóa nhân viên'
+            : confirmModal.user?.status === 'ACTIVE'
+            ? 'Vô hiệu hóa tài khoản'
+            : 'Kích hoạt tài khoản'
+        }
         message={
-          confirmModal.user?.status === 'ACTIVE'
+          confirmModal.type === 'delete'
+            ? `Bạn có chắc muốn xóa nhân viên "${confirmModal.user?.full_name}" khỏi danh sách? Lịch sử chứng từ và nhật ký liên quan vẫn được bảo lưu.`
+            : confirmModal.user?.status === 'ACTIVE'
             ? `Bạn có chắc muốn vô hiệu hóa tài khoản của "${confirmModal.user?.full_name}"? Nhân viên sẽ không thể đăng nhập.`
             : `Bạn có chắc muốn kích hoạt lại tài khoản của "${confirmModal.user?.full_name}"?`
         }
-        confirmLabel={confirmModal.user?.status === 'ACTIVE' ? 'Vô hiệu hóa' : 'Kích hoạt'}
+        confirmLabel={
+          confirmModal.type === 'delete'
+            ? 'Xác nhận xóa'
+            : confirmModal.user?.status === 'ACTIVE'
+            ? 'Vô hiệu hóa'
+            : 'Kích hoạt'
+        }
+      />
+
+      {/* Modal đặt lại mật khẩu (US-04 bổ sung) */}
+      <ResetPasswordModal
+        isOpen={resetPasswordModal.open}
+        onClose={() => setResetPasswordModal({ open: false, user: null })}
+        onSuccess={() => {
+          showNotification('Đã đặt lại mật khẩu thành công');
+        }}
+        user={resetPasswordModal.user}
       />
     </MainLayout>
   );

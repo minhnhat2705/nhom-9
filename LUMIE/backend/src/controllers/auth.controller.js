@@ -122,16 +122,8 @@ const getMe = async (req, res, next) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.user.id },
-      select: {
-        id: true,
-        full_name: true,
-        email: true,
-        phone: true,
-        status: true,
-        must_change_password: true,
-        last_login: true,
-        created_at: true,
-        role: { select: { role_name: true } },
+      include: {
+        role: true,
         warehouse: { select: { id: true, warehouse_name: true, warehouse_code: true } },
       },
     });
@@ -140,7 +132,7 @@ const getMe = async (req, res, next) => {
       return errorResponse(res, 'Tài khoản không tồn tại', 404);
     }
 
-    return successResponse(res, user, 'Lấy thông tin tài khoản thành công');
+    return successResponse(res, authService.getSafeUserData(user), 'Lấy thông tin tài khoản thành công');
   } catch (error) {
     next(error);
   }

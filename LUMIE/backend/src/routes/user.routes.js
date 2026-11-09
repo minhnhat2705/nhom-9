@@ -28,5 +28,6 @@ router.get('/:id', ...managerOnly, userController.getUserById);
 router.put('/:id', ...managerOnly, validateUpdateUser, userController.updateUser);
 router.patch('/:id/status', ...managerOnly, userController.updateUserStatus);
 router.post('/:id/reset-password', ...managerOnly, validateResetPassword, userController.resetUserPassword);
+router.delete('/:id', ...managerOnly, userController.deleteUser);
 
 module.exports = router;

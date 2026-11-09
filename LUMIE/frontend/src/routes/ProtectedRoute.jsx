@@ -45,7 +45,7 @@ export const ProtectedRoute = ({ children }) => {
  * Nhân viên kho → Chuyển về dashboard của nhân viên
  */
 export const ManagerRoute = ({ children }) => {
-  const { isAuthenticated, isManager, loading } = useAuth();
+  const { isAuthenticated, isManager, isStaff, loading } = useAuth();
   const location = useLocation();
 
   if (loading) return <LoadingScreen />;
@@ -55,7 +55,7 @@ export const ManagerRoute = ({ children }) => {
   }
 
   if (!isManager) {
-    return <Navigate to="/staff/dashboard" replace />;
+    return <Navigate to={isStaff ? "/staff/dashboard" : "/login"} replace />;
   }
 
   return children;
@@ -66,7 +66,7 @@ export const ManagerRoute = ({ children }) => {
  * Quản lý kho → Chuyển về dashboard của quản lý
  */
 export const StaffRoute = ({ children }) => {
-  const { isAuthenticated, isStaff, loading } = useAuth();
+  const { isAuthenticated, isStaff, isManager, loading } = useAuth();
   const location = useLocation();
 
   if (loading) return <LoadingScreen />;
@@ -76,7 +76,7 @@ export const StaffRoute = ({ children }) => {
   }
 
   if (!isStaff) {
-    return <Navigate to="/manager/dashboard" replace />;
+    return <Navigate to={isManager ? "/manager/dashboard" : "/login"} replace />;
   }
 
   return children;
