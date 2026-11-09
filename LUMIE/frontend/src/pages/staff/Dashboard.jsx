@@ -41,7 +41,7 @@ const StaffDashboard = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-5xl">
+      <div className="w-full transition-all duration-300">
         {/* Page Header (Thu nhỏ vừa vặn) */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5 sm:mb-6">
           <div>
@@ -56,15 +56,27 @@ const StaffDashboard = () => {
             </div>
           </div>
 
-          <Link
-            to="/profile/change-password"
-            className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-purple-50/70 text-[#6D28D9] border border-purple-200 text-xs font-medium shadow-2xs transition-all cursor-pointer"
-          >
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-            <span>Đổi mật khẩu</span>
-          </Link>
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              to="/staff/products"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#7C3AED] hover:bg-[#6D28D9] text-white text-xs font-semibold shadow-xs shadow-purple-500/20 transition-all cursor-pointer"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <span>Tra cứu sản phẩm</span>
+            </Link>
+
+            <Link
+              to="/profile/change-password"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-purple-50/70 text-[#6D28D9] border border-purple-200 text-xs font-medium shadow-2xs transition-all cursor-pointer"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              <span>Đổi mật khẩu</span>
+            </Link>
+          </div>
         </div>
 
         {/* Cảnh báo đổi mật khẩu lần đầu (gọn gàng, tinh tế) */}

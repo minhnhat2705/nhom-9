@@ -45,6 +45,9 @@ model Warehouse {
   // Quan hệ: Một kho có nhiều nhân viên
   users           User[]
 
+  // Quan hệ: Một kho có nhiều bản ghi tồn kho
+  inventories     Inventory[]
+
   @@map("warehouses")
 }
 
@@ -127,6 +130,125 @@ model AuditLog {
 }
 
 // ============================================================
+// BẢNG: categories
+// Danh mục sản phẩm (Áo thun, Sơ mi, Quần jean, v.v.)
+// ============================================================
+model Category {
+  id            Int       @id @default(autoincrement())
+  category_code String    @unique @db.VarChar(50)
+  category_name String    @db.VarChar(100)
+  rack_zone     String?   @db.VarChar(20) // Kệ zone: A, B, C...
+  description   String?   @db.Text
+  status        Status    @default(ACTIVE)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+
+  products      Product[]
+
+  @@map("categories")
+}
+
+// ============================================================
+// BẢNG: suppliers
+// Nhà cung cấp thời trang (Routine, Zara, Canifa, Nike...)
+// ============================================================
+model Supplier {
+  id             Int       @id @default(autoincrement())
+  supplier_code  String    @unique @db.VarChar(50)
+  supplier_name  String    @db.VarChar(150)
+  brand_name     String?   @db.VarChar(100)
+  contact_person String?   @db.VarChar(100)
+  phone          String?   @db.VarChar(20)
+  email          String?   @db.VarChar(100)
+  address        String?   @db.VarChar(255)
+  status         Status    @default(ACTIVE)
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+
+  products       Product[]
+
+  @@map("suppliers")
+}
+
+// ============================================================
+// BẢNG: products
+// Thông tin sản phẩm cha
+// ============================================================
+model Product {
+  id            Int             @id @default(autoincrement())
+  product_code  String          @unique @db.VarChar(50)
+  product_name  String          @db.VarChar(255)
+  category_id   Int
+  category      Category        @relation(fields: [category_id], references: [id])
+  supplier_id   Int
+  supplier      Supplier        @relation(fields: [supplier_id], references: [id])
+  brand         String?         @db.VarChar(100)
+  gender        Gender          @default(UNISEX)
+  material      String?         @db.VarChar(100)
+  description   String?         @db.Text
+  image_url     String?         @db.VarChar(255)
+  status        Status          @default(ACTIVE)
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+
+  variants      ProductVariant[]
+
+  @@index([category_id])
+  @@index([supplier_id])
+  @@map("products")
+}
+
+// ============================================================
+// BẢNG: product_variants
+// Biến thể chi tiết: SKU, Mã vạch, Size, Màu, Giá nhập, Giá bán
+// ============================================================
+model ProductVariant {
+  id            Int         @id @default(autoincrement())
+  product_id    Int
+  product       Product     @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  sku           String      @unique @db.VarChar(100)
+  barcode       String      @unique @db.VarChar(100)
+  size          String      @db.VarChar(20)
+  color         String      @db.VarChar(50)
+  color_code    String?     @db.VarChar(20)
+  import_price  Decimal     @default(0.00) @db.Decimal(15, 2)
+  selling_price Decimal     @default(0.00) @db.Decimal(15, 2)
+  profit_margin Decimal?    @db.Decimal(6, 4)
+  min_stock     Int         @default(10)
+  status        Status      @default(ACTIVE)
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+
+  inventories   Inventory[]
+
+  @@index([product_id])
+  @@map("product_variants")
+}
+
+// ============================================================
+// BẢNG: inventories
+// Tồn kho thực tế theo từng kho & vị trí kệ
+// ============================================================
+model Inventory {
+  id             Int            @id @default(autoincrement())
+  variant_id     Int
+  variant        ProductVariant @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+  warehouse_id   Int
+  warehouse      Warehouse      @relation(fields: [warehouse_id], references: [id], onDelete: Cascade)
+  quantity       Int            @default(0)
+  shelf_location String?        @db.VarChar(50)
+  stock_status   String?        @db.VarChar(50) // 'Đủ hàng', 'Sắp hết', 'Hết hàng'
+  last_checked_at DateTime?
+  created_at     DateTime       @default(now())
+  updated_at     DateTime       @updatedAt
+
+  @@unique([variant_id, warehouse_id])
+  @@index([variant_id])
+  @@index([warehouse_id])
+  @@map("inventories")
+}
+
+// ============================================================
 // ENUMS
 // ============================================================
 
@@ -139,4 +261,15 @@ enum UserStatus {
 enum WarehouseStatus {
   ACTIVE
   INACTIVE
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+enum Gender {
+  UNISEX
+  MALE
+  FEMALE
 }

@@ -18,7 +18,9 @@ import { PublicRoute, ManagerRoute, StaffRoute, ProtectedRoute } from './routes/
 import LoginPage from './pages/auth/Login';
 import ManagerDashboard from './pages/manager/Dashboard';
 import EmployeesPage from './pages/manager/Employees';
+import ManagerProductsPage from './pages/manager/Products';
 import StaffDashboard from './pages/staff/Dashboard';
+import ProductsPage from './pages/staff/Products';
 import ChangePasswordPage from './pages/profile/ChangePassword';
 
 // Component chuyển hướng thông minh theo role
@@ -58,11 +60,21 @@ function App() {
               <EmployeesPage />
             </ManagerRoute>
           } />
+          <Route path="/manager/products" element={
+            <ManagerRoute>
+              <ManagerProductsPage />
+            </ManagerRoute>
+          } />
 
           {/* ===== ROUTES CHO NHÂN VIÊN KHO ===== */}
           <Route path="/staff/dashboard" element={
             <StaffRoute>
               <StaffDashboard />
+            </StaffRoute>
+          } />
+          <Route path="/staff/products" element={
+            <StaffRoute>
+              <ProductsPage />
             </StaffRoute>
           } />
 

@@ -88,7 +88,7 @@ const ManagerDashboard = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-6xl">
+      <div className="w-full transition-all duration-300">
         {/* Page header */}
         <div className="mb-8">
           <h1 className="text-2xl sm:text-[26px] font-bold text-[#1E1B4B]">
