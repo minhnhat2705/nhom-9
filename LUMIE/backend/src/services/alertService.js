@@ -1,0 +1,23 @@
+const pool = require('../config/db');
+const createAlert = async (type,variantId,productId,warehouseId,severity,message,metadata={},conn=pool) => {
+  const [old]=await conn.query("SELECT id FROM alerts WHERE alert_type=? AND warehouse_id=? AND status='OPEN' AND ((variant_id=? AND ? IS NOT NULL) OR (variant_id IS NULL AND ? IS NULL)) ORDER BY id DESC LIMIT 1",[type,warehouseId,variantId,variantId,variantId]);
+  const days=metadata.days_of_supply==null?null:Number(metadata.days_of_supply),capital=metadata.stagnant_capital==null?null:Number(metadata.stagnant_capital);
+  if(old.length){await conn.query('UPDATE alerts SET severity=?,message=?,metadata=?,days_of_supply=?,stagnant_capital=? WHERE id=?',[severity,message,JSON.stringify(metadata),days,capital,old[0].id]);return old[0].id;}
+  const [r]=await conn.query("INSERT INTO alerts (alert_type,variant_id,product_id,warehouse_id,severity,days_of_supply,stagnant_capital,message,metadata,status,created_at) VALUES (?,?,?,?,?,?,?,?,?,'OPEN',NOW())",[type,variantId,productId,warehouseId,severity,days,capital,message,JSON.stringify(metadata)]);
+  const id=r.insertId,[users]=await conn.query("SELECT id FROM users WHERE status='ACTIVE' AND role IN ('MANAGER','STAFF') AND (warehouse_id=? OR warehouse_id IS NULL)",[warehouseId]);
+  if(users.length)await conn.query('INSERT INTO user_notifications (user_id,alert_id,reference_type,reference_id,title,message,is_read,is_resolved,created_at) VALUES ?',[users.map(u=>[u.id,id,'ALERT',id,'Cảnh báo tồn kho mới',message,0,0,new Date()])]);
+  return id;
+};
+const runForecastStockoutCheck=async()=>{
+  const [rows]=await pool.query("SELECT i.variant_id,i.warehouse_id,i.actual_stock,i.reserved_stock,pv.sku,p.name AS product_name,p.id AS product_id,COALESCE(s.lead_time_days,14) AS lead_time_days,COALESCE((SELECT SUM(sh.quantity_sold)/30 FROM sales_history sh WHERE sh.variant_id=i.variant_id AND sh.warehouse_id=i.warehouse_id AND sh.sale_date>=DATE_SUB(CURRENT_DATE(),INTERVAL 30 DAY)),0) AS avg_daily_sales FROM inventory i JOIN product_variants pv ON pv.id=i.variant_id JOIN products p ON p.id=pv.product_id LEFT JOIN suppliers s ON s.id=p.supplier_id WHERE p.status='ACTIVE' AND pv.status='ACTIVE'");
+  for(const x of rows){const avg=Number(x.avg_daily_sales||0);if(avg<=0)continue;const days=Math.max(0,Number(x.actual_stock)-Number(x.reserved_stock))/avg;if(days<Number(x.lead_time_days))await createAlert('FORECAST_STOCKOUT',x.variant_id,x.product_id,x.warehouse_id,days<Number(x.lead_time_days)/2?'HIGH':'MEDIUM','SKU '+x.sku+' còn khoảng '+Math.floor(days)+' ngày tồn; lead time '+x.lead_time_days+' ngày.',{days_of_supply:days,lead_time_days:Number(x.lead_time_days),avg_daily_demand:avg});}
+};
+const runSlowMovingCheck=async()=>{
+  const [rows]=await pool.query("SELECT i.variant_id,i.warehouse_id,i.actual_stock,pv.sku,p.name AS product_name,p.id AS product_id,p.cost_price,(SELECT MAX(sh.sale_date) FROM sales_history sh WHERE sh.variant_id=i.variant_id AND sh.warehouse_id=i.warehouse_id) AS last_sale_date,COALESCE((SELECT SUM(sh.quantity_sold)/30 FROM sales_history sh WHERE sh.variant_id=i.variant_id AND sh.warehouse_id=i.warehouse_id AND sh.sale_date>=DATE_SUB(CURRENT_DATE(),INTERVAL 30 DAY)),0) AS avg_daily_sales FROM inventory i JOIN product_variants pv ON pv.id=i.variant_id JOIN products p ON p.id=pv.product_id WHERE p.status='ACTIVE' AND pv.status='ACTIVE' AND i.actual_stock>0");
+  for(const x of rows){const avg=Number(x.avg_daily_sales||0),days=avg>0?Number(x.actual_stock)/avg:Infinity,inactive=x.last_sale_date?Math.floor((Date.now()-new Date(x.last_sale_date).getTime())/86400000):Infinity;if(days>90||inactive>60)await createAlert('SLOW_MOVING',x.variant_id,x.product_id,x.warehouse_id,'LOW','SKU '+x.sku+' có hàng tồn chậm luân chuyển.',{days_of_supply:Number.isFinite(days)?days:null,days_since_last_sale:Number.isFinite(inactive)?inactive:null,stagnant_capital:Number(x.actual_stock)*Number(x.cost_price||0)});}
+};
+const runSizeBreakCheck=async()=>{
+  const service=require('./inventoryService'),[rows]=await pool.query("SELECT DISTINCT pv.product_id,i.warehouse_id FROM inventory i JOIN product_variants pv ON pv.id=i.variant_id JOIN products p ON p.id=pv.product_id WHERE p.status='ACTIVE'");
+  for(const x of rows)await service.checkSizeBreakAlert(x.product_id,x.warehouse_id);
+};
+module.exports={createAlert,runForecastStockoutCheck,runSlowMovingCheck,runSizeBreakCheck};
