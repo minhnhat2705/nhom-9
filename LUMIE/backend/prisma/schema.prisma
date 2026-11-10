@@ -47,6 +47,7 @@ model Warehouse {
 
   // Quan hệ: Một kho có nhiều bản ghi tồn kho
   inventories     Inventory[]
+  receipts        Receipt[]
 
   @@map("warehouses")
 }
@@ -89,6 +90,8 @@ model User {
   // Quan hệ với các bảng khác
   refresh_tokens        RefreshToken[]
   audit_logs_created    AuditLog[] @relation("AuditLogCreatedBy")
+  created_receipts      Receipt[]  @relation("ReceiptCreatedBy")
+  approved_receipts     Receipt[]  @relation("ReceiptApprovedBy")
 
   @@map("users")
 }
@@ -166,6 +169,7 @@ model Supplier {
   updated_at     DateTime  @updatedAt
 
   products       Product[]
+  receipts       Receipt[]
 
   @@map("suppliers")
 }
@@ -220,6 +224,7 @@ model ProductVariant {
   updated_at    DateTime    @updatedAt
 
   inventories   Inventory[]
+  receipt_items ReceiptItem[]
 
   @@index([product_id])
   @@map("product_variants")
@@ -272,4 +277,64 @@ enum Gender {
   UNISEX
   MALE
   FEMALE
+}
+
+enum ReceiptStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+// ============================================================
+// BẢNG: receipts
+// Phiếu nhập kho: Nhân viên tạo, Quản lý duyệt
+// ============================================================
+model Receipt {
+  id               Int           @id @default(autoincrement())
+  receipt_code     String        @unique @db.VarChar(50)
+  warehouse_id     Int
+  warehouse        Warehouse     @relation(fields: [warehouse_id], references: [id], onDelete: Cascade)
+  supplier_id      Int?
+  supplier         Supplier?     @relation(fields: [supplier_id], references: [id], onDelete: SetNull)
+  created_by_id    Int
+  created_by       User          @relation("ReceiptCreatedBy", fields: [created_by_id], references: [id], onDelete: Cascade)
+  approved_by_id   Int?
+  approved_by      User?         @relation("ReceiptApprovedBy", fields: [approved_by_id], references: [id], onDelete: SetNull)
+  status           ReceiptStatus @default(PENDING)
+  total_quantity   Int           @default(0)
+  total_amount     Decimal       @default(0.00) @db.Decimal(15, 2)
+  notes            String?       @db.Text
+  rejection_reason String?       @db.Text
+  approved_at      DateTime?
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+
+  items            ReceiptItem[]
+
+  @@index([warehouse_id])
+  @@index([supplier_id])
+  @@index([created_by_id])
+  @@index([approved_by_id])
+  @@map("receipts")
+}
+
+// ============================================================
+// BẢNG: receipt_items
+// Chi tiết mặt hàng trong phiếu nhập kho
+// ============================================================
+model ReceiptItem {
+  id             Int            @id @default(autoincrement())
+  receipt_id     Int
+  receipt        Receipt        @relation(fields: [receipt_id], references: [id], onDelete: Cascade)
+  variant_id     Int
+  variant        ProductVariant @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+  quantity       Int            @default(1)
+  unit_price     Decimal        @default(0.00) @db.Decimal(15, 2)
+  total_price    Decimal        @default(0.00) @db.Decimal(15, 2)
+  shelf_location String?        @db.VarChar(50)
+  notes          String?        @db.VarChar(255)
+
+  @@index([receipt_id])
+  @@index([variant_id])
+  @@map("receipt_items")
 }

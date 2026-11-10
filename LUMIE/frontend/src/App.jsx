@@ -24,6 +24,7 @@ import WarehousesPage from './pages/manager/Warehouses';
 import StaffDashboard from './pages/staff/Dashboard';
 import ProductsPage from './pages/staff/Products';
 import ChangePasswordPage from './pages/profile/ChangePassword';
+import ReceiptsPage from './pages/inbound/Receipts';
 
 // Component chuyển hướng thông minh theo role
 const HomeRedirect = () => {
@@ -91,6 +92,13 @@ function App() {
           } />
 
           {/* ===== ROUTES CHUNG (đã đăng nhập) ===== */}
+          <Route path="/inbound/receipts" element={
+            <ProtectedRoute>
+              <ReceiptsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/manager/receipts" element={<Navigate to="/inbound/receipts" replace />} />
+          <Route path="/staff/receipts" element={<Navigate to="/inbound/receipts" replace />} />
           <Route path="/profile/change-password" element={
             <ProtectedRoute>
               <ChangePasswordPage />
