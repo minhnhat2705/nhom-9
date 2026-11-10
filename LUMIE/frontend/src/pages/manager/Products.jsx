@@ -35,6 +35,7 @@ const ManagerProductsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedSupplier, setSelectedSupplier] = useState('');
   const [selectedRackZone, setSelectedRackZone] = useState('');
+  const [selectedWarehouse, setSelectedWarehouse] = useState('');
   const [statusFilter, setStatusFilter] = useState('ACTIVE'); // 'ACTIVE' | 'INACTIVE' | 'ALL'
   const [sortBy, setSortBy] = useState('code_asc');
 
@@ -131,6 +132,7 @@ const ManagerProductsPage = () => {
         category_id: selectedCategory || undefined,
         supplier_id: selectedSupplier || undefined,
         rack_zone: selectedRackZone || undefined,
+        warehouse_id: selectedWarehouse || undefined,
         status: statusFilter,
         sort: sortBy,
         page: currentPage,
@@ -162,6 +164,7 @@ const ManagerProductsPage = () => {
     selectedCategory,
     selectedSupplier,
     selectedRackZone,
+    selectedWarehouse,
     statusFilter,
     sortBy,
     currentPage,
@@ -562,6 +565,22 @@ const ManagerProductsPage = () => {
                   </option>
                 ))}
               </select>
+
+              <select
+                value={selectedWarehouse}
+                onChange={(e) => {
+                  setSelectedWarehouse(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="px-3 py-2 rounded-xl bg-purple-50/50 border border-purple-100 text-xs sm:text-sm font-medium text-[#1E1B4B] outline-hidden cursor-pointer"
+              >
+                <option value="">Tất cả kho (5 kho)</option>
+                {filtersMeta.warehouses.map((w) => (
+                  <option key={w.id} value={w.id}>
+                    {w.warehouse_name}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         </div>
@@ -655,10 +674,13 @@ const ManagerProductsPage = () => {
                           <span className="text-gray-600">{variant.color || '—'}</span>
                         </td>
 
-                        {/* Kệ kho */}
+                        {/* Kệ kho & Kho lưu trữ */}
                         <td className="py-2.5 px-3.5">
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-purple-100 text-[#6D28D9] font-bold text-[11px]">
                             {inventory.shelf_location || 'A-01'}
+                          </span>
+                          <span className="text-[10px] text-gray-500 block mt-0.5 truncate max-w-[130px]" title={inventory.warehouse?.warehouse_name || 'Kho tổng Lumié'}>
+                            {inventory.warehouse?.warehouse_name || 'Kho tổng Lumié'}
                           </span>
                         </td>
 

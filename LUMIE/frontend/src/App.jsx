@@ -20,6 +20,7 @@ import ManagerDashboard from './pages/manager/Dashboard';
 import EmployeesPage from './pages/manager/Employees';
 import ManagerProductsPage from './pages/manager/Products';
 import CategoriesPage from './pages/manager/Categories';
+import WarehousesPage from './pages/manager/Warehouses';
 import StaffDashboard from './pages/staff/Dashboard';
 import ProductsPage from './pages/staff/Products';
 import ChangePasswordPage from './pages/profile/ChangePassword';
@@ -69,6 +70,11 @@ function App() {
           <Route path="/manager/categories" element={
             <ManagerRoute>
               <CategoriesPage />
+            </ManagerRoute>
+          } />
+          <Route path="/manager/warehouses" element={
+            <ManagerRoute>
+              <WarehousesPage />
             </ManagerRoute>
           } />
 

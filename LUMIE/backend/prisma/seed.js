@@ -341,12 +341,28 @@ async function main() {
     });
     variantCount++;
 
-    // 3. Inventory (kho LUMIE-WH01)
+    // 3. Inventory phân bổ chuẩn hệ thống:
+    // - SP001 - SP015 (15 sp): Kho Hà Nội - Chi nhánh 1
+    // - SP016 - SP030 (15 sp): Kho TP.HCM - Chi nhánh 1
+    // - SP031 - SP045 (15 sp): Kho Đà Nẵng - Chi nhánh 1
+    // - SP046 - SP060 (15 sp): Kho Hải Phòng - Chi nhánh 1
+    // - SP061 - SP100 (40 sp): Kho tổng Lumié
+    let assignedWarehouse = warehouseMain;
+    if (productCount <= 15) {
+      assignedWarehouse = warehouse1;
+    } else if (productCount <= 30) {
+      assignedWarehouse = warehouse2;
+    } else if (productCount <= 45) {
+      assignedWarehouse = warehouse3;
+    } else if (productCount <= 60) {
+      assignedWarehouse = warehouse4;
+    }
+
     await prisma.inventory.upsert({
       where: {
         variant_id_warehouse_id: {
           variant_id: variant.id,
-          warehouse_id: warehouseMain.id,
+          warehouse_id: assignedWarehouse.id,
         },
       },
       update: {
@@ -356,7 +372,7 @@ async function main() {
       },
       create: {
         variant_id: variant.id,
-        warehouse_id: warehouseMain.id,
+        warehouse_id: assignedWarehouse.id,
         quantity: parseInt(p['Số lượng tồn'], 10) || 0,
         shelf_location: p['V vị trí kệ'] || p['Vị trí kệ'],
         stock_status: p['Trạng thái tồn'],
