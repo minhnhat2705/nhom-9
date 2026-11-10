@@ -14,6 +14,7 @@ const {
   getProductFiltersMeta,
   getProductById,
   createProduct,
+  uploadProductImage,
   updateProduct,
   deleteProduct,
   reactivateProduct,
@@ -34,6 +35,9 @@ router.get('/:id', getProductById);
 // ============================================================
 // CÁC CHỨC NĂNG CỦA QUẢN LÝ (TUYỆT ĐỐI KHÔNG DÀNH CHO NHÂN VIÊN)
 // ============================================================
+
+// POST /api/products/upload-image - Tải ảnh sản phẩm vào folder products và đổi tên theo thứ tự (Chỉ Quản lý)
+router.post('/upload-image', authorize('WAREHOUSE_MANAGER'), uploadProductImage);
 
 // POST /api/products - Thêm sản phẩm kèm biến thể size, màu, SKU (Chỉ Quản lý)
 router.post('/', authorize('WAREHOUSE_MANAGER'), createProduct);

@@ -13,13 +13,14 @@ const { body, validationResult } = require('express-validator');
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    const errorList = errors.array().map(err => ({
+      field: err.path,
+      message: err.msg,
+    }));
     return res.status(400).json({
       success: false,
-      message: 'Dữ liệu không hợp lệ',
-      errors: errors.array().map(err => ({
-        field: err.path,
-        message: err.msg,
-      })),
+      message: errorList[0]?.message || 'Dữ liệu không hợp lệ',
+      errors: errorList,
     });
   }
   next();

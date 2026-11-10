@@ -20,9 +20,9 @@ const validateCreateUser = [
     .normalizeEmail(),
   
   body('phone')
-    .optional()
+    .optional({ values: 'falsy' })
     .matches(/^(0|\+84)[3-9][0-9]{8}$/)
-    .withMessage('Số điện thoại không hợp lệ (định dạng Việt Nam)'),
+    .withMessage('Số điện thoại không hợp lệ (gồm 10 số, bắt đầu bằng 03, 05, 07, 08, 09 hoặc +84)'),
   
   body('password')
     .notEmpty().withMessage('Mật khẩu tạm thời không được để trống')
@@ -31,7 +31,7 @@ const validateCreateUser = [
     .withMessage('Mật khẩu phải chứa cả chữ cái và số'),
   
   body('warehouse_id')
-    .optional()
+    .optional({ values: 'falsy' })
     .isInt({ min: 1 }).withMessage('ID kho không hợp lệ'),
 
   // QUAN TRỌNG: Không cho phép client tự đặt role_id
@@ -50,12 +50,12 @@ const validateUpdateUser = [
     .trim(),
   
   body('phone')
-    .optional()
+    .optional({ values: 'falsy' })
     .matches(/^(0|\+84)[3-9][0-9]{8}$/)
-    .withMessage('Số điện thoại không hợp lệ'),
+    .withMessage('Số điện thoại không hợp lệ (gồm 10 số, bắt đầu bằng 03, 05, 07, 08, 09 hoặc +84)'),
   
   body('warehouse_id')
-    .optional()
+    .optional({ values: 'falsy' })
     .isInt({ min: 1 }).withMessage('ID kho không hợp lệ'),
 
   handleValidationErrors,

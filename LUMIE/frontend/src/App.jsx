@@ -19,6 +19,7 @@ import LoginPage from './pages/auth/Login';
 import ManagerDashboard from './pages/manager/Dashboard';
 import EmployeesPage from './pages/manager/Employees';
 import ManagerProductsPage from './pages/manager/Products';
+import CategoriesPage from './pages/manager/Categories';
 import StaffDashboard from './pages/staff/Dashboard';
 import ProductsPage from './pages/staff/Products';
 import ChangePasswordPage from './pages/profile/ChangePassword';
@@ -63,6 +64,11 @@ function App() {
           <Route path="/manager/products" element={
             <ManagerRoute>
               <ManagerProductsPage />
+            </ManagerRoute>
+          } />
+          <Route path="/manager/categories" element={
+            <ManagerRoute>
+              <CategoriesPage />
             </ManagerRoute>
           } />
 

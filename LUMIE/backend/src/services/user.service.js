@@ -77,12 +77,6 @@ const getUserById = async (id) => {
  * Role luôn là WAREHOUSE_STAFF - không thể tùy chỉnh từ client
  */
 const createUser = async ({ full_name, email, password, phone, warehouse_id }, actorId, ipAddress) => {
-  // Kiểm tra email đã tồn tại chưa
-  const existingUser = await prisma.user.findUnique({ where: { email } });
-  if (existingUser) {
-    return { success: false, message: 'Email đã được sử dụng bởi tài khoản khác' };
-  }
-
   // Tìm role WAREHOUSE_STAFF
   const staffRole = await prisma.role.findUnique({ where: { role_name: 'WAREHOUSE_STAFF' } });
   if (!staffRole) {
@@ -92,13 +86,55 @@ const createUser = async ({ full_name, email, password, phone, warehouse_id }, a
   // Hash mật khẩu
   const password_hash = await bcrypt.hash(password, BCRYPT_ROUNDS);
 
-  // Tạo user
+  // Kiểm tra email đã tồn tại chưa
+  const existingUser = await prisma.user.findUnique({ where: { email } });
+  if (existingUser) {
+    // Nếu tài khoản này đã từng bị xóa mềm (deleted_at !== null)
+    // -> Khôi phục và cập nhật thông tin nhân viên mới
+    if (existingUser.deleted_at !== null) {
+      const restoredUser = await prisma.user.update({
+        where: { id: existingUser.id },
+        data: {
+          full_name,
+          password_hash,
+          phone: phone || null,
+          role_id: staffRole.id,
+          warehouse_id: warehouse_id ? parseInt(warehouse_id) : null,
+          status: 'ACTIVE',
+          deleted_at: null,
+          must_change_password: true,
+          failed_login_attempts: 0,
+          locked_until: null,
+        },
+        select: userSelectFields,
+      });
+
+      // Ghi audit log
+      await prisma.auditLog.create({
+        data: {
+          user_id: actorId,
+          action: 'CREATE_USER',
+          description: `Tái kích hoạt và tạo lại tài khoản nhân viên: ${email} (${full_name})`,
+          target_id: restoredUser.id,
+          target_type: 'user',
+          ip_address: ipAddress,
+        },
+      });
+
+      return { success: true, data: restoredUser };
+    }
+
+    // Nếu email đang thuộc về một nhân viên đang hoạt động
+    return { success: false, message: `Email "${email}" đã tồn tại trong danh sách nhân viên của hệ thống.` };
+  }
+
+  // Tạo user mới
   const newUser = await prisma.user.create({
     data: {
       full_name,
       email,
       password_hash,
-      phone,
+      phone: phone || null,
       role_id: staffRole.id, // QUAN TRỌNG: Luôn là WAREHOUSE_STAFF
       warehouse_id: warehouse_id ? parseInt(warehouse_id) : null,
       status: 'ACTIVE',

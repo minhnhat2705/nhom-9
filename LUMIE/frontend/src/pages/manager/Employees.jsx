@@ -75,14 +75,37 @@ const UserFormModal = ({ isOpen, onClose, onSuccess, warehouses, editUser = null
 
   const validate = () => {
     const errs = {};
-    if (!form.full_name.trim()) errs.full_name = 'Họ và tên không được để trống';
-    if (!form.email.trim()) errs.email = 'Email không được để trống';
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = 'Email không đúng định dạng';
-    if (!isEdit) {
-      if (!form.password) errs.password = 'Mật khẩu không được để trống';
-      else if (form.password.length < 8) errs.password = 'Mật khẩu phải có ít nhất 8 ký tự';
-      else if (!/(?=.*[a-zA-Z])(?=.*[0-9])/.test(form.password)) errs.password = 'Mật khẩu phải có cả chữ và số';
+    const name = form.full_name?.trim() || '';
+    if (!name) {
+      errs.full_name = 'Họ và tên không được để trống';
+    } else if (name.length < 2 || name.length > 100) {
+      errs.full_name = 'Họ và tên phải từ 2 đến 100 ký tự';
     }
+
+    if (!isEdit) {
+      const email = form.email?.trim() || '';
+      if (!email) {
+        errs.email = 'Email không được để trống';
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errs.email = 'Email không đúng định dạng (ví dụ: nhanvien@lumie.vn)';
+      }
+
+      if (!form.password) {
+        errs.password = 'Mật khẩu tạm thời không được để trống';
+      } else if (form.password.length < 8) {
+        errs.password = 'Mật khẩu phải có ít nhất 8 ký tự';
+      } else if (!/(?=.*[a-zA-Z])(?=.*[0-9])/.test(form.password)) {
+        errs.password = 'Mật khẩu phải chứa cả chữ cái và số';
+      }
+    }
+
+    if (form.phone && form.phone.trim()) {
+      const cleanPhone = form.phone.trim();
+      if (!/^(0|\+84)[3-9][0-9]{8}$/.test(cleanPhone)) {
+        errs.phone = 'Số điện thoại không hợp lệ (gồm 10 số, bắt đầu bằng 03, 05, 07, 08, 09 hoặc +84)';
+      }
+    }
+
     return errs;
   };
 
@@ -98,24 +121,33 @@ const UserFormModal = ({ isOpen, onClose, onSuccess, warehouses, editUser = null
     try {
       if (isEdit) {
         await userService.updateUser(editUser.id, {
-          full_name: form.full_name,
-          phone: form.phone,
-          warehouse_id: form.warehouse_id || null,
+          full_name: form.full_name.trim(),
+          phone: form.phone.trim() || null,
+          warehouse_id: form.warehouse_id ? Number(form.warehouse_id) : null,
         });
       } else {
         await userService.createUser({
-          full_name: form.full_name,
-          email: form.email,
-          phone: form.phone,
+          full_name: form.full_name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim() || undefined,
           password: form.password,
-          warehouse_id: form.warehouse_id || null,
+          warehouse_id: form.warehouse_id ? Number(form.warehouse_id) : undefined,
         });
       }
       onSuccess();
       onClose();
     } catch (err) {
-      const msg = err.response?.data?.message || 'Đã xảy ra lỗi. Vui lòng thử lại.';
-      setErrors({ submit: msg });
+      const responseData = err.response?.data;
+      const msg = responseData?.message || 'Đã xảy ra lỗi. Vui lòng thử lại.';
+      const newErrors = { submit: msg };
+      if (Array.isArray(responseData?.errors)) {
+        responseData.errors.forEach((errItem) => {
+          if (errItem.field) {
+            newErrors[errItem.field] = errItem.message;
+          }
+        });
+      }
+      setErrors(newErrors);
     } finally {
       setLoading(false);
     }
@@ -187,9 +219,12 @@ const UserFormModal = ({ isOpen, onClose, onSuccess, warehouses, editUser = null
               type="tel"
               value={form.phone}
               onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
-              className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all"
+              className={`w-full px-4 py-2.5 bg-white border rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all ${
+                errors.phone ? 'border-red-300' : 'border-gray-200'
+              }`}
               placeholder="0912345678"
             />
+            {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
           </div>
 
           <div>

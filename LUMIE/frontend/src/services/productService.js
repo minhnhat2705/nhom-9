@@ -40,6 +40,15 @@ const productService = {
   },
 
   /**
+   * Tải ảnh sản phẩm lên folder products và tự động đổi tên theo thứ tự
+   * @param {string} imageBase64
+   */
+  uploadProductImage: async (imageBase64) => {
+    const response = await api.post('/products/upload-image', { image: imageBase64 });
+    return response.data;
+  },
+
+  /**
    * CHỨC NĂNG QUẢN LÝ 2: Sửa thông tin sản phẩm và biến thể
    * @param {number|string} id
    * @param {Object} productData

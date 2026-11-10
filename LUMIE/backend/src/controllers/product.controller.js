@@ -8,8 +8,88 @@
  * - Xóa / Ngừng kinh doanh (DELETE): CHỈ Quản lý (WAREHOUSE_MANAGER)
  */
 
+const fs = require('fs');
+const path = require('path');
 const prisma = require('../config/prisma');
 const { successResponse, errorResponse } = require('../utils/response');
+
+/**
+ * Helper: Lưu ảnh sản phẩm vào folder products và tự động đổi tên theo thứ tự spXXX.jpg
+ */
+const saveProductImageSequentially = (base64Data) => {
+  if (!base64Data) return null;
+
+  const publicDir = path.resolve(__dirname, '../../../frontend/public/products');
+  const assetsDir = path.resolve(__dirname, '../../../frontend/src/assets/products');
+  const distDir = path.resolve(__dirname, '../../../frontend/dist/products');
+
+  // Đảm bảo thư mục tồn tại
+  if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
+
+  // Quét danh sách file hiện có để tìm số thứ tự lớn nhất (sp001 -> sp100 -> sp101...)
+  const files = fs.readdirSync(publicDir);
+  let maxNum = 0;
+  files.forEach((file) => {
+    const match = file.match(/^sp(\d+)\.(jpg|jpeg|png|webp)$/i);
+    if (match) {
+      const num = parseInt(match[1], 10);
+      if (num > maxNum) maxNum = num;
+    }
+  });
+
+  const nextNum = maxNum > 0 ? maxNum + 1 : 101;
+  const filename = `sp${String(nextNum).padStart(3, '0')}.jpg`;
+
+  // Tách base64 header nếu có
+  const matches = base64Data.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+  const buffer = matches ? Buffer.from(matches[2], 'base64') : Buffer.from(base64Data, 'base64');
+
+  // Ghi vào public/products
+  fs.writeFileSync(path.join(publicDir, filename), buffer);
+
+  // Đồng bộ sang assets/products nếu thư mục tồn tại
+  if (fs.existsSync(assetsDir)) {
+    fs.writeFileSync(path.join(assetsDir, filename), buffer);
+  }
+
+  // Đồng bộ sang dist/products nếu thư mục tồn tại
+  if (fs.existsSync(distDir)) {
+    fs.writeFileSync(path.join(distDir, filename), buffer);
+  }
+
+  return {
+    filename,
+    image_url: `products/${filename}`,
+    nextNum,
+  };
+};
+
+/**
+ * POST /api/products/upload-image
+ * Upload ảnh sản phẩm mới, tự động lưu vào folder products và đổi tên theo thứ tự
+ */
+const uploadProductImage = async (req, res, next) => {
+  try {
+    const { image } = req.body;
+    if (!image) {
+      return errorResponse(res, 'Vui lòng cung cấp dữ liệu hình ảnh.', 400);
+    }
+
+    const saved = saveProductImageSequentially(image);
+    if (!saved) {
+      return errorResponse(res, 'Không thể lưu hình ảnh sản phẩm.', 500);
+    }
+
+    return successResponse(
+      res,
+      saved,
+      `Đã lưu ảnh thành công vào folder products với tên "${saved.filename}"`,
+      201
+    );
+  } catch (error) {
+    next(error);
+  }
+};
 
 /**
  * GET /api/products
@@ -356,6 +436,18 @@ const createProduct = async (req, res, next) => {
     }
     const defaultWhId = defaultWarehouse ? defaultWarehouse.id : 1;
 
+    // Xử lý ảnh sản phẩm: Nếu có image_data (base64) thì lưu tự động theo thứ tự
+    let finalImageUrl = image_url ? image_url.trim() : null;
+    if (req.body.image_data) {
+      const saved = saveProductImageSequentially(req.body.image_data);
+      if (saved) {
+        finalImageUrl = saved.image_url;
+      }
+    }
+    if (!finalImageUrl) {
+      finalImageUrl = `products/${finalCode.toLowerCase()}.jpg`;
+    }
+
     // 4. Tạo sản phẩm và biến thể trong Transaction
     const newProduct = await prisma.$transaction(async (tx) => {
       // Tạo sản phẩm cha
@@ -369,7 +461,7 @@ const createProduct = async (req, res, next) => {
           gender: gender,
           material: material ? material.trim() : null,
           description: description ? description.trim() : null,
-          image_url: image_url ? image_url.trim() : `products/${finalCode.toLowerCase()}.jpg`,
+          image_url: finalImageUrl,
           status: 'ACTIVE',
         },
       });
@@ -704,6 +796,7 @@ module.exports = {
   getProductFiltersMeta,
   getProductById,
   createProduct,
+  uploadProductImage,
   updateProduct,
   deleteProduct,
   reactivateProduct,
