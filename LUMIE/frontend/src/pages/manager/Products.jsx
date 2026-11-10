@@ -422,7 +422,7 @@ const ManagerProductsPage = () => {
                 </svg>
               </span>
               <h1 className="text-xl sm:text-2xl font-bold text-[#1E1B4B]">
-                Quản lý sản phẩm & Biến thể
+                Quản lý sản phẩm
               </h1>
               <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-50 text-[#6D28D9] border border-purple-200">
                 Quyền Quản lý kho
@@ -442,7 +442,7 @@ const ManagerProductsPage = () => {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
-            <span>+ Thêm sản phẩm mới</span>
+            <span>Thêm sản phẩm mới</span>
           </button>
         </div>
 
@@ -498,8 +498,8 @@ const ManagerProductsPage = () => {
                 }}
                 className="px-3 py-2 rounded-xl bg-purple-50/50 border border-purple-100 text-xs sm:text-sm font-semibold text-[#1E1B4B] outline-hidden cursor-pointer"
               >
-                <option value="ACTIVE">🟢 Đang kinh doanh (ACTIVE)</option>
-                <option value="INACTIVE">🔴 Ngừng kinh doanh (INACTIVE)</option>
+                <option value="ACTIVE">🟢 Đang kinh doanh</option>
+                <option value="INACTIVE">🔴 Ngừng kinh doanh</option>
                 <option value="ALL">⚪ Tất cả trạng thái</option>
               </select>
 
