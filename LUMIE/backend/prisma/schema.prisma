@@ -52,6 +52,10 @@ model Warehouse {
   transfers_from  StockTransfer[] @relation("TransferFromWarehouse")
   transfers_to    StockTransfer[] @relation("TransferToWarehouse")
   stock_audits    StockAudit[]    @relation("AuditWarehouse")
+  historical_sales HistoricalSale[] @relation("WarehouseHistoricalSales")
+  replenishment_suggestions ReplenishmentSuggestion[]
+  purchase_orders PurchaseOrder[]
+  alerts          SystemAlert[]
 
   @@map("warehouses")
 }
@@ -103,6 +107,8 @@ model User {
   created_audits        StockAudit[]    @relation("AuditCreatedBy")
   assigned_audits       StockAudit[]    @relation("AuditAssignedTo")
   approved_audits       StockAudit[]    @relation("AuditApprovedBy")
+  created_purchase_orders PurchaseOrder[] @relation("UserPurchaseOrders")
+  notification_states   NotificationRecipient[]
 
   @@map("users")
 }
@@ -175,12 +181,16 @@ model Supplier {
   phone          String?   @db.VarChar(20)
   email          String?   @db.VarChar(100)
   address        String?   @db.VarChar(255)
+  lead_time      Int?      @default(7)
+  min_order_qty  Int?      @default(10)
   status         Status    @default(ACTIVE)
   created_at     DateTime  @default(now())
   updated_at     DateTime  @updatedAt
 
   products       Product[]
   receipts       Receipt[]
+  purchase_orders PurchaseOrder[]
+  replenishment_suggestions ReplenishmentSuggestion[]
 
   @@map("suppliers")
 }
@@ -207,6 +217,8 @@ model Product {
   updated_at    DateTime        @updatedAt
 
   variants      ProductVariant[]
+  replenishment_suggestions ReplenishmentSuggestion[]
+  alerts        SystemAlert[]
 
   @@index([category_id])
   @@index([supplier_id])
@@ -239,6 +251,10 @@ model ProductVariant {
   export_items  ExportReceiptItem[]
   transfer_items StockTransferItem[]
   audit_items    StockAuditItem[]
+  historical_sales HistoricalSale[] @relation("VariantHistoricalSales")
+  purchase_order_items PurchaseOrderItem[]
+  replenishment_suggestions ReplenishmentSuggestion[]
+  alerts               SystemAlert[]
 
   @@index([product_id])
   @@map("product_variants")
@@ -513,4 +529,193 @@ model StockAuditItem {
   @@index([audit_id])
   @@index([variant_id])
   @@map("stock_audit_items")
+}
+
+// ============================================================
+// BẢNG: historical_sales
+// Dữ liệu bán hàng lịch sử phục vụ AI dự báo nhu cầu (US-34, US-35, US-36)
+// ============================================================
+model HistoricalSale {
+  id           Int            @id @default(autoincrement())
+  sale_date    DateTime       @db.Date
+  warehouse_id Int
+  warehouse    Warehouse      @relation("WarehouseHistoricalSales", fields: [warehouse_id], references: [id], onDelete: Cascade)
+  variant_id   Int
+  variant      ProductVariant @relation("VariantHistoricalSales", fields: [variant_id], references: [id], onDelete: Cascade)
+  quantity     Int            @default(1)
+  unit_price   Decimal        @default(0.00) @db.Decimal(15, 2)
+  total_amount Decimal        @default(0.00) @db.Decimal(15, 2)
+  channel      String?        @default("STORE") @db.VarChar(50)
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+
+  @@unique([sale_date, warehouse_id, variant_id], name: "sale_date_warehouse_variant_unique")
+  @@index([sale_date])
+  @@index([warehouse_id])
+  @@index([variant_id])
+  @@map("historical_sales")
+}
+
+// ============================================================
+// BẢNG: replenishment_suggestions (Epic 4.2: US-37, US-38, US-39)
+// Đề xuất nhập hàng thông minh bằng AI
+// ============================================================
+model ReplenishmentSuggestion {
+  id                  Int             @id @default(autoincrement())
+  suggestion_code     String          @unique @db.VarChar(50)
+  warehouse_id        Int
+  variant_id          Int
+  product_id          Int
+  supplier_id         Int
+  period_key          String          @db.VarChar(50)
+  daily_demand        Float           @default(0)
+  lead_time           Int             @default(7)
+  demand_in_lead_time Int             @default(0)
+  current_stock       Int             @default(0)
+  pending_export_qty  Int             @default(0)
+  available_stock     Int             @default(0)
+  incoming_stock      Int             @default(0)
+  safety_stock        Int             @default(10)
+  raw_suggested_qty   Int             @default(0)
+  min_order_qty       Int             @default(10)
+  ai_suggested_qty    Int             @default(0)
+  adjusted_qty        Int?
+  days_of_supply      Float           @default(0)
+  latest_order_date   DateTime?
+  urgency_level       String          @default("NORMAL") @db.VarChar(20) // URGENT | HIGH | NORMAL
+  calculation_details String?         @db.Text // Snapshot JSON công thức & dữ liệu tính toán
+  status              String          @default("PENDING") @db.VarChar(30) // PENDING | APPROVED | REJECTED | ORDERED
+  rejection_reason    String?         @db.VarChar(255)
+  purchase_order_id   Int?
+  created_at          DateTime        @default(now())
+  updated_at          DateTime        @updatedAt
+
+  warehouse           Warehouse       @relation(fields: [warehouse_id], references: [id], onDelete: Cascade)
+  variant             ProductVariant  @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+  product             Product         @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  supplier            Supplier        @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
+  purchase_order      PurchaseOrder?  @relation(fields: [purchase_order_id], references: [id], onDelete: SetNull)
+
+  @@index([warehouse_id])
+  @@index([variant_id])
+  @@index([supplier_id])
+  @@index([status])
+  @@index([period_key])
+  @@map("replenishment_suggestions")
+}
+
+// ============================================================
+// BẢNG: purchase_orders (Epic 4.2: US-40)
+// Đơn đặt hàng nhà cung cấp (PO)
+// ============================================================
+model PurchaseOrder {
+  id                     Int                         @id @default(autoincrement())
+  po_code                String                      @unique @db.VarChar(50)
+  supplier_id            Int
+  warehouse_id           Int
+  order_date             DateTime                    @default(now())
+  expected_delivery_date DateTime
+  total_items            Int                         @default(0)
+  total_quantity         Int                         @default(0)
+  total_amount           Decimal                     @default(0.00) @db.Decimal(15, 2)
+  status                 String                      @default("PENDING") @db.VarChar(30) // PENDING | SENT | CONFIRMED | COMPLETED | CANCELLED
+  notes                  String?                     @db.Text
+  created_by_id          Int?
+  created_at             DateTime                    @default(now())
+  updated_at             DateTime                    @updatedAt
+
+  supplier               Supplier                    @relation(fields: [supplier_id], references: [id], onDelete: Restrict)
+  warehouse              Warehouse                   @relation(fields: [warehouse_id], references: [id], onDelete: Restrict)
+  created_by             User?                       @relation("UserPurchaseOrders", fields: [created_by_id], references: [id], onDelete: SetNull)
+  items                  PurchaseOrderItem[]
+  suggestions            ReplenishmentSuggestion[]
+
+  @@index([supplier_id])
+  @@index([warehouse_id])
+  @@index([status])
+  @@map("purchase_orders")
+}
+
+// ============================================================
+// BẢNG: purchase_order_items (Epic 4.2: US-40)
+// Chi tiết mặt hàng trong Đơn đặt hàng nhà cung cấp
+// ============================================================
+model PurchaseOrderItem {
+  id                Int             @id @default(autoincrement())
+  purchase_order_id Int
+  variant_id        Int
+  quantity          Int             @default(0)
+  unit_price        Decimal         @default(0.00) @db.Decimal(15, 2)
+  total_price       Decimal         @default(0.00) @db.Decimal(15, 2)
+  created_at        DateTime        @default(now())
+  updated_at        DateTime        @updatedAt
+
+  purchase_order    PurchaseOrder   @relation(fields: [purchase_order_id], references: [id], onDelete: Cascade)
+  variant           ProductVariant  @relation(fields: [variant_id], references: [id], onDelete: Restrict)
+
+  @@index([purchase_order_id])
+  @@index([variant_id])
+  @@map("purchase_order_items")
+}
+
+// ============================================================
+// BẢNG: system_alerts (Theme 5: US-41 -> US-46)
+// Cảnh báo thông minh: LOW_STOCK, BROKEN_SIZE, STOCKOUT_FORECAST, OVERSTOCK_SLOW
+// ============================================================
+model SystemAlert {
+  id              Int       @id @default(autoincrement())
+  alert_code      String    @unique @db.VarChar(100)
+  alert_type      String    @db.VarChar(50) // LOW_STOCK | BROKEN_SIZE | STOCKOUT_FORECAST | OVERSTOCK_SLOW
+  warehouse_id    Int
+  product_id      Int?
+  variant_id      Int?
+  title           String    @db.VarChar(255)
+  message         String    @db.Text
+  urgency         String    @default("HIGH") @db.VarChar(20) // URGENT | HIGH | MEDIUM | LOW
+  target_role     String    @default("STAFF") @db.VarChar(30) // STAFF (Staff & Manager) | MANAGER (Manager only)
+  current_stock   Int       @default(0)
+  threshold_stock Int?      // min_stock hoặc ngưỡng cảnh báo
+  days_of_supply  Float?
+  stagnant_days   Int?      // số ngày không bán được hàng
+  capital_tied_up Decimal?  @default(0.00) @db.Decimal(15, 2) // Giá trị vốn đọng = Tồn * Giá vốn
+  extra_data      String?   @db.Text // JSON chứa chi tiết bổ sung (core sizes, các size còn lại, v.v.)
+  status          String    @default("OPEN") @db.VarChar(20) // OPEN | RESOLVED | ACKNOWLEDGED
+  resolved_at     DateTime?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+
+  warehouse       Warehouse       @relation(fields: [warehouse_id], references: [id], onDelete: Cascade)
+  product         Product?        @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  variant         ProductVariant? @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+  recipients      NotificationRecipient[]
+
+  @@index([warehouse_id])
+  @@index([alert_type])
+  @@index([status])
+  @@index([target_role])
+  @@index([variant_id])
+  @@map("system_alerts")
+}
+
+// ============================================================
+// BẢNG: notification_recipients (US-45, US-46)
+// Trạng thái thông báo cá nhân hóa theo từng User (Đã đọc, Đã ẩn/xóa)
+// ============================================================
+model NotificationRecipient {
+  id           Int         @id @default(autoincrement())
+  alert_id     Int
+  user_id      Int
+  is_read      Boolean     @default(false)
+  is_dismissed Boolean     @default(false) // Ẩn/Xóa cá nhân theo user_id (không ảnh hưởng user khác)
+  read_at      DateTime?
+  dismissed_at DateTime?
+  created_at   DateTime    @default(now())
+
+  alert        SystemAlert @relation(fields: [alert_id], references: [id], onDelete: Cascade)
+  user         User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([alert_id, user_id], name: "alert_user_unique")
+  @@index([user_id, is_read])
+  @@index([user_id, is_dismissed])
+  @@map("notification_recipients")
 }

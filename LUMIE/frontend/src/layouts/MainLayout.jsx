@@ -2,9 +2,10 @@
  * src/layouts/MainLayout.jsx - Layout chính với Sidebar cố định chiều cao & Logo to căn giữa
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import notificationService from '../services/notificationService';
 
 // Import logo từ thư mục src/assets/image
 import logoImage from '../assets/image/logo.png';
@@ -29,6 +30,28 @@ const MainLayout = ({ children }) => {
   // State xác nhận đăng xuất
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  // Số lượng thông báo chưa đọc
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchUnread = async () => {
+      try {
+        const count = await notificationService.getUnreadCount();
+        if (isMounted) setUnreadCount(count || 0);
+      } catch (err) {
+        // silent error
+      }
+    };
+
+    fetchUnread();
+    const interval = setInterval(fetchUnread, 30000); // Polling 30s
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [location.pathname]);
 
   // Hàm chuyển đổi trạng thái thu gọn và lưu vào localStorage
   const toggleCollapse = () => {
@@ -129,6 +152,43 @@ const MainLayout = ({ children }) => {
             </svg>
           ),
         },
+        {
+          name: 'Dự báo nhu cầu AI',
+          path: '/forecast',
+          icon: (
+            <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
+          ),
+        },
+        {
+          name: 'Đề xuất nhập hàng AI',
+          path: '/replenishment',
+          icon: (
+            <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+          ),
+        },
+        {
+          name: 'Báo cáo kho',
+          path: '/reports',
+          icon: (
+            <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          ),
+        },
+        {
+          name: 'Trung tâm thông báo',
+          path: '/notifications',
+          badge: unreadCount,
+          icon: (
+            <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+          ),
+        },
       ]
     : [
         {
@@ -182,6 +242,16 @@ const MainLayout = ({ children }) => {
           icon: (
             <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+          ),
+        },
+        {
+          name: 'Thông báo & Cảnh báo',
+          path: '/notifications',
+          badge: unreadCount,
+          icon: (
+            <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
             </svg>
           ),
         },
@@ -254,7 +324,7 @@ const MainLayout = ({ children }) => {
                 to={item.path}
                 onClick={() => setIsMobileOpen(false)}
                 title={isCollapsed ? item.name : ''}
-                className={`flex items-center rounded-xl text-sm font-medium transition-all duration-200 ${
+                className={`relative flex items-center rounded-xl text-sm font-medium transition-all duration-200 ${
                   isCollapsed ? 'justify-center p-3' : 'px-3.5 py-3 gap-3'
                 } ${
                   isActive
@@ -262,8 +332,22 @@ const MainLayout = ({ children }) => {
                     : 'text-[#1E1B4B] hover:bg-white/70 hover:text-[#6D28D9]'
                 }`}
               >
-                {item.icon}
-                {!isCollapsed && <span className="truncate whitespace-nowrap">{item.name}</span>}
+                <div className="relative shrink-0">
+                  {item.icon}
+                  {isCollapsed && item.badge > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 w-2.5 h-2.5 rounded-full bg-red-500 ring-2 ring-white animate-pulse" />
+                  )}
+                </div>
+                {!isCollapsed && (
+                  <div className="flex-1 flex items-center justify-between min-w-0">
+                    <span className="truncate whitespace-nowrap">{item.name}</span>
+                    {item.badge > 0 && (
+                      <span className="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold bg-red-500 text-white shadow-xs">
+                        {item.badge > 99 ? '99+' : item.badge}
+                      </span>
+                    )}
+                  </div>
+                )}
               </Link>
             );
           })}
@@ -325,18 +409,42 @@ const MainLayout = ({ children }) => {
             </button>
           </div>
 
-          {/* Thông tin User góc phải */}
-          <div className="flex items-center gap-3.5">
-            <div className="text-right">
-              <p className="text-sm font-semibold text-[#1E1B4B]">
-                {user?.fullName || user?.full_name || user?.name || 'Phạm Doãn Nho'}
-              </p>
-              <p className="text-xs text-gray-500">
-                {isManager ? 'Quản lý kho' : 'Nhân viên kho'}
-              </p>
-            </div>
-            <div className="w-10 h-10 rounded-full bg-[#1E1B4B] text-white flex items-center justify-center font-semibold text-sm shadow-sm">
-              {userInitial}
+          {/* Khu vực thông báo & Thông tin User góc phải */}
+          <div className="flex items-center gap-4">
+            {/* Chuông thông báo (US-45 & US-46) */}
+            <Link
+              to="/notifications"
+              className="relative p-2.5 rounded-xl bg-purple-50/80 hover:bg-purple-100 text-[#6D28D9] border border-purple-100/80 transition-all cursor-pointer hover:scale-105 active:scale-95 flex items-center justify-center shadow-2xs"
+              title="Trung tâm thông báo & cảnh báo"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.75}
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full bg-red-500 text-white text-[11px] font-bold flex items-center justify-center shadow-xs animate-pulse ring-2 ring-white">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
+            </Link>
+
+            {/* Thông tin User */}
+            <div className="flex items-center gap-3.5 pl-2 border-l border-gray-100">
+              <div className="text-right hidden sm:block">
+                <p className="text-sm font-semibold text-[#1E1B4B]">
+                  {user?.fullName || user?.full_name || user?.name || 'Phạm Doãn Nho'}
+                </p>
+                <p className="text-xs text-gray-500">
+                  {isManager ? 'Quản lý kho' : 'Nhân viên kho'}
+                </p>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-[#1E1B4B] text-white flex items-center justify-center font-semibold text-sm shadow-sm ring-2 ring-purple-100">
+                {userInitial}
+              </div>
             </div>
           </div>
         </header>

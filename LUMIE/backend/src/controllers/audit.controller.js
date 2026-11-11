@@ -141,6 +141,9 @@ const getAudits = async (req, res, next) => {
       where.warehouse_id = parseInt(warehouse_id, 10);
     }
 
+    const statsWhere = { ...where };
+    delete statsWhere.status;
+
     const [totalItems, auditsList, statusCounts] = await Promise.all([
       prisma.stockAudit.count({ where }),
       prisma.stockAudit.findMany({
@@ -158,6 +161,7 @@ const getAudits = async (req, res, next) => {
       }),
       prisma.stockAudit.groupBy({
         by: ['status'],
+        where: statsWhere,
         _count: { id: true },
       }),
     ]);
@@ -181,6 +185,7 @@ const getAudits = async (req, res, next) => {
         limit: limitNum,
         totalPages: Math.ceil(totalItems / limitNum) || 1,
       },
+      stats,
       meta: { stats },
     });
   } catch (error) {

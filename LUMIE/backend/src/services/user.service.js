@@ -359,9 +359,28 @@ const deleteUser = async (id, actorId, ipAddress) => {
   return { success: true, message: 'Xóa nhân viên thành công' };
 };
 
+/**
+ * Thống kê số lượng nhân viên kho nhanh (Total, Active, Inactive)
+ */
+const getUserStats = async () => {
+  const baseWhere = {
+    deleted_at: null,
+    role: { role_name: 'WAREHOUSE_STAFF' },
+  };
+
+  const [total, active, inactive] = await Promise.all([
+    prisma.user.count({ where: baseWhere }),
+    prisma.user.count({ where: { ...baseWhere, status: 'ACTIVE' } }),
+    prisma.user.count({ where: { ...baseWhere, status: 'INACTIVE' } }),
+  ]);
+
+  return { total, active, inactive };
+};
+
 module.exports = {
   getUsers,
   getUserById,
+  getUserStats,
   createUser,
   updateUser,
   updateUserStatus,

@@ -408,7 +408,9 @@ const batchUpdateMinStockThreshold = async (req, res, next) => {
           user_id: req.user.id,
           action: 'BATCH_UPDATE_MIN_STOCK',
           description: `Quản lý ${req.user.full_name} đã thiết lập ngưỡng tồn tối thiểu hàng loạt cho ${ids.length} biến thể thành ${newMinStock}`,
+          target_id: ids[0] || null,
           target_type: 'product_variant',
+          ip_address: req.ip || null,
         },
       });
     });

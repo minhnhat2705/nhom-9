@@ -10,6 +10,8 @@
 const prisma = require('../config/prisma');
 const { successResponse, errorResponse } = require('../utils/response');
 
+const getUserRole = (user) => (typeof user?.role === 'object' ? user.role?.role_name : user?.role);
+
 /**
  * 1. Lấy danh sách lịch sử phiếu nhập kho (Cả Quản lý & Nhân viên)
  * GET /api/inbound/receipts
@@ -44,7 +46,11 @@ const getReceipts = async (req, res, next) => {
 
     // Filter theo supplier
     if (supplier_id) {
-      where.supplier_id = parseInt(supplier_id, 10);
+      if (supplier_id === 'INTERNAL' || supplier_id === 'NONE') {
+        where.supplier_id = null;
+      } else {
+        where.supplier_id = parseInt(supplier_id, 10);
+      }
     }
 
     // Tìm kiếm theo mã phiếu, ghi chú hoặc tên người tạo
@@ -58,6 +64,10 @@ const getReceipts = async (req, res, next) => {
         { supplier: { supplier_name: { contains: keyword } } },
       ];
     }
+
+    // Điều kiện đếm thống kê theo các bộ lọc đang chọn (ngoại trừ status để hiển thị đủ các thẻ)
+    const statsWhere = { ...where };
+    delete statsWhere.status;
 
     // Đếm tổng số bản ghi
     const [totalItems, receipts, statusCounts] = await Promise.all([
@@ -106,6 +116,7 @@ const getReceipts = async (req, res, next) => {
       // Thống kê nhanh số lượng theo trạng thái
       prisma.receipt.groupBy({
         by: ['status'],
+        where: statsWhere,
         _count: { id: true },
       }),
     ]);
@@ -247,7 +258,7 @@ const getReceiptFormData = async (req, res, next) => {
 const createReceipt = async (req, res, next) => {
   try {
     // Kiểm tra quyền nghiêm ngặt
-    if (req.user.role !== 'WAREHOUSE_STAFF') {
+    if (getUserRole(req.user) !== 'WAREHOUSE_STAFF') {
       return errorResponse(
         res,
         'Chức năng Tạo phiếu nhập kho chỉ dành riêng cho Nhân viên kho. Quản lý không được tạo phiếu!',
@@ -393,7 +404,7 @@ const createReceipt = async (req, res, next) => {
 const approveReceipt = async (req, res, next) => {
   try {
     // Kiểm tra quyền nghiêm ngặt
-    if (req.user.role !== 'WAREHOUSE_MANAGER') {
+    if (getUserRole(req.user) !== 'WAREHOUSE_MANAGER') {
       return errorResponse(
         res,
         'Chức năng Duyệt phiếu nhập kho chỉ dành riêng cho Quản lý kho. Nhân viên không được duyệt!',
@@ -426,6 +437,14 @@ const approveReceipt = async (req, res, next) => {
 
     // Thực hiện trong Transaction để đảm bảo tính toàn vẹn dữ liệu
     const updatedReceipt = await prisma.$transaction(async (tx) => {
+      // Kiểm tra lại trạng thái trong transaction để chống race condition
+      const checkReceipt = await tx.receipt.findUnique({
+        where: { id: receiptId },
+      });
+      if (!checkReceipt || checkReceipt.status !== 'PENDING') {
+        throw new Error('Phiếu nhập kho này đã được xử lý hoặc không còn ở trạng thái chờ duyệt!');
+      }
+
       // 1. Cập nhật trạng thái phiếu thành APPROVED
       const approved = await tx.receipt.update({
         where: { id: receiptId },
@@ -443,25 +462,33 @@ const approveReceipt = async (req, res, next) => {
           approved_by: {
             select: { id: true, full_name: true, email: true },
           },
-          items: true,
+          items: {
+            include: {
+              variant: {
+                select: { id: true, min_stock: true },
+              },
+            },
+          },
         },
       });
 
       // 2. Tự động cộng số lượng tồn kho tương ứng
-      for (const item of receipt.items) {
+      for (const item of approved.items) {
         // Tìm bản ghi tồn kho hiện tại theo variant_id và warehouse_id
         const existingInventory = await tx.inventory.findUnique({
           where: {
             variant_id_warehouse_id: {
               variant_id: item.variant_id,
-              warehouse_id: receipt.warehouse_id,
+              warehouse_id: approved.warehouse_id,
             },
           },
         });
 
+        const minStock = (item.variant && item.variant.min_stock != null) ? item.variant.min_stock : 10;
+
         if (existingInventory) {
           const newQty = existingInventory.quantity + item.quantity;
-          const newStockStatus = newQty >= 10 ? 'Đủ hàng' : (newQty > 0 ? 'Sắp hết' : 'Hết hàng');
+          const newStockStatus = newQty >= minStock ? 'Đủ hàng' : (newQty > 0 ? 'Sắp hết' : 'Hết hàng');
 
           await tx.inventory.update({
             where: { id: existingInventory.id },
@@ -474,11 +501,11 @@ const approveReceipt = async (req, res, next) => {
           });
         } else {
           // Chưa có tồn kho ở kho này -> tạo mới
-          const newStockStatus = item.quantity >= 10 ? 'Đủ hàng' : (item.quantity > 0 ? 'Sắp hết' : 'Hết hàng');
+          const newStockStatus = item.quantity >= minStock ? 'Đủ hàng' : (item.quantity > 0 ? 'Sắp hết' : 'Hết hàng');
           await tx.inventory.create({
             data: {
               variant_id: item.variant_id,
-              warehouse_id: receipt.warehouse_id,
+              warehouse_id: approved.warehouse_id,
               quantity: item.quantity,
               shelf_location: item.shelf_location || 'A-01',
               stock_status: newStockStatus,
@@ -493,8 +520,8 @@ const approveReceipt = async (req, res, next) => {
         data: {
           user_id: req.user.id,
           action: 'APPROVE_RECEIPT',
-          description: `Quản lý ${req.user.full_name} đã DUYỆT phiếu nhập kho ${receipt.receipt_code} (Tổng ${receipt.total_quantity} sản phẩm nhập vào ${receipt.warehouse.warehouse_name})`,
-          target_id: receipt.id,
+          description: `Quản lý ${req.user.full_name} đã DUYỆT phiếu nhập kho ${approved.receipt_code} (Tổng ${approved.total_quantity} sản phẩm nhập vào ${approved.warehouse.warehouse_name})`,
+          target_id: approved.id,
           target_type: 'receipt',
           ip_address: req.ip || null,
         },
@@ -521,7 +548,7 @@ const approveReceipt = async (req, res, next) => {
 const rejectReceipt = async (req, res, next) => {
   try {
     // Kiểm tra quyền nghiêm ngặt
-    if (req.user.role !== 'WAREHOUSE_MANAGER') {
+    if (getUserRole(req.user) !== 'WAREHOUSE_MANAGER') {
       return errorResponse(
         res,
         'Chức năng Từ chối phiếu nhập kho chỉ dành riêng cho Quản lý kho. Nhân viên không có quyền!',

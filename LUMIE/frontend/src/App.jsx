@@ -28,6 +28,10 @@ import ReceiptsPage from './pages/inbound/Receipts';
 import OutboundPage from './pages/outbound/Outbound';
 import InventoryTrackingPage from './pages/inventory/InventoryTracking';
 import StockAuditPage from './pages/audit/StockAudit';
+import ForecastDemand from './pages/forecast/ForecastDemand';
+import ReplenishmentPage from './pages/replenishment/Replenishment';
+import NotificationsPage from './pages/notifications/Notifications';
+import ReportsPage from './pages/reports/Reports';
 
 // Component chuyển hướng thông minh theo role
 const HomeRedirect = () => {
@@ -81,6 +85,24 @@ function App() {
               <WarehousesPage />
             </ManagerRoute>
           } />
+          <Route path="/forecast" element={
+            <ManagerRoute>
+              <ForecastDemand />
+            </ManagerRoute>
+          } />
+          <Route path="/manager/forecast" element={<Navigate to="/forecast" replace />} />
+          <Route path="/replenishment" element={
+            <ManagerRoute>
+              <ReplenishmentPage />
+            </ManagerRoute>
+          } />
+          <Route path="/manager/replenishment" element={<Navigate to="/replenishment" replace />} />
+          <Route path="/reports" element={
+            <ManagerRoute>
+              <ReportsPage />
+            </ManagerRoute>
+          } />
+          <Route path="/manager/reports" element={<Navigate to="/reports" replace />} />
 
           {/* ===== ROUTES CHO NHÂN VIÊN KHO ===== */}
           <Route path="/staff/dashboard" element={
@@ -126,6 +148,14 @@ function App() {
           } />
           <Route path="/manager/audits" element={<Navigate to="/audits" replace />} />
           <Route path="/staff/audits" element={<Navigate to="/audits" replace />} />
+
+          <Route path="/notifications" element={
+            <ProtectedRoute>
+              <NotificationsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/manager/notifications" element={<Navigate to="/notifications" replace />} />
+          <Route path="/staff/notifications" element={<Navigate to="/notifications" replace />} />
 
           <Route path="/profile/change-password" element={
             <ProtectedRoute>

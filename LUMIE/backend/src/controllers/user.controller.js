@@ -182,9 +182,23 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
+/**
+ * GET /api/users/stats
+ * Thống kê nhanh số lượng nhân viên (Total, Active, Inactive)
+ */
+const getUserStats = async (req, res, next) => {
+  try {
+    const stats = await userService.getUserStats();
+    return successResponse(res, stats, 'Thống kê nhân viên thành công');
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getUsers,
   getUserById,
+  getUserStats,
   createUser,
   updateUser,
   updateUserStatus,

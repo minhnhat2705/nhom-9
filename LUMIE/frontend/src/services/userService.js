@@ -28,6 +28,14 @@ const userService = {
   },
 
   /**
+   * Lấy thống kê số lượng nhân viên (Total, Active, Inactive)
+   */
+  getUserStats: async () => {
+    const response = await api.get('/users/stats');
+    return response.data.data;
+  },
+
+  /**
    * Tạo nhân viên mới
    */
   createUser: async (userData) => {

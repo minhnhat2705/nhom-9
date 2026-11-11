@@ -104,6 +104,9 @@ const getExports = async (req, res, next) => {
       ];
     }
 
+    const statsWhere = { ...where };
+    delete statsWhere.status;
+
     const [totalItems, exportsList, statusCounts] = await Promise.all([
       prisma.exportReceipt.count({ where }),
       prisma.exportReceipt.findMany({
@@ -133,6 +136,7 @@ const getExports = async (req, res, next) => {
       }),
       prisma.exportReceipt.groupBy({
         by: ['status'],
+        where: statsWhere,
         _count: { id: true },
       }),
     ]);
@@ -218,7 +222,8 @@ const createExport = async (req, res, next) => {
       return errorResponse(res, 'Vui lòng chọn Kho xuất hàng', 400);
     }
 
-    if (!customer_name || !customer_name.trim()) {
+    const isCustomerRequired = !['DISPOSAL', 'DESTROY', 'INTERNAL'].includes(export_type);
+    if (isCustomerRequired && (!customer_name || !customer_name.trim())) {
       return errorResponse(res, 'Vui lòng nhập tên khách hàng hoặc đối tác nhận hàng', 400);
     }
 
@@ -388,13 +393,27 @@ const approveExport = async (req, res, next) => {
 
     // Transaction trừ tồn kho và cập nhật trạng thái phiếu
     const updated = await prisma.$transaction(async (tx) => {
+      // Re-fetch và kiểm tra trạng thái trong transaction để chống race condition
+      const currentReceipt = await tx.exportReceipt.findUnique({
+        where: { id: exportId },
+        include: { items: true, warehouse: true },
+      });
+
+      if (!currentReceipt) {
+        throw new Error('Không tìm thấy phiếu xuất kho');
+      }
+
+      if (currentReceipt.status !== 'PENDING') {
+        throw new Error(`Không thể duyệt phiếu này vì trạng thái hiện tại là: ${currentReceipt.status === 'APPROVED' ? 'Đã duyệt' : 'Đã từ chối'}`);
+      }
+
       // Kiểm tra lại tồn kho thực tế trước khi trừ
-      for (const item of exportReceipt.items) {
+      for (const item of currentReceipt.items) {
         const inv = await tx.inventory.findUnique({
           where: {
             variant_id_warehouse_id: {
               variant_id: item.variant_id,
-              warehouse_id: exportReceipt.warehouse_id,
+              warehouse_id: currentReceipt.warehouse_id,
             },
           },
           include: { variant: { include: { product: true } } },
@@ -409,7 +428,8 @@ const approveExport = async (req, res, next) => {
 
         // Trừ số lượng tồn kho
         const newQty = currentQty - item.quantity;
-        const newStockStatus = newQty >= 10 ? 'Đủ hàng' : (newQty > 0 ? 'Sắp hết' : 'Hết hàng');
+        const minStock = inv?.variant?.min_stock != null ? inv.variant.min_stock : 10;
+        const newStockStatus = newQty >= minStock ? 'Đủ hàng' : (newQty > 0 ? 'Sắp hết' : 'Hết hàng');
 
         await tx.inventory.update({
           where: { id: inv.id },
@@ -559,6 +579,9 @@ const getTransfers = async (req, res, next) => {
       ];
     }
 
+    const statsWhere = { ...where };
+    delete statsWhere.status;
+
     const [totalItems, transfersList, statusCounts] = await Promise.all([
       prisma.stockTransfer.count({ where }),
       prisma.stockTransfer.findMany({
@@ -589,6 +612,7 @@ const getTransfers = async (req, res, next) => {
       }),
       prisma.stockTransfer.groupBy({
         by: ['status'],
+        where: statsWhere,
         _count: { id: true },
       }),
     ]);
@@ -840,13 +864,31 @@ const approveTransfer = async (req, res, next) => {
 
     // Transaction điều chuyển kho: Trừ kho nguồn & Cộng kho đích
     const updated = await prisma.$transaction(async (tx) => {
-      for (const item of transfer.items) {
+      // Re-fetch và kiểm tra trạng thái trong transaction để chống race condition
+      const currentTransfer = await tx.stockTransfer.findUnique({
+        where: { id: transferId },
+        include: {
+          items: true,
+          from_warehouse: true,
+          to_warehouse: true,
+        },
+      });
+
+      if (!currentTransfer) {
+        throw new Error('Không tìm thấy phiếu điều chuyển');
+      }
+
+      if (currentTransfer.status !== 'PENDING') {
+        throw new Error(`Không thể duyệt phiếu này vì trạng thái hiện tại là: ${currentTransfer.status === 'APPROVED' ? 'Đã duyệt' : 'Đã từ chối'}`);
+      }
+
+      for (const item of currentTransfer.items) {
         // 1. Kiểm tra và trừ tồn kho tại Kho nguồn (from_warehouse_id)
         const fromInv = await tx.inventory.findUnique({
           where: {
             variant_id_warehouse_id: {
               variant_id: item.variant_id,
-              warehouse_id: transfer.from_warehouse_id,
+              warehouse_id: currentTransfer.from_warehouse_id,
             },
           },
           include: { variant: { include: { product: true } } },
@@ -855,12 +897,13 @@ const approveTransfer = async (req, res, next) => {
         const currentFromQty = fromInv ? fromInv.quantity : 0;
         if (currentFromQty < item.quantity) {
           throw new Error(
-            `Không thể duyệt: Mặt hàng ${fromInv?.variant?.product?.product_name || item.variant_id} tại ${transfer.from_warehouse.warehouse_name} chỉ còn ${currentFromQty} chiếc, không đủ để chuyển ${item.quantity} chiếc!`
+            `Không thể duyệt: Mặt hàng ${fromInv?.variant?.product?.product_name || item.variant_id} tại ${currentTransfer.from_warehouse.warehouse_name} chỉ còn ${currentFromQty} chiếc, không đủ để chuyển ${item.quantity} chiếc!`
           );
         }
 
+        const minStock = fromInv?.variant?.min_stock != null ? fromInv.variant.min_stock : 10;
         const newFromQty = currentFromQty - item.quantity;
-        const newFromStatus = newFromQty >= 10 ? 'Đủ hàng' : (newFromQty > 0 ? 'Sắp hết' : 'Hết hàng');
+        const newFromStatus = newFromQty >= minStock ? 'Đủ hàng' : (newFromQty > 0 ? 'Sắp hết' : 'Hết hàng');
 
         await tx.inventory.update({
           where: { id: fromInv.id },
@@ -876,14 +919,14 @@ const approveTransfer = async (req, res, next) => {
           where: {
             variant_id_warehouse_id: {
               variant_id: item.variant_id,
-              warehouse_id: transfer.to_warehouse_id,
+              warehouse_id: currentTransfer.to_warehouse_id,
             },
           },
         });
 
         if (toInv) {
           const newToQty = toInv.quantity + item.quantity;
-          const newToStatus = newToQty >= 10 ? 'Đủ hàng' : (newToQty > 0 ? 'Sắp hết' : 'Hết hàng');
+          const newToStatus = newToQty >= minStock ? 'Đủ hàng' : (newToQty > 0 ? 'Sắp hết' : 'Hết hàng');
 
           await tx.inventory.update({
             where: { id: toInv.id },
@@ -896,12 +939,12 @@ const approveTransfer = async (req, res, next) => {
           });
         } else {
           // Chưa có bản ghi tại kho đích -> tạo mới
-          const newToStatus = item.quantity >= 10 ? 'Đủ hàng' : (item.quantity > 0 ? 'Sắp hết' : 'Hết hàng');
+          const newToStatus = item.quantity >= minStock ? 'Đủ hàng' : (item.quantity > 0 ? 'Sắp hết' : 'Hết hàng');
 
           await tx.inventory.create({
             data: {
               variant_id: item.variant_id,
-              warehouse_id: transfer.to_warehouse_id,
+              warehouse_id: currentTransfer.to_warehouse_id,
               quantity: item.quantity,
               shelf_location: item.to_shelf_location || 'A-01',
               stock_status: newToStatus,

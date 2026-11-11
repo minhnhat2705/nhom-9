@@ -23,6 +23,7 @@ const { validateCreateUser, validateUpdateUser, validateResetPassword } = requir
 const managerOnly = [authenticate, authorize('WAREHOUSE_MANAGER')];
 
 router.get('/', ...managerOnly, userController.getUsers);
+router.get('/stats', ...managerOnly, userController.getUserStats);
 router.post('/', ...managerOnly, validateCreateUser, userController.createUser);
 router.get('/:id', ...managerOnly, userController.getUserById);
 router.put('/:id', ...managerOnly, validateUpdateUser, userController.updateUser);

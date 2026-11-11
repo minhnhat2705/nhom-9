@@ -72,6 +72,9 @@ const StockAuditPage = () => {
   const [managerFeedback, setManagerFeedback] = useState('');
   const [approveLoading, setApproveLoading] = useState(false);
 
+  // State Modal Hủy đợt kiểm kê (Chỉ Quản lý)
+  const [cancelModal, setCancelModal] = useState({ open: false, auditId: null, reason: '', loading: false });
+
   // Tải danh sách đợt kiểm kê
   const fetchAudits = useCallback(async () => {
     try {
@@ -88,6 +91,7 @@ const StockAuditPage = () => {
       if (res && res.success) {
         setAuditsList(res.data || []);
         if (res.meta?.stats) setStats(res.meta.stats);
+        else if (res.stats) setStats(res.stats);
         if (res.pagination) setPagination(res.pagination);
       }
     } catch (err) {
@@ -354,18 +358,23 @@ const StockAuditPage = () => {
     }
   };
 
-  // Hủy đợt kiểm kê (Chỉ Quản lý)
-  const handleCancelAudit = async (auditId) => {
+  // Hủy đợt kiểm kê (Chỉ Quản lý - mở modal nhập lý do)
+  const handleCancelAudit = (auditId) => {
     if (!isManager) return;
-    const reason = prompt('Nhập lý do hủy đợt kiểm kê này:');
-    if (reason === null) return;
+    setCancelModal({ open: true, auditId, reason: '', loading: false });
+  };
 
+  const handleConfirmCancelAudit = async () => {
+    if (!cancelModal.auditId) return;
     try {
-      const res = await auditService.cancelAudit(auditId, { reason });
+      setCancelModal((prev) => ({ ...prev, loading: true }));
+      const res = await auditService.cancelAudit(cancelModal.auditId, { reason: cancelModal.reason });
       showToast(res.message || 'Đã hủy đợt kiểm kê');
+      setCancelModal({ open: false, auditId: null, reason: '', loading: false });
       fetchAudits();
     } catch (err) {
       alert(err.response?.data?.message || 'Không thể hủy đợt kiểm kê');
+      setCancelModal((prev) => ({ ...prev, loading: false }));
     }
   };
 
@@ -375,7 +384,7 @@ const StockAuditPage = () => {
         {/* Toast thông báo */}
         {toast.show && (
           <div
-            className={`fixed top-5 right-5 z-50 px-4 py-3 rounded-xl shadow-lg border text-sm font-medium flex items-center gap-2 animate-bounce ${
+            className={`fixed top-5 right-5 z-50 px-4 py-3 rounded-xl shadow-xl border text-sm font-medium flex items-center gap-2 transition-all duration-300 ${
               toast.type === 'error'
                 ? 'bg-rose-50 border-rose-200 text-rose-700'
                 : 'bg-emerald-50 border-emerald-200 text-emerald-800'
@@ -1268,6 +1277,64 @@ const StockAuditPage = () => {
                     className="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-semibold"
                   >
                     Đóng cửa sổ
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* MODAL HỦY ĐỢT KIỂM KÊ (CHỈ QUẢN LÝ) */}
+        {cancelModal.open && (
+          <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
+              <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-rose-50/50">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center text-lg">
+                    ⚠️
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-800">Xác nhận hủy đợt kiểm kê</h3>
+                    <p className="text-xs text-slate-500">Thao tác này sẽ hủy đợt kiểm kê và không thể hoàn tác</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setCancelModal({ open: false, auditId: null, reason: '', loading: false })}
+                  className="text-slate-400 hover:text-slate-600 p-1"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="p-6 space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">
+                    Lý do hủy đợt kiểm kê <span className="text-rose-500">*</span>
+                  </label>
+                  <textarea
+                    rows={3}
+                    placeholder="Nhập lý do hủy đợt kiểm kê này..."
+                    value={cancelModal.reason}
+                    onChange={(e) => setCancelModal((prev) => ({ ...prev, reason: e.target.value }))}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
+                  />
+                </div>
+
+                <div className="flex justify-end gap-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setCancelModal({ open: false, auditId: null, reason: '', loading: false })}
+                    disabled={cancelModal.loading}
+                    className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-semibold"
+                  >
+                    Đóng
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleConfirmCancelAudit}
+                    disabled={cancelModal.loading || !cancelModal.reason.trim()}
+                    className="px-5 py-2 bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white rounded-xl text-xs font-semibold flex items-center gap-2"
+                  >
+                    {cancelModal.loading ? 'Đang xử lý...' : 'Xác nhận hủy'}
                   </button>
                 </div>
               </div>
