@@ -65,6 +65,9 @@ const warehouseRoutes = require('./routes/warehouse.routes');
 const productRoutes = require('./routes/product.routes');
 const categoryRoutes = require('./routes/category.routes');
 const receiptRoutes = require('./routes/receipt.routes');
+const outboundRoutes = require('./routes/outbound.routes');
+const inventoryRoutes = require('./routes/inventory.routes');
+const auditRoutes = require('./routes/audit.routes');
 
 // Prefix /api cho tất cả routes
 app.use('/api/auth', authRoutes);
@@ -73,6 +76,9 @@ app.use('/api/warehouses', warehouseRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/inbound/receipts', receiptRoutes);
+app.use('/api/outbound', outboundRoutes);
+app.use('/api/inventory', inventoryRoutes);
+app.use('/api/audits', auditRoutes);
 
 // ============================================================
 // 404 HANDLER - Route không tồn tại

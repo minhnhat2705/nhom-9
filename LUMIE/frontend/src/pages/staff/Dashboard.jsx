@@ -189,6 +189,147 @@ const StaffDashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Thao tác nhanh cho nhân viên kho */}
+        <div className="bg-white rounded-xl border border-purple-50/80 p-4 sm:p-5 shadow-[0_4px_16px_rgba(88,28,135,0.04)] mb-5">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-sm sm:text-base font-bold text-[#1E1B4B]">Thao tác nhanh</h2>
+              <p className="text-[11px] text-gray-400 mt-0.5">Lối tắt truy cập các tác vụ kho hàng ngày của nhân viên</p>
+            </div>
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-purple-50 text-[#6D28D9] border border-purple-200/60">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#7C3AED]"></span>
+              5 tác vụ vận hành
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {/* 1. Tra cứu sản phẩm */}
+            <Link
+              to="/staff/products"
+              className="group flex items-start gap-3 p-3 rounded-xl border border-purple-100/70 bg-white hover:bg-gradient-to-br hover:from-white hover:to-purple-50/40 hover:border-purple-300 shadow-2xs hover:shadow-xs transition-all duration-200"
+            >
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#1E1B4B] to-[#4338CA] text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-1 mb-0.5">
+                  <h3 className="text-xs sm:text-sm font-bold text-[#1E1B4B] group-hover:text-[#6D28D9] transition-colors whitespace-nowrap">
+                    Tra cứu sản phẩm
+                  </h3>
+                  <svg className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#6D28D9] group-hover:translate-x-0.5 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+                <p className="text-[11px] text-gray-500 line-clamp-1">
+                  Tìm kiếm vị trí kệ, tồn kho & mã vạch
+                </p>
+              </div>
+            </Link>
+
+            {/* 2. Tạo phiếu nhập kho */}
+            <Link
+              to="/inbound/receipts"
+              className="group flex items-start gap-3 p-3 rounded-xl border border-purple-100/70 bg-white hover:bg-gradient-to-br hover:from-white hover:to-purple-50/40 hover:border-purple-300 shadow-2xs hover:shadow-xs transition-all duration-200"
+            >
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#0284C7] to-[#0EA5E9] text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20" />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-1 mb-0.5">
+                  <h3 className="text-xs sm:text-sm font-bold text-[#1E1B4B] group-hover:text-[#6D28D9] transition-colors whitespace-nowrap">
+                    Tạo phiếu nhập kho
+                  </h3>
+                  <svg className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#6D28D9] group-hover:translate-x-0.5 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+                <p className="text-[11px] text-gray-500 line-clamp-1">
+                  Lập phiếu nhập hàng từ nhà cung cấp
+                </p>
+              </div>
+            </Link>
+
+            {/* 3. Tạo phiếu xuất & chuyển kho */}
+            <Link
+              to="/outbound"
+              className="group flex items-start gap-3 p-3 rounded-xl border border-purple-100/70 bg-white hover:bg-gradient-to-br hover:from-white hover:to-purple-50/40 hover:border-purple-300 shadow-2xs hover:shadow-xs transition-all duration-200"
+            >
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#EA580C] to-[#F97316] text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-1 mb-0.5">
+                  <h3 className="text-xs sm:text-sm font-bold text-[#1E1B4B] group-hover:text-[#6D28D9] transition-colors whitespace-nowrap">
+                    Xuất & Điều chuyển
+                  </h3>
+                  <svg className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#6D28D9] group-hover:translate-x-0.5 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+                <p className="text-[11px] text-gray-500 line-clamp-1">
+                  Lập phiếu xuất kho & chuyển giữa các kho
+                </p>
+              </div>
+            </Link>
+
+            {/* 4. Theo dõi tồn kho */}
+            <Link
+              to="/inventory"
+              className="group flex items-start gap-3 p-3 rounded-xl border border-purple-100/70 bg-white hover:bg-gradient-to-br hover:from-white hover:to-purple-50/40 hover:border-purple-300 shadow-2xs hover:shadow-xs transition-all duration-200"
+            >
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#059669] to-[#10B981] text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-1 mb-0.5">
+                  <h3 className="text-xs sm:text-sm font-bold text-[#1E1B4B] group-hover:text-[#6D28D9] transition-colors whitespace-nowrap">
+                    Theo dõi tồn kho
+                  </h3>
+                  <svg className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#6D28D9] group-hover:translate-x-0.5 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+                <p className="text-[11px] text-gray-500 line-clamp-1">
+                  Xem số lượng tồn kho và toàn hệ thống
+                </p>
+              </div>
+            </Link>
+
+            {/* 5. Nhập kết quả kiểm kê */}
+            <Link
+              to="/audits"
+              className="group flex items-start gap-3 p-3 rounded-xl border border-purple-100/70 bg-white hover:bg-gradient-to-br hover:from-white hover:to-purple-50/40 hover:border-purple-300 shadow-2xs hover:shadow-xs transition-all duration-200"
+            >
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#7C3AED] to-[#A855F7] text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-1 mb-0.5">
+                  <h3 className="text-xs sm:text-sm font-bold text-[#1E1B4B] group-hover:text-[#6D28D9] transition-colors whitespace-nowrap">
+                    Kiểm kê tồn kho
+                  </h3>
+                  <svg className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#6D28D9] group-hover:translate-x-0.5 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+                <p className="text-[11px] text-gray-500 line-clamp-1">
+                  Nhập số lượng kiểm đếm thực tế
+                </p>
+              </div>
+            </Link>
+          </div>
+        </div>
       </div>
     </MainLayout>
   );

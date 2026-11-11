@@ -48,6 +48,10 @@ model Warehouse {
   // Quan hệ: Một kho có nhiều bản ghi tồn kho
   inventories     Inventory[]
   receipts        Receipt[]
+  export_receipts ExportReceipt[] @relation("ExportWarehouse")
+  transfers_from  StockTransfer[] @relation("TransferFromWarehouse")
+  transfers_to    StockTransfer[] @relation("TransferToWarehouse")
+  stock_audits    StockAudit[]    @relation("AuditWarehouse")
 
   @@map("warehouses")
 }
@@ -92,6 +96,13 @@ model User {
   audit_logs_created    AuditLog[] @relation("AuditLogCreatedBy")
   created_receipts      Receipt[]  @relation("ReceiptCreatedBy")
   approved_receipts     Receipt[]  @relation("ReceiptApprovedBy")
+  created_exports       ExportReceipt[] @relation("ExportCreatedBy")
+  approved_exports      ExportReceipt[] @relation("ExportApprovedBy")
+  created_transfers     StockTransfer[] @relation("TransferCreatedBy")
+  approved_transfers    StockTransfer[] @relation("TransferApprovedBy")
+  created_audits        StockAudit[]    @relation("AuditCreatedBy")
+  assigned_audits       StockAudit[]    @relation("AuditAssignedTo")
+  approved_audits       StockAudit[]    @relation("AuditApprovedBy")
 
   @@map("users")
 }
@@ -225,6 +236,9 @@ model ProductVariant {
 
   inventories   Inventory[]
   receipt_items ReceiptItem[]
+  export_items  ExportReceiptItem[]
+  transfer_items StockTransferItem[]
+  audit_items    StockAuditItem[]
 
   @@index([product_id])
   @@map("product_variants")
@@ -337,4 +351,166 @@ model ReceiptItem {
   @@index([receipt_id])
   @@index([variant_id])
   @@map("receipt_items")
+}
+
+// ============================================================
+// BẢNG: export_receipts
+// Phiếu xuất kho: Nhân viên tạo, Quản lý duyệt
+// ============================================================
+model ExportReceipt {
+  id               Int           @id @default(autoincrement())
+  export_code      String        @unique @db.VarChar(50)
+  warehouse_id     Int
+  warehouse        Warehouse     @relation("ExportWarehouse", fields: [warehouse_id], references: [id], onDelete: Cascade)
+  export_type      String        @default("SALE") @db.VarChar(50)
+  customer_name    String?       @db.VarChar(150)
+  created_by_id    Int
+  created_by       User          @relation("ExportCreatedBy", fields: [created_by_id], references: [id], onDelete: Cascade)
+  approved_by_id   Int?
+  approved_by      User?         @relation("ExportApprovedBy", fields: [approved_by_id], references: [id], onDelete: SetNull)
+  status           ReceiptStatus @default(PENDING)
+  total_quantity   Int           @default(0)
+  total_amount     Decimal       @default(0.00) @db.Decimal(15, 2)
+  notes            String?       @db.Text
+  rejection_reason String?       @db.Text
+  approved_at      DateTime?
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+
+  items            ExportReceiptItem[]
+
+  @@index([warehouse_id])
+  @@index([created_by_id])
+  @@index([approved_by_id])
+  @@map("export_receipts")
+}
+
+// ============================================================
+// BẢNG: export_receipt_items
+// Chi tiết mặt hàng trong phiếu xuất kho
+// ============================================================
+model ExportReceiptItem {
+  id             Int            @id @default(autoincrement())
+  export_id      Int
+  export_receipt ExportReceipt  @relation(fields: [export_id], references: [id], onDelete: Cascade)
+  variant_id     Int
+  variant        ProductVariant @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+  quantity       Int            @default(1)
+  unit_price     Decimal        @default(0.00) @db.Decimal(15, 2)
+  total_price    Decimal        @default(0.00) @db.Decimal(15, 2)
+  shelf_location String?        @db.VarChar(50)
+  notes          String?        @db.VarChar(255)
+
+  @@index([export_id])
+  @@index([variant_id])
+  @@map("export_receipt_items")
+}
+
+// ============================================================
+// BẢNG: stock_transfers
+// Phiếu điều chuyển hàng giữa các kho: Nhân viên tạo, Quản lý duyệt & xác nhận
+// ============================================================
+model StockTransfer {
+  id                 Int           @id @default(autoincrement())
+  transfer_code      String        @unique @db.VarChar(50)
+  from_warehouse_id  Int
+  from_warehouse     Warehouse     @relation("TransferFromWarehouse", fields: [from_warehouse_id], references: [id], onDelete: Cascade)
+  to_warehouse_id    Int
+  to_warehouse       Warehouse     @relation("TransferToWarehouse", fields: [to_warehouse_id], references: [id], onDelete: Cascade)
+  created_by_id      Int
+  created_by         User          @relation("TransferCreatedBy", fields: [created_by_id], references: [id], onDelete: Cascade)
+  approved_by_id     Int?
+  approved_by        User?         @relation("TransferApprovedBy", fields: [approved_by_id], references: [id], onDelete: SetNull)
+  status             ReceiptStatus @default(PENDING)
+  total_quantity     Int           @default(0)
+  notes              String?       @db.Text
+  rejection_reason   String?       @db.Text
+  approved_at        DateTime?
+  created_at         DateTime      @default(now())
+  updated_at         DateTime      @updatedAt
+
+  items              StockTransferItem[]
+
+  @@index([from_warehouse_id])
+  @@index([to_warehouse_id])
+  @@index([created_by_id])
+  @@index([approved_by_id])
+  @@map("stock_transfers")
+}
+
+// ============================================================
+// BẢNG: stock_transfer_items
+// Chi tiết mặt hàng điều chuyển
+// ============================================================
+model StockTransferItem {
+  id                  Int            @id @default(autoincrement())
+  transfer_id         Int
+  transfer            StockTransfer  @relation(fields: [transfer_id], references: [id], onDelete: Cascade)
+  variant_id          Int
+  variant             ProductVariant @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+  quantity            Int            @default(1)
+  from_shelf_location String?        @db.VarChar(50)
+  to_shelf_location   String?        @db.VarChar(50)
+  notes               String?        @db.VarChar(255)
+
+  @@index([transfer_id])
+  @@index([variant_id])
+  @@map("stock_transfer_items")
+}
+
+// ============================================================
+// BẢNG: stock_audits
+// Quản lý đợt kiểm kê tồn kho
+// ============================================================
+model StockAudit {
+  id                 Int               @id @default(autoincrement())
+  audit_code         String            @unique @db.VarChar(50) // Ví dụ: KK-20261111-001
+  warehouse_id       Int
+  warehouse          Warehouse         @relation("AuditWarehouse", fields: [warehouse_id], references: [id])
+  status             String            @default("PENDING") @db.VarChar(20) // PENDING (Chờ đếm), COUNTED (Đã đếm - Chờ duyệt), COMPLETED (Đã duyệt điều chỉnh), CANCELLED (Đã hủy)
+  created_by_id      Int               // Quản lý tạo đợt kiểm kê (CHỈ DÀNH CHO QUẢN LÝ)
+  created_by         User              @relation("AuditCreatedBy", fields: [created_by_id], references: [id])
+  assigned_to_id     Int?              // Nhân viên thực hiện / kiểm đếm (CHỈ DÀNH CHO NHÂN VIÊN)
+  assigned_to        User?             @relation("AuditAssignedTo", fields: [assigned_to_id], references: [id])
+  approved_by_id     Int?              // Quản lý duyệt điều chỉnh chênh lệch (CHỈ DÀNH CHO QUẢN LÝ)
+  approved_by        User?             @relation("AuditApprovedBy", fields: [approved_by_id], references: [id])
+  notes              String?           @db.Text
+  manager_feedback   String?           @db.Text
+  total_system_qty   Int               @default(0)
+  total_actual_qty   Int               @default(0)
+  total_discrepancy  Int               @default(0)
+  created_at         DateTime          @default(now())
+  updated_at         DateTime          @updatedAt
+  counted_at         DateTime?
+  completed_at       DateTime?
+
+  items              StockAuditItem[]
+
+  @@index([warehouse_id])
+  @@index([created_by_id])
+  @@index([assigned_to_id])
+  @@index([approved_by_id])
+  @@map("stock_audits")
+}
+
+// ============================================================
+// BẢNG: stock_audit_items
+// Chi tiết mặt hàng kiểm kê và chênh lệch
+// ============================================================
+model StockAuditItem {
+  id                 Int            @id @default(autoincrement())
+  audit_id           Int
+  audit              StockAudit     @relation(fields: [audit_id], references: [id], onDelete: Cascade)
+  variant_id         Int
+  variant            ProductVariant @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+  shelf_location     String?        @db.VarChar(50)
+  system_quantity    Int            @default(0)
+  actual_quantity    Int?           // NULL khi mới tạo, nhân viên sẽ nhập vào khi kiểm đếm
+  discrepancy        Int            @default(0) // actual_quantity - system_quantity
+  reason             String?        @db.VarChar(255)
+  is_adjusted        Boolean        @default(false)
+
+  @@index([audit_id])
+  @@index([variant_id])
+  @@map("stock_audit_items")
 }

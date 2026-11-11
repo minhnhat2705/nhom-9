@@ -261,6 +261,10 @@ const createReceipt = async (req, res, next) => {
       return errorResponse(res, 'Vui lòng chọn Kho nhập hàng', 400);
     }
 
+    if (!notes || !notes.trim()) {
+      return errorResponse(res, 'Vui lòng nhập lý do nhập kho hoặc ghi chú', 400);
+    }
+
     if (!items || !Array.isArray(items) || items.length === 0) {
       return errorResponse(res, 'Phiếu nhập kho phải có ít nhất 1 mặt hàng', 400);
     }

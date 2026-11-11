@@ -242,6 +242,11 @@ const ReceiptsPage = () => {
       return;
     }
 
+    if (!newReceiptData.notes || !newReceiptData.notes.trim()) {
+      alert('Vui lòng nhập lý do nhập kho hoặc ghi chú!');
+      return;
+    }
+
     // Kiểm tra từng item
     for (let i = 0; i < newReceiptData.items.length; i++) {
       const it = newReceiptData.items[i];
@@ -646,13 +651,14 @@ const ReceiptsPage = () => {
                   {/* Ghi chú */}
                   <div className="md:col-span-2">
                     <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">
-                      Ghi chú phiếu nhập
+                      Ghi chú / Lý do nhập kho <span className="text-rose-500">*</span>
                     </label>
                     <input
                       type="text"
                       placeholder="Ví dụ: Nhập hàng bổ sung đợt đầu tháng, Lô hàng giao theo hợp đồng..."
                       value={newReceiptData.notes}
                       onChange={(e) => setNewReceiptData((prev) => ({ ...prev, notes: e.target.value }))}
+                      required
                       className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
                     />
                   </div>

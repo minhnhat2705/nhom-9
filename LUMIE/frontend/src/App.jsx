@@ -25,6 +25,9 @@ import StaffDashboard from './pages/staff/Dashboard';
 import ProductsPage from './pages/staff/Products';
 import ChangePasswordPage from './pages/profile/ChangePassword';
 import ReceiptsPage from './pages/inbound/Receipts';
+import OutboundPage from './pages/outbound/Outbound';
+import InventoryTrackingPage from './pages/inventory/InventoryTracking';
+import StockAuditPage from './pages/audit/StockAudit';
 
 // Component chuyển hướng thông minh theo role
 const HomeRedirect = () => {
@@ -99,6 +102,31 @@ function App() {
           } />
           <Route path="/manager/receipts" element={<Navigate to="/inbound/receipts" replace />} />
           <Route path="/staff/receipts" element={<Navigate to="/inbound/receipts" replace />} />
+
+          <Route path="/outbound" element={
+            <ProtectedRoute>
+              <OutboundPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/manager/outbound" element={<Navigate to="/outbound" replace />} />
+          <Route path="/staff/outbound" element={<Navigate to="/outbound" replace />} />
+
+          <Route path="/inventory" element={
+            <ProtectedRoute>
+              <InventoryTrackingPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/manager/inventory" element={<Navigate to="/inventory" replace />} />
+          <Route path="/staff/inventory" element={<Navigate to="/inventory" replace />} />
+
+          <Route path="/audits" element={
+            <ProtectedRoute>
+              <StockAuditPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/manager/audits" element={<Navigate to="/audits" replace />} />
+          <Route path="/staff/audits" element={<Navigate to="/audits" replace />} />
+
           <Route path="/profile/change-password" element={
             <ProtectedRoute>
               <ChangePasswordPage />

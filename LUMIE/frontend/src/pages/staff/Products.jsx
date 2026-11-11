@@ -430,7 +430,11 @@ const ProductsPage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {products.map((item) => {
               const variant = item.variants?.[0] || {};
-              const inventory = variant.inventories?.[0] || {};
+              const inventory = (selectedStockStatus === 'Sắp hết'
+                ? variant.inventories?.find((inv) => inv.stock_status === 'Sắp hết' || inv.quantity <= 10)
+                : (selectedStockStatus === 'Đủ hàng'
+                    ? variant.inventories?.find((inv) => inv.quantity > 10)
+                    : null)) || variant.inventories?.[0] || {};
               const isLowStock = inventory.stock_status === 'Sắp hết' || (inventory.quantity <= 10);
               const imgSrc = getProductImage(item);
 
@@ -438,10 +442,10 @@ const ProductsPage = () => {
                 <div
                   key={item.id}
                   onClick={() => setSelectedProduct(item)}
-                  className="group bg-white rounded-2xl border border-purple-100/70 overflow-hidden shadow-[0_4px_16px_rgba(88,28,135,0.03)] hover:shadow-[0_12px_28px_rgba(88,28,135,0.1)] hover:border-purple-300 transition-all duration-300 flex flex-col cursor-pointer"
+                  className="group bg-white rounded-2xl border border-purple-100/70 overflow-hidden shadow-[0_4px_16px_rgba(88,28,135,0.03)] hover:shadow-[0_12px_28px_rgba(88,28,135,0.1)] hover:border-purple-300 transition-all duration-300 flex flex-col h-full cursor-pointer"
                 >
-                  {/* Khung Ảnh Sản Phẩm (Tỷ lệ thời trang 4:3) */}
-                  <div className="relative aspect-4/3 w-full bg-purple-50/50 overflow-hidden">
+                  {/* Khung Ảnh Sản Phẩm (Tỷ lệ vuông 1:1 chuẩn giúp các thẻ trên cùng hàng thẳng đều tăm tắp) */}
+                  <div className="relative aspect-square w-full bg-purple-50/50 overflow-hidden">
                     <img
                       src={imgSrc}
                       alt={item.product_name}
@@ -487,14 +491,14 @@ const ProductsPage = () => {
                     <div>
                       {/* Thương hiệu & Danh mục */}
                       <div className="flex items-center justify-between text-[11px] text-gray-500 mb-1">
-                        <span className="font-semibold text-[#7C3AED] uppercase tracking-wider">
+                        <span className="font-semibold text-[#7C3AED] uppercase tracking-wider truncate">
                           {item.brand || 'Lumié'}
                         </span>
-                        <span>{item.category?.category_name}</span>
+                        <span className="shrink-0">{item.category?.category_name}</span>
                       </div>
 
                       {/* Tên sản phẩm */}
-                      <h3 className="text-sm font-bold text-[#1E1B4B] group-hover:text-[#7C3AED] transition-colors line-clamp-1">
+                      <h3 className="text-sm font-bold text-[#1E1B4B] group-hover:text-[#7C3AED] transition-colors line-clamp-1 h-5" title={item.product_name}>
                         {item.product_name}
                       </h3>
 
@@ -502,30 +506,30 @@ const ProductsPage = () => {
                       <div className="mt-2 space-y-1 bg-purple-50/30 p-2 rounded-lg border border-purple-100/50 text-[11px] font-mono">
                         <div className="flex items-center justify-between text-gray-600">
                           <span className="text-gray-400">SKU:</span>
-                          <span className="font-semibold text-gray-800">{variant.sku || '—'}</span>
+                          <span className="font-semibold text-gray-800 truncate ml-2">{variant.sku || '—'}</span>
                         </div>
                         <div className="flex items-center justify-between text-gray-600">
                           <span className="text-gray-400">Mã vạch:</span>
-                          <span className="text-gray-700">{variant.barcode || '—'}</span>
+                          <span className="text-gray-700 font-medium">{variant.barcode || '—'}</span>
                         </div>
                       </div>
 
                       {/* Thuộc tính biến thể */}
                       <div className="flex items-center gap-1.5 mt-2 text-xs">
-                        <span className="px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 font-medium">
+                        <span className="px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 font-medium shrink-0">
                           Size {variant.size || 'M'}
                         </span>
-                        <span className="px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 font-medium">
+                        <span className="px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 font-medium shrink-0">
                           Màu {variant.color || 'Be'}
                         </span>
-                        <span className="px-2 py-0.5 rounded-md bg-gray-100 text-gray-600 text-[11px]">
+                        <span className="px-2 py-0.5 rounded-md bg-gray-100 text-gray-600 text-[11px] shrink-0">
                           {item.gender === 'FEMALE' ? 'Nữ' : (item.gender === 'MALE' ? 'Nam' : 'Unisex')}
                         </span>
                       </div>
                     </div>
 
                     {/* Chân thẻ: Giá & Số lượng tồn kho */}
-                    <div className="pt-2.5 border-t border-gray-100 flex items-center justify-between">
+                    <div className="pt-2.5 border-t border-gray-100 flex items-center justify-between mt-auto">
                       <div>
                         <p className="text-[10px] text-gray-400 font-medium">Giá bán niêm yết</p>
                         <p className="text-sm font-bold text-[#1E1B4B]">
@@ -568,7 +572,11 @@ const ProductsPage = () => {
                 <tbody className="divide-y divide-gray-100 text-xs">
                   {products.map((item) => {
                     const variant = item.variants?.[0] || {};
-                    const inventory = variant.inventories?.[0] || {};
+                    const inventory = (selectedStockStatus === 'Sắp hết'
+                      ? variant.inventories?.find((inv) => inv.stock_status === 'Sắp hết' || inv.quantity <= 10)
+                      : (selectedStockStatus === 'Đủ hàng'
+                          ? variant.inventories?.find((inv) => inv.quantity > 10)
+                          : null)) || variant.inventories?.[0] || {};
                     const isLowStock = inventory.stock_status === 'Sắp hết' || (inventory.quantity <= 10);
                     const imgSrc = getProductImage(item);
 
