@@ -75,38 +75,38 @@ const ChangePasswordPage = () => {
     <MainLayout>
       {/* Vùng bao căn giữa 100% cả chiều ngang và chiều dọc màn hình */}
       <div className="min-h-[calc(100vh-10rem)] flex items-center justify-center py-6 px-4">
-        <div className="w-full max-w-md bg-white rounded-3xl border border-purple-100/70 shadow-xl shadow-purple-500/5 p-6 sm:p-8 transition-all">
+        <div className="w-full max-w-md bg-white rounded-xl border border-slate-200/80 shadow-md p-6 sm:p-7 transition-all">
           
           {/* Header của form đổi mật khẩu (Căn giữa) */}
           <div className="mb-6 text-center">
-            <div className="w-12 h-12 bg-purple-50 text-[#6D28D9] rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-2xs">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-10 h-10 bg-purple-50 text-purple-700 border border-purple-100 rounded-lg flex items-center justify-center mx-auto mb-2.5">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-[#1E1B4B]">Đổi mật khẩu</h1>
-            <p className="text-sm text-gray-500 mt-1">
+            <h1 className="text-xl font-bold text-slate-900">Đổi mật khẩu</h1>
+            <p className="text-xs text-slate-500 mt-1">
               Mật khẩu phải có ít nhất 8 ký tự, gồm cả chữ và số
             </p>
           </div>
 
           {success ? (
             <div className="text-center py-6">
-              <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 ring-8 ring-green-50/50">
-                <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-12 h-12 bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full flex items-center justify-center mx-auto mb-3">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <p className="text-lg font-semibold text-lumie-black">Đổi mật khẩu thành công!</p>
-              <p className="text-sm text-gray-500 mt-1.5">
+              <p className="text-base font-semibold text-slate-900">Đổi mật khẩu thành công!</p>
+              <p className="text-xs text-slate-500 mt-1">
                 Đang chuyển hướng về trang đăng nhập để áp dụng mật khẩu mới...
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3.5">
               {errors.submit && (
-                <div className="p-3.5 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600 flex items-start gap-2">
-                  <svg className="w-5 h-5 shrink-0 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="p-3 bg-rose-50 border border-rose-200/70 rounded-lg text-xs text-rose-700 flex items-start gap-2">
+                  <svg className="w-4 h-4 shrink-0 text-rose-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <span>{errors.submit}</span>
@@ -119,35 +119,35 @@ const ChangePasswordPage = () => {
                 { key: 'confirmPassword', label: 'Xác nhận mật khẩu mới', showKey: 'confirm', placeholder: 'Nhập lại mật khẩu mới' },
               ].map(({ key, label, showKey, placeholder }) => (
                 <div key={key}>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">{label} *</label>
+                  <label className="block text-[11px] font-medium text-slate-700 mb-1">{label} *</label>
                   <div className="relative">
                     <input
                       type={showPasswords[showKey] ? 'text' : 'password'}
                       value={form[key]}
                       onChange={e => { setForm(p => ({ ...p, [key]: e.target.value })); setErrors(p => ({ ...p, [key]: '', submit: '' })); }}
                       placeholder={placeholder}
-                      className={`input-base pr-12 ${errors[key] ? 'border-red-300 ring-1 ring-red-300' : ''}`}
+                      className={`w-full px-3 py-2 pr-10 bg-white border rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-purple-600 transition-colors ${errors[key] ? 'border-rose-300' : 'border-slate-200'}`}
                       disabled={loading}
                       autoComplete="new-password"
                     />
                     <button
                       type="button"
                       onClick={() => toggleShow(showKey)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#6D28D9] transition-colors p-1"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1"
                       tabIndex={-1}
                     >
                       <EyeIcon show={showPasswords[showKey]} />
                     </button>
                   </div>
-                  {errors[key] && <p className="text-xs text-red-500 mt-1">{errors[key]}</p>}
+                  {errors[key] && <p className="text-[11px] text-rose-600 mt-1">{errors[key]}</p>}
                 </div>
               ))}
 
-              <div className="flex gap-3 pt-3">
+              <div className="flex gap-2.5 pt-3">
                 <button
                   type="button"
                   onClick={() => navigate(-1)}
-                  className="btn-secondary flex-1 cursor-pointer"
+                  className="flex-1 px-3.5 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-medium text-slate-700 transition-colors cursor-pointer"
                   disabled={loading}
                 >
                   Hủy
@@ -155,7 +155,7 @@ const ChangePasswordPage = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="btn-primary flex-1 cursor-pointer shadow-md shadow-purple-500/20"
+                  className="flex-1 px-4 py-2 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-xs font-medium shadow-xs transition-colors disabled:opacity-50 cursor-pointer"
                 >
                   {loading ? 'Đang lưu...' : 'Lưu mật khẩu'}
                 </button>

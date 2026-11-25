@@ -274,11 +274,11 @@ const MainLayout = ({ children }) => {
   const userInitial = (user?.fullName || user?.full_name || user?.name || user?.email || 'P').charAt(0).toUpperCase();
 
   return (
-    <div className="h-screen flex bg-gradient-to-br from-[#F9F8FF] via-[#FDFCFB] to-[#F3E8FF]/60 overflow-hidden">
+    <div className="h-screen flex bg-slate-50/70 overflow-hidden">
       {/* Overlay mờ trên Mobile khi mở Sidebar */}
       {isMobileOpen && (
         <div
-          className="fixed inset-0 bg-black/30 backdrop-blur-xs z-30 lg:hidden transition-opacity duration-300"
+          className="fixed inset-0 bg-slate-900/30 backdrop-blur-xs z-30 lg:hidden transition-opacity duration-200"
           onClick={() => setIsMobileOpen(false)}
         />
       )}
@@ -289,33 +289,33 @@ const MainLayout = ({ children }) => {
           - Footer (Đổi mật khẩu & Đăng xuất) luôn ghim chắc chắn ở dưới cùng
          ============================================================ */}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-40 h-full flex flex-col bg-gradient-to-b from-[#F5F3FF] via-[#F8F6FF] to-[#EDE9FE]/90 border-r border-purple-100/80 transition-all duration-300 ease-in-out shrink-0 overflow-hidden shadow-lg lg:shadow-none ${
+        className={`fixed lg:static inset-y-0 left-0 z-40 h-full flex flex-col bg-white border-r border-slate-200/80 transition-all duration-200 ease-in-out shrink-0 overflow-hidden shadow-sm lg:shadow-none ${
           isMobileOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0'
         } ${isCollapsed ? 'lg:w-20' : 'lg:w-64'}`}
       >
-        {/* ===== HEADER THANH BÊN (LOGO TO RA & CĂN GIỮA) ===== */}
-        <div className="h-20 flex items-center justify-center border-b border-purple-100/80 px-4 shrink-0 transition-all">
+        {/* ===== HEADER THANH BÊN (LOGO CĂN GIỮA) ===== */}
+        <div className="h-16 flex items-center justify-center border-b border-slate-100 px-4 shrink-0 transition-all">
           <Link to="/" className="flex items-center justify-center w-full overflow-hidden" title="Lumié Smart Warehouse">
             {isCollapsed ? (
-              /* KHI THU GỌN: CHỈ HIỆN DUY NHẤT LOGO CHỮ L TO ĐẸP CĂN GIỮA */
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#7C3AED] to-[#4C1D95] flex items-center justify-center text-white font-bold text-2xl shadow-md shadow-purple-500/30 transition-transform duration-200 hover:scale-105 active:scale-95 shrink-0">
+              /* KHI THU GỌN: CHỈ HIỆN DUY NHẤT LOGO CHỮ L CĂN GIỮA */
+              <div className="w-10 h-10 rounded-xl bg-purple-700 flex items-center justify-center text-white font-bold text-xl shadow-sm transition-transform duration-150 hover:scale-105 active:scale-95 shrink-0">
                 L
               </div>
             ) : (
-              /* KHI MỞ RỘNG: HIỆN LOGO LUMIÉ TO HƠN & CĂN GIỮA HOÀN TOÀN */
+              /* KHI MỞ RỘNG: HIỆN LOGO LUMIÉ CĂN GIỮA */
               <div className="flex items-center justify-center w-full py-1">
                 <img
                   src={logoImage}
                   alt="LUMIÉ"
-                  className="h-11 sm:h-12 w-auto max-w-[200px] object-contain transition-transform duration-200 hover:scale-105"
+                  className="h-9 sm:h-10 w-auto max-w-[170px] object-contain transition-transform duration-150 hover:scale-102"
                 />
               </div>
             )}
           </Link>
         </div>
 
-        {/* ===== DANH SÁCH MENU CHÍNH (CUỘN RIÊNG BIỆT NẾU MENU DÀI) ===== */}
-        <nav className="flex-1 p-3 space-y-2 overflow-y-auto overflow-x-hidden">
+        {/* ===== DANH SÁCH MENU CHÍNH ===== */}
+        <nav className="flex-1 p-3 space-y-1 overflow-y-auto overflow-x-hidden">
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
@@ -324,25 +324,25 @@ const MainLayout = ({ children }) => {
                 to={item.path}
                 onClick={() => setIsMobileOpen(false)}
                 title={isCollapsed ? item.name : ''}
-                className={`relative flex items-center rounded-xl text-sm font-medium transition-all duration-200 ${
-                  isCollapsed ? 'justify-center p-3' : 'px-3.5 py-3 gap-3'
+                className={`relative flex items-center rounded-xl text-xs font-semibold transition-all duration-150 ${
+                  isCollapsed ? 'justify-center p-3' : 'px-3 py-2.5 gap-2.5'
                 } ${
                   isActive
-                    ? 'bg-gradient-to-r from-[#7C3AED] to-[#4F46E5] text-white shadow-md shadow-purple-500/25'
-                    : 'text-[#1E1B4B] hover:bg-white/70 hover:text-[#6D28D9]'
+                    ? 'bg-purple-50 text-purple-700 shadow-sm'
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 }`}
               >
                 <div className="relative shrink-0">
                   {item.icon}
                   {isCollapsed && item.badge > 0 && (
-                    <span className="absolute -top-1.5 -right-1.5 w-2.5 h-2.5 rounded-full bg-red-500 ring-2 ring-white animate-pulse" />
+                    <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white" />
                   )}
                 </div>
                 {!isCollapsed && (
                   <div className="flex-1 flex items-center justify-between min-w-0">
                     <span className="truncate whitespace-nowrap">{item.name}</span>
                     {item.badge > 0 && (
-                      <span className="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold bg-red-500 text-white shadow-xs">
+                      <span className="ml-2 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-500 text-white">
                         {item.badge > 99 ? '99+' : item.badge}
                       </span>
                     )}
@@ -353,17 +353,17 @@ const MainLayout = ({ children }) => {
           })}
         </nav>
 
-        {/* ===== CHÂN THANH BÊN (LUÔN CỐ ĐỊNH Ở ĐÁY: ĐỔI MẬT KHẨU & ĐĂNG XUẤT) ===== */}
-        <div className="p-3 border-t border-purple-100/80 space-y-1.5 shrink-0 bg-gradient-to-b from-transparent to-[#EDE9FE]/50">
+        {/* ===== CHÂN THANH BÊN (ĐỔI MẬT KHẨU & ĐĂNG XUẤT) ===== */}
+        <div className="p-3 border-t border-slate-100 space-y-1 shrink-0 bg-white">
           <Link
             to="/profile/change-password"
             onClick={() => setIsMobileOpen(false)}
             title={isCollapsed ? 'Đổi mật khẩu' : ''}
-            className={`flex items-center rounded-xl text-sm font-medium text-gray-600 hover:bg-white/70 hover:text-[#1E1B4B] transition-all ${
-              isCollapsed ? 'justify-center p-2.5' : 'px-3.5 py-2.5 gap-3'
+            className={`flex items-center rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all ${
+              isCollapsed ? 'justify-center p-2.5' : 'px-3 py-2 gap-2.5'
             }`}
           >
-            <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 shrink-0 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
             {!isCollapsed && <span className="truncate whitespace-nowrap">Đổi mật khẩu</span>}
@@ -372,11 +372,11 @@ const MainLayout = ({ children }) => {
           <button
             onClick={() => setShowLogoutModal(true)}
             title={isCollapsed ? 'Đăng xuất' : ''}
-            className={`w-full flex items-center rounded-xl text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all cursor-pointer ${
-              isCollapsed ? 'justify-center p-2.5' : 'px-3.5 py-2.5 gap-3'
+            className={`w-full flex items-center rounded-xl text-xs font-medium text-slate-600 hover:bg-rose-50 hover:text-rose-600 transition-all cursor-pointer ${
+              isCollapsed ? 'justify-center p-2.5' : 'px-3 py-2 gap-2.5'
             }`}
           >
-            <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 shrink-0 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
             {!isCollapsed && <span className="truncate whitespace-nowrap">Đăng xuất</span>}
@@ -385,12 +385,12 @@ const MainLayout = ({ children }) => {
       </aside>
 
       {/* ============================================================
-          PHẦN NỘI DUNG BÊN PHẢI (MAIN CONTENT - CUỘN ĐỘC LẬP)
+          PHẦN NỘI DUNG BÊN PHẢI (MAIN CONTENT)
          ============================================================ */}
-      <div className="flex-1 flex flex-col min-w-0 h-full overflow-y-auto transition-all duration-300">
-        {/* TOP HEADER (CỐ ĐỊNH Ở ĐẦU KHI CUỘN NỘI DUNG) */}
-        <header className="h-20 bg-white/90 backdrop-blur-md border-b border-gray-100 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-20 shrink-0 transition-all">
-          {/* NÚT THU GỌN DUY NHẤT Ở BÊN NGOÀI (ICON 3 GẠCH HAMBURGER) */}
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-y-auto transition-all duration-200">
+        {/* TOP HEADER */}
+        <header className="h-16 bg-white border-b border-slate-200/80 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-20 shrink-0 transition-all">
+          {/* NÚT THU GỌN / MỞ RỘNG SIDEBAR */}
           <div className="flex items-center gap-2.5">
             <button
               onClick={() => {
@@ -400,10 +400,10 @@ const MainLayout = ({ children }) => {
                   toggleCollapse();
                 }
               }}
-              className="flex items-center justify-center w-10 h-10 rounded-xl bg-purple-50 hover:bg-purple-100 text-[#6D28D9] border border-purple-100/80 transition-all cursor-pointer shadow-2xs hover:scale-105 active:scale-95"
+              className="flex items-center justify-center w-9 h-9 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/80 transition-all cursor-pointer hover:text-slate-900"
               title={isCollapsed ? 'Mở rộng thanh bên' : 'Thu gọn thanh bên'}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
@@ -414,10 +414,10 @@ const MainLayout = ({ children }) => {
             {/* Chuông thông báo (US-45 & US-46) */}
             <Link
               to="/notifications"
-              className="relative p-2.5 rounded-xl bg-purple-50/80 hover:bg-purple-100 text-[#6D28D9] border border-purple-100/80 transition-all cursor-pointer hover:scale-105 active:scale-95 flex items-center justify-center shadow-2xs"
+              className="relative p-2 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/80 transition-all cursor-pointer flex items-center justify-center hover:text-slate-900"
               title="Trung tâm thông báo & cảnh báo"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -426,31 +426,31 @@ const MainLayout = ({ children }) => {
                 />
               </svg>
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full bg-red-500 text-white text-[11px] font-bold flex items-center justify-center shadow-xs animate-pulse ring-2 ring-white">
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-4 px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white">
                   {unreadCount > 99 ? '99+' : unreadCount}
                 </span>
               )}
             </Link>
 
             {/* Thông tin User */}
-            <div className="flex items-center gap-3.5 pl-2 border-l border-gray-100">
+            <div className="flex items-center gap-3 pl-3 border-l border-slate-200">
               <div className="text-right hidden sm:block">
-                <p className="text-sm font-semibold text-[#1E1B4B]">
+                <p className="text-xs font-semibold text-slate-800">
                   {user?.fullName || user?.full_name || user?.name || 'Phạm Doãn Nho'}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-[11px] text-slate-400">
                   {isManager ? 'Quản lý kho' : 'Nhân viên kho'}
                 </p>
               </div>
-              <div className="w-10 h-10 rounded-full bg-[#1E1B4B] text-white flex items-center justify-center font-semibold text-sm shadow-sm ring-2 ring-purple-100">
+              <div className="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center font-semibold text-xs shadow-sm">
                 {userInitial}
               </div>
             </div>
           </div>
         </header>
 
-        {/* Nội dung trang (Dashboard, Quản lý nhân viên,...) */}
-        <main className="flex-1 p-6 sm:p-8 lg:p-10 relative">
+        {/* Nội dung trang */}
+        <main className="flex-1 p-6 sm:p-8 max-w-[1600px] w-full mx-auto relative">
           {children}
         </main>
       </div>
@@ -460,16 +460,16 @@ const MainLayout = ({ children }) => {
          ============================================================ */}
       {showLogoutModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs transition-opacity duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs transition-opacity duration-200"
           onClick={() => !isLoggingOut && setShowLogoutModal(false)}
         >
           <div
-            className="bg-white rounded-3xl border border-purple-100/80 shadow-2xl shadow-purple-950/20 w-full max-w-sm p-6 sm:p-7 text-center transition-all scale-100"
+            className="bg-white rounded-2xl border border-slate-200 shadow-xl w-full max-w-sm p-6 text-center transition-all scale-100"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Icon cảnh báo đăng xuất */}
-            <div className="w-14 h-14 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center mx-auto mb-4 ring-8 ring-red-50/50">
-              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-3.5 border border-rose-100">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -479,19 +479,19 @@ const MainLayout = ({ children }) => {
               </svg>
             </div>
 
-            <h3 className="text-lg font-bold text-[#1E1B4B] mb-1.5">
+            <h3 className="text-base font-bold text-slate-800 mb-1">
               Xác nhận đăng xuất
             </h3>
-            <p className="text-xs sm:text-sm text-gray-500 mb-6 leading-relaxed">
+            <p className="text-xs text-slate-500 mb-5 leading-relaxed">
               Bạn có chắc chắn muốn đăng xuất khỏi phiên làm việc này không?
             </p>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               <button
                 type="button"
                 onClick={() => setShowLogoutModal(false)}
                 disabled={isLoggingOut}
-                className="flex-1 py-2.5 px-4 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-semibold transition-colors cursor-pointer disabled:opacity-50"
+                className="flex-1 py-2 px-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors cursor-pointer disabled:opacity-50"
               >
                 Hủy bỏ
               </button>
@@ -499,7 +499,7 @@ const MainLayout = ({ children }) => {
                 type="button"
                 onClick={handleConfirmLogout}
                 disabled={isLoggingOut}
-                className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white text-sm font-semibold shadow-md shadow-red-500/25 transition-all cursor-pointer disabled:opacity-50"
+                className="flex-1 py-2 px-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-sm transition-all cursor-pointer disabled:opacity-50"
               >
                 {isLoggingOut ? 'Đang thoát...' : 'Đăng xuất'}
               </button>

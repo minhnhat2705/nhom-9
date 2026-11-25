@@ -401,15 +401,7 @@ const Replenishment = () => {
         <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-800 p-6 rounded-2xl text-white shadow-md">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 text-purple-200 text-xs font-semibold uppercase tracking-wider mb-2 border border-purple-400/30">
-                <span>🤖</span>
-                <span>Epic 4.2: AI Replenishment Engine</span>
-                {meta.currentPeriodKey && (
-                  <span className="bg-purple-400/30 px-2 py-0.5 rounded-full text-[10px] font-mono text-purple-100">
-                    Kỳ: {meta.currentPeriodKey}
-                  </span>
-                )}
-              </div>
+              
               <h1 className="text-2xl font-bold tracking-tight">Đề xuất nhập hàng thông minh bằng AI</h1>
               <p className="text-purple-200 text-xs mt-1 max-w-3xl leading-relaxed">
                 Tự động tính toán điểm bổ sung hàng theo Lead Time, Tồn an toàn, Tồn khả dụng, Hàng đang về, làm tròn theo MOQ của Nhà cung cấp và sinh Đơn đặt hàng PO chuyên nghiệp.
@@ -486,19 +478,19 @@ const Replenishment = () => {
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
                 <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
                   <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tổng đề xuất</div>
-                  <div className="text-xl font-black text-slate-800 mt-1 font-mono">{summary.total}</div>
+                  <div className="text-xl font-bold text-slate-800 mt-1 tabular-nums">{summary.total}</div>
                   <div className="text-[11px] text-slate-500 mt-0.5">mặt hàng cần nhập</div>
                 </div>
 
                 <div className="bg-white p-4 rounded-2xl border border-amber-200/80 shadow-xs bg-amber-50/20">
                   <div className="text-[11px] font-bold text-amber-700 uppercase tracking-wider">Đang chờ duyệt</div>
-                  <div className="text-xl font-black text-amber-600 mt-1 font-mono">{summary.pendingCount}</div>
+                  <div className="text-xl font-bold text-amber-600 mt-1 tabular-nums">{summary.pendingCount}</div>
                   <div className="text-[11px] text-amber-600 mt-0.5">chưa xử lý</div>
                 </div>
 
                 <div className="bg-white p-4 rounded-2xl border border-emerald-200/80 shadow-xs bg-emerald-50/20">
                   <div className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">Đã duyệt</div>
-                  <div className="text-xl font-black text-emerald-600 mt-1 font-mono">{summary.approvedCount}</div>
+                  <div className="text-xl font-bold text-emerald-600 mt-1 tabular-nums">{summary.approvedCount}</div>
                   <div className="text-[11px] text-emerald-600 mt-0.5">sẵn sàng tạo PO</div>
                 </div>
 
@@ -507,19 +499,19 @@ const Replenishment = () => {
                     <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
                     <span>Cần đặt khẩn cấp</span>
                   </div>
-                  <div className="text-xl font-black text-rose-600 mt-1 font-mono">{summary.urgentCount}</div>
+                  <div className="text-xl font-bold text-rose-600 mt-1 tabular-nums">{summary.urgentCount}</div>
                   <div className="text-[11px] text-rose-600 mt-0.5">tồn &le; Lead Time</div>
                 </div>
 
                 <div className="bg-white p-4 rounded-2xl border border-purple-200/80 shadow-xs bg-purple-50/20">
                   <div className="text-[11px] font-bold text-purple-700 uppercase tracking-wider">Tổng lượng đặt</div>
-                  <div className="text-xl font-black text-purple-800 mt-1 font-mono">{summary.totalSuggestedUnits}</div>
+                  <div className="text-xl font-bold text-purple-800 mt-1 tabular-nums">{summary.totalSuggestedUnits}</div>
                   <div className="text-[11px] text-purple-600 mt-0.5">chiếc (trên trang)</div>
                 </div>
 
                 <div className="bg-white p-4 rounded-2xl border border-indigo-200/80 shadow-xs bg-indigo-50/20">
                   <div className="text-[11px] font-bold text-indigo-700 uppercase tracking-wider">Ước tính vốn</div>
-                  <div className="text-sm font-black text-indigo-900 mt-1 font-mono truncate" title={`${Number(summary.totalEstimatedCost).toLocaleString('vi-VN')} đ`}>
+                  <div className="text-sm font-bold text-indigo-900 mt-1 tabular-nums truncate" title={`${Number(summary.totalEstimatedCost).toLocaleString('vi-VN')} đ`}>
                     {Number(summary.totalEstimatedCost).toLocaleString('vi-VN')} đ
                   </div>
                   <div className="text-[11px] text-indigo-600 mt-0.5">chi phí nhập hàng</div>
@@ -649,12 +641,12 @@ const Replenishment = () => {
             </div>
 
             {/* BẢNG DỮ LIỆU ĐỀ XUẤT NHẬP HÀNG (US-37, US-38, US-39) */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse text-xs">
+                <table className="w-full min-w-[1360px] text-left border-collapse text-xs">
                   <thead>
-                    <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-bold">
-                      <th className="p-3.5 text-center w-10">
+                    <tr className="bg-slate-50/90 border-b border-slate-200/80 text-slate-500 text-[12px] font-semibold whitespace-nowrap">
+                      <th className="py-3.5 px-3 text-center w-11 sticky left-0 z-20 bg-slate-50">
                         <input
                           type="checkbox"
                           onChange={handleSelectAll}
@@ -662,19 +654,39 @@ const Replenishment = () => {
                           className="w-4 h-4 rounded text-purple-600 focus:ring-purple-500 border-slate-300"
                         />
                       </th>
-                      <th className="p-3.5">Mặt hàng & Biến thể</th>
-                      <th className="p-3.5">Nhà cung cấp</th>
-                      <th className="p-3.5">Kho lưu trữ</th>
-                      <th className="p-3.5 text-right" title="Tồn thực tế - Chờ xuất">Tồn khả dụng</th>
-                      <th className="p-3.5 text-right" title="PO chờ + Nhập chờ duyệt + Chuyển đến">Đang về</th>
-                      <th className="p-3.5 text-right">Tồn an toàn</th>
-                      <th className="p-3.5 text-right">Nhu cầu/ngày</th>
-                      <th className="p-3.5 text-center">Tồn đủ bán</th>
-                      <th className="p-3.5 text-center">Mức khẩn cấp</th>
-                      <th className="p-3.5 text-right font-black text-purple-900">AI Gợi ý</th>
-                      <th className="p-3.5 text-right font-black text-indigo-900">Đã chỉnh</th>
-                      <th className="p-3.5 text-center">Trạng thái</th>
-                      <th className="p-3.5 text-center">Thao tác</th>
+                      <th className="py-3.5 px-3 min-w-[280px] sticky left-11 z-20 bg-slate-50 border-r border-slate-200/60 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.05)]">
+                        Mặt hàng & biến thể
+                      </th>
+                      <th className="py-3.5 px-3 min-w-[190px]">Nhà cung cấp</th>
+                      <th className="py-3.5 px-3 min-w-[90px]">Kho lưu trữ</th>
+                      <th className="py-3.5 px-3 min-w-[110px] text-right" title="Tồn thực tế - Chờ xuất">
+                        Tồn khả dụng
+                      </th>
+                      <th className="py-3.5 px-3 min-w-[95px] text-right" title="PO chờ + Nhập chờ duyệt + Chuyển đến">
+                        Đang về
+                      </th>
+                      <th className="py-3.5 px-3 min-w-[105px] text-right" title="Mức tồn kho an toàn">
+                        Tồn an toàn
+                      </th>
+                      <th className="py-3.5 px-3 min-w-[110px] text-right" title="Tốc độ tiêu thụ trung bình mỗi ngày">
+                        Nhu cầu/ngày
+                      </th>
+                      <th className="py-3.5 px-3 min-w-[105px] text-right" title="Số ngày dự kiến còn đủ hàng bán">
+                        Tồn đủ bán
+                      </th>
+                      <th className="py-3.5 px-3 min-w-[115px] text-center" title="Mức độ khẩn cấp cần bổ sung">
+                        Khẩn cấp
+                      </th>
+                      <th className="py-3.5 px-3 min-w-[100px] text-right" title="Số lượng đề xuất bổ sung do AI tính toán">
+                        AI gợi ý
+                      </th>
+                      <th className="py-3.5 px-3 min-w-[110px] text-right" title="Số lượng đã được Quản lý kho điều chỉnh">
+                        Đã chỉnh
+                      </th>
+                      <th className="py-3.5 px-3 min-w-[120px] text-center">Trạng thái</th>
+                      <th className="py-3.5 px-3 min-w-[130px] text-center sticky right-0 z-20 bg-slate-50 border-l border-slate-200/60 shadow-[-2px_0_4px_-2px_rgba(0,0,0,0.05)]">
+                        Thao tác
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -682,35 +694,40 @@ const Replenishment = () => {
                       <tr>
                         <td colSpan={14} className="p-8 text-center text-slate-500">
                           <span className="inline-block w-6 h-6 border-2 border-purple-600 border-t-transparent rounded-full animate-spin mb-2"></span>
-                          <div>Đang tải danh sách đề xuất nhập hàng...</div>
+                          <div className="text-xs">Đang tải danh sách đề xuất nhập hàng...</div>
                         </td>
                       </tr>
                     ) : suggestions.length === 0 ? (
                       <tr>
-                        <td colSpan={14} className="p-8 text-center text-slate-500">
-                          <div className="text-3xl mb-2">✨</div>
-                          <div className="font-semibold text-slate-700">Chưa có đề xuất nhập hàng nào phù hợp bộ lọc.</div>
-                          <div className="text-xs text-slate-400 mt-1">
-                            Bấm nút <strong>"Chạy thuật toán AI quét đề xuất"</strong> ở phía trên để hệ thống tự động quét lại toàn bộ kho.
-                          </div>
+                        <td colSpan={14} className="py-12 px-4 text-center text-slate-500">
+                          <svg className="w-9 h-9 mx-auto text-slate-300 mb-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                          </svg>
+                          <div className="font-medium text-slate-700 text-sm">Chưa có đề xuất nhập hàng nào phù hợp bộ lọc</div>
+                          <p className="text-xs text-slate-400 mt-1 max-w-lg mx-auto leading-relaxed">
+                            Bấm nút <span className="font-medium text-slate-600">"Chạy thuật toán AI quét đề xuất"</span> ở phía trên để hệ thống tự động quét lại toàn bộ kho.
+                          </p>
                         </td>
                       </tr>
                     ) : (
                       suggestions.map((sug) => {
                         const isSelected = selectedIds.includes(sug.id);
                         const isEdited = sug.adjusted_qty !== null && sug.adjusted_qty !== undefined;
-                        const finalQty = isEdited ? sug.adjusted_qty : sug.ai_suggested_qty;
                         const diff = isEdited ? sug.adjusted_qty - sug.ai_suggested_qty : 0;
 
                         return (
                           <tr
                             key={sug.id}
-                            className={`hover:bg-slate-50/60 transition-colors ${
-                              isSelected ? 'bg-purple-50/40' : ''
+                            className={`group transition-colors ${
+                              isSelected ? 'bg-purple-50/50' : 'hover:bg-slate-50/70'
                             }`}
                           >
-                            {/* Checkbox */}
-                            <td className="p-3.5 text-center">
+                            {/* Checkbox (Sticky Left) */}
+                            <td
+                              className={`py-3.5 px-3 text-center sticky left-0 z-10 transition-colors ${
+                                isSelected ? 'bg-purple-50/50' : 'bg-white group-hover:bg-slate-50/70'
+                              }`}
+                            >
                               <input
                                 type="checkbox"
                                 checked={isSelected}
@@ -719,8 +736,12 @@ const Replenishment = () => {
                               />
                             </td>
 
-                            {/* Mặt hàng & Biến thể */}
-                            <td className="p-3.5">
+                            {/* Mặt hàng & Biến thể (Sticky Left) */}
+                            <td
+                              className={`py-3.5 px-3 sticky left-11 z-10 border-r border-slate-200/60 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.05)] transition-colors ${
+                                isSelected ? 'bg-purple-50/50' : 'bg-white group-hover:bg-slate-50/70'
+                              }`}
+                            >
                               <div className="flex items-center gap-2.5">
                                 <div className="w-9 h-9 rounded-lg bg-slate-100 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center text-xs font-bold text-slate-400">
                                   {sug.product?.image_url ? (
@@ -736,12 +757,12 @@ const Replenishment = () => {
                                     <span>SP</span>
                                   )}
                                 </div>
-                                <div>
-                                  <div className="font-bold text-slate-800 line-clamp-1">
+                                <div className="min-w-0">
+                                  <div className="font-semibold text-slate-800 truncate" title={sug.product?.product_name}>
                                     {sug.product?.product_name}
                                   </div>
                                   <div className="flex items-center gap-2 text-[11px] text-slate-500 font-mono mt-0.5">
-                                    <span className="font-semibold text-purple-700">{sug.variant?.sku}</span>
+                                    <span className="font-medium text-slate-700">{sug.variant?.sku}</span>
                                     <span>• Size: {sug.variant?.size}</span>
                                     <span>• Màu: {sug.variant?.color}</span>
                                   </div>
@@ -750,44 +771,46 @@ const Replenishment = () => {
                             </td>
 
                             {/* Nhà cung cấp */}
-                            <td className="p-3.5">
-                              <div className="font-semibold text-slate-800">{sug.supplier?.supplier_name}</div>
-                              <div className="text-[10px] text-slate-500 mt-0.5">
+                            <td className="py-3.5 px-3">
+                              <div className="font-medium text-slate-800 truncate" title={sug.supplier?.supplier_name}>
+                                {sug.supplier?.supplier_name}
+                              </div>
+                              <div className="text-[11px] text-slate-400 mt-0.5">
                                 LT: {sug.lead_time} ngày • MOQ: {sug.min_order_qty} sp
                               </div>
                             </td>
 
                             {/* Kho */}
-                            <td className="p-3.5">
-                              <span className="inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200 font-mono">
+                            <td className="py-3.5 px-3">
+                              <span className="inline-block px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200/70 font-mono">
                                 {sug.warehouse?.warehouse_code}
                               </span>
                             </td>
 
                             {/* Tồn khả dụng */}
-                            <td className="p-3.5 text-right font-mono font-bold text-slate-800">
-                              {sug.available_stock}
+                            <td className="py-3.5 px-3 text-right tabular-nums font-semibold text-slate-800">
+                              {Number(sug.available_stock).toLocaleString('vi-VN')}
                             </td>
 
                             {/* Hàng đang về */}
-                            <td className="p-3.5 text-right font-mono text-indigo-600 font-semibold">
-                              {sug.incoming_stock > 0 ? `+${sug.incoming_stock}` : '0'}
+                            <td className="py-3.5 px-3 text-right tabular-nums text-slate-600 font-medium">
+                              {sug.incoming_stock > 0 ? `+${Number(sug.incoming_stock).toLocaleString('vi-VN')}` : '0'}
                             </td>
 
                             {/* Tồn an toàn */}
-                            <td className="p-3.5 text-right font-mono text-slate-500">
-                              {sug.safety_stock}
+                            <td className="py-3.5 px-3 text-right tabular-nums text-slate-500">
+                              {Number(sug.safety_stock).toLocaleString('vi-VN')}
                             </td>
 
                             {/* Nhu cầu ngày */}
-                            <td className="p-3.5 text-right font-mono text-slate-700">
+                            <td className="py-3.5 px-3 text-right tabular-nums text-slate-600">
                               {sug.daily_demand}/ngày
                             </td>
 
                             {/* Số ngày tồn đủ bán */}
-                            <td className="p-3.5 text-center font-mono">
+                            <td className="py-3.5 px-3 text-right tabular-nums">
                               <span
-                                className={`font-bold ${
+                                className={`font-semibold ${
                                   sug.days_of_supply <= sug.lead_time
                                     ? 'text-rose-600'
                                     : sug.days_of_supply <= sug.lead_time + 3
@@ -800,35 +823,37 @@ const Replenishment = () => {
                             </td>
 
                             {/* Mức khẩn cấp */}
-                            <td className="p-3.5 text-center">
+                            <td className="py-3.5 px-3 text-center">
                               {sug.urgency_level === 'URGENT' ? (
-                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-ping"></span>
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-rose-50 text-rose-700 border border-rose-200/70">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
                                   Khẩn cấp
                                 </span>
                               ) : sug.urgency_level === 'HIGH' ? (
-                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200/70">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
                                   Cao
                                 </span>
                               ) : (
-                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/70">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                                   Trung bình
                                 </span>
                               )}
                             </td>
 
                             {/* AI Gợi ý */}
-                            <td className="p-3.5 text-right font-mono font-bold text-purple-900 text-sm">
-                              {sug.ai_suggested_qty}
+                            <td className="py-3.5 px-3 text-right tabular-nums font-semibold text-slate-800">
+                              {Number(sug.ai_suggested_qty).toLocaleString('vi-VN')}
                             </td>
 
                             {/* Đã chỉnh (US-38) */}
-                            <td className="p-3.5 text-right font-mono">
+                            <td className="py-3.5 px-3 text-right tabular-nums">
                               {isEdited ? (
-                                <div>
-                                  <span className="font-bold text-indigo-900 text-sm">{sug.adjusted_qty}</span>
+                                <div className="inline-flex items-center justify-end gap-1">
+                                  <span className="font-semibold text-slate-800">{Number(sug.adjusted_qty).toLocaleString('vi-VN')}</span>
                                   <span
-                                    className={`ml-1 text-[10px] font-semibold ${
+                                    className={`text-[11px] font-medium ${
                                       diff > 0 ? 'text-emerald-600' : 'text-rose-600'
                                     }`}
                                   >
@@ -836,30 +861,30 @@ const Replenishment = () => {
                                   </span>
                                 </div>
                               ) : (
-                                <span className="text-slate-400 italic text-[11px]">—</span>
+                                <span className="text-slate-300 text-xs">—</span>
                               )}
                             </td>
 
                             {/* Trạng thái */}
-                            <td className="p-3.5 text-center">
+                            <td className="py-3.5 px-3 text-center whitespace-nowrap">
                               {sug.status === 'PENDING' ? (
-                                <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                                <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200/70">
                                   Chờ duyệt
                                 </span>
                               ) : sug.status === 'APPROVED' ? (
-                                <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/70">
                                   Đã duyệt
                                 </span>
                               ) : sug.status === 'REJECTED' ? (
                                 <span
-                                  className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200 cursor-help"
+                                  className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-rose-50 text-rose-700 border border-rose-200/70 cursor-help"
                                   title={`Lý do từ chối: ${sug.rejection_reason || 'Không rõ'}`}
                                 >
                                   Đã từ chối
                                 </span>
                               ) : sug.status === 'ORDERED' ? (
                                 <span
-                                  className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-900 border border-purple-200 cursor-pointer"
+                                  className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-purple-50 text-purple-700 border border-purple-200/70 cursor-pointer"
                                   onClick={() => sug.purchase_order_id && handleOpenPrintModal(sug.purchase_order_id)}
                                   title={`Mã PO: ${sug.purchase_order?.po_code || ''} (Nhấp để xem)`}
                                 >
@@ -870,26 +895,34 @@ const Replenishment = () => {
                               )}
                             </td>
 
-                            {/* Cột thao tác */}
-                            <td className="p-3.5 text-center">
+                            {/* Cột thao tác (Sticky Right) */}
+                            <td
+                              className={`py-3.5 px-3 text-center sticky right-0 z-10 border-l border-slate-200/60 shadow-[-2px_0_4px_-2px_rgba(0,0,0,0.05)] transition-colors ${
+                                isSelected ? 'bg-purple-50/50' : 'bg-white group-hover:bg-slate-50/70'
+                              }`}
+                            >
                               <div className="inline-flex items-center gap-1.5">
                                 {/* Nút xem lý do AI (Explainable AI - US-37) */}
                                 <button
                                   onClick={() => setExplainModal({ show: true, data: sug })}
-                                  className="p-1.5 rounded-lg text-purple-700 bg-purple-50 hover:bg-purple-100 transition-colors"
-                                  title="Xem sơ đồ giải thích phép tính AI"
+                                  className="p-1.5 rounded-lg text-purple-600 bg-purple-50/80 hover:bg-purple-100 transition-colors"
+                                  title="Xem giải thích phép tính AI"
                                 >
-                                  💡
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                  </svg>
                                 </button>
 
                                 {/* Nút điều chỉnh (US-38) */}
                                 {sug.status !== 'ORDERED' && (
                                   <button
                                     onClick={() => handleOpenEditModal(sug)}
-                                    className="p-1.5 rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
+                                    className="p-1.5 rounded-lg text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors"
                                     title="Điều chỉnh số lượng hoặc nhà cung cấp"
                                   >
-                                    ✏️
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
                                   </button>
                                 )}
 
@@ -897,10 +930,12 @@ const Replenishment = () => {
                                 {sug.status === 'PENDING' && (
                                   <button
                                     onClick={() => handleApprove(sug.id)}
-                                    className="p-1.5 rounded-lg text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors"
+                                    className="p-1.5 rounded-lg text-emerald-600 bg-emerald-50/80 hover:bg-emerald-100 transition-colors"
                                     title="Duyệt đề xuất này"
                                   >
-                                    ✓
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
                                   </button>
                                 )}
 
@@ -908,10 +943,12 @@ const Replenishment = () => {
                                 {sug.status === 'PENDING' && (
                                   <button
                                     onClick={() => handleOpenRejectModal(sug.id)}
-                                    className="p-1.5 rounded-lg text-rose-700 bg-rose-50 hover:bg-rose-100 transition-colors"
+                                    className="p-1.5 rounded-lg text-rose-600 bg-rose-50/80 hover:bg-rose-100 transition-colors"
                                     title="Từ chối đề xuất này"
                                   >
-                                    ✕
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
                                   </button>
                                 )}
                               </div>
@@ -1020,21 +1057,31 @@ const Replenishment = () => {
             </div>
 
             {/* BẢNG DANH SÁCH ĐƠN ĐẶT HÀNG (PO) */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse text-xs">
+                <table className="w-full min-w-[1100px] text-left border-collapse text-xs">
                   <thead>
-                    <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-bold">
-                      <th className="p-3.5">Mã đơn hàng PO</th>
-                      <th className="p-3.5">Nhà cung cấp</th>
-                      <th className="p-3.5">Kho nhận hàng</th>
-                      <th className="p-3.5">Ngày đặt</th>
-                      <th className="p-3.5">Dự kiến giao</th>
-                      <th className="p-3.5 text-right">Số loại SKU</th>
-                      <th className="p-3.5 text-right">Tổng sản lượng</th>
-                      <th className="p-3.5 text-right font-black text-purple-900">Tổng thành tiền</th>
-                      <th className="p-3.5 text-center">Trạng thái</th>
-                      <th className="p-3.5 text-center">Thao tác</th>
+                    <tr className="bg-slate-50/90 border-b border-slate-200/80 text-slate-500 text-[12px] font-semibold whitespace-nowrap">
+                      <th className="py-3.5 px-3 min-w-[160px] sticky left-0 z-20 bg-slate-50 border-r border-slate-200/60 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.05)]">
+                        Mã đơn hàng PO
+                      </th>
+                      <th className="py-3.5 px-3 min-w-[180px]">Nhà cung cấp</th>
+                      <th className="py-3.5 px-3 min-w-[180px]">Kho nhận hàng</th>
+                      <th className="py-3.5 px-3 min-w-[110px]">Ngày đặt</th>
+                      <th className="py-3.5 px-3 min-w-[120px]">Dự kiến giao</th>
+                      <th className="py-3.5 px-3 min-w-[100px] text-right" title="Tổng số loại SKU sản phẩm trong đơn">
+                        Số loại SKU
+                      </th>
+                      <th className="py-3.5 px-3 min-w-[120px] text-right" title="Tổng số lượng sản phẩm nhập">
+                        Tổng sản lượng
+                      </th>
+                      <th className="py-3.5 px-3 min-w-[140px] text-right" title="Tổng giá trị đơn hàng (VNĐ)">
+                        Tổng thành tiền
+                      </th>
+                      <th className="py-3.5 px-3 min-w-[120px] text-center">Trạng thái</th>
+                      <th className="py-3.5 px-3 min-w-[130px] text-center sticky right-0 z-20 bg-slate-50 border-l border-slate-200/60 shadow-[-2px_0_4px_-2px_rgba(0,0,0,0.05)]">
+                        Thao tác
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -1042,71 +1089,83 @@ const Replenishment = () => {
                       <tr>
                         <td colSpan={10} className="p-8 text-center text-slate-500">
                           <span className="inline-block w-6 h-6 border-2 border-purple-600 border-t-transparent rounded-full animate-spin mb-2"></span>
-                          <div>Đang tải danh sách Đơn đặt hàng PO...</div>
+                          <div className="text-xs">Đang tải danh sách Đơn đặt hàng PO...</div>
                         </td>
                       </tr>
                     ) : orders.length === 0 ? (
                       <tr>
-                        <td colSpan={10} className="p-8 text-center text-slate-500">
-                          <div className="text-3xl mb-2">📦</div>
-                          <div className="font-semibold text-slate-700">Chưa có Đơn đặt hàng nhà cung cấp (PO) nào.</div>
-                          <div className="text-xs text-slate-400 mt-1">
-                            Vui lòng duyệt các đề xuất AI ở Tab 1 và nhấn <strong>"Tạo Đơn đặt hàng PO"</strong> để sinh tự động.
-                          </div>
+                        <td colSpan={10} className="py-12 px-4 text-center text-slate-500">
+                          <svg className="w-9 h-9 mx-auto text-slate-300 mb-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                          <div className="font-medium text-slate-700 text-sm">Chưa có đơn đặt hàng nhà cung cấp (PO) nào</div>
+                          <p className="text-xs text-slate-400 mt-1 max-w-lg mx-auto leading-relaxed">
+                            Vui lòng duyệt các đề xuất AI ở Tab 1 và nhấn <span className="font-medium text-slate-600">"Tạo Đơn đặt hàng PO"</span> để sinh tự động.
+                          </p>
                         </td>
                       </tr>
                     ) : (
                       orders.map((order) => (
-                        <tr key={order.id} className="hover:bg-slate-50/60 transition-colors">
-                          <td className="p-3.5 font-mono font-bold text-purple-700">{order.po_code}</td>
-                          <td className="p-3.5 font-semibold text-slate-800">{order.supplier?.supplier_name}</td>
-                          <td className="p-3.5 font-medium text-slate-600">
-                            {order.warehouse?.warehouse_name} ({order.warehouse?.warehouse_code})
+                        <tr key={order.id} className="group hover:bg-slate-50/70 transition-colors">
+                          {/* Mã đơn hàng PO (Sticky Left) */}
+                          <td className="py-3.5 px-3 font-mono font-medium text-purple-700 sticky left-0 z-10 bg-white group-hover:bg-slate-50/70 border-r border-slate-200/60 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.05)] transition-colors">
+                            {order.po_code}
                           </td>
-                          <td className="p-3.5 font-mono text-slate-600">
+                          <td className="py-3.5 px-3 font-medium text-slate-800 truncate" title={order.supplier?.supplier_name}>
+                            {order.supplier?.supplier_name}
+                          </td>
+                          <td className="py-3.5 px-3 text-slate-600">
+                            {order.warehouse?.warehouse_name} <span className="font-mono text-[11px] text-slate-400">({order.warehouse?.warehouse_code})</span>
+                          </td>
+                          <td className="py-3.5 px-3 text-[11px] text-slate-600 whitespace-nowrap">
                             {new Date(order.order_date).toLocaleDateString('vi-VN')}
                           </td>
-                          <td className="p-3.5 font-mono font-semibold text-indigo-700">
+                          <td className="py-3.5 px-3 text-[11px] font-medium text-slate-700 whitespace-nowrap">
                             {new Date(order.expected_delivery_date).toLocaleDateString('vi-VN')}
                           </td>
-                          <td className="p-3.5 text-right font-mono text-slate-700">{order.total_items} loại</td>
-                          <td className="p-3.5 text-right font-mono font-bold text-slate-900">
-                            {order.total_quantity} chiếc
+                          <td className="py-3.5 px-3 text-right tabular-nums text-slate-600">
+                            {order.total_items} loại
                           </td>
-                          <td className="p-3.5 text-right font-mono font-bold text-purple-900 text-sm">
+                          <td className="py-3.5 px-3 text-right tabular-nums font-semibold text-slate-800">
+                            {Number(order.total_quantity).toLocaleString('vi-VN')} chiếc
+                          </td>
+                          <td className="py-3.5 px-3 text-right tabular-nums font-bold text-slate-900">
                             {Number(order.total_amount).toLocaleString('vi-VN')} đ
                           </td>
-                          <td className="p-3.5 text-center">
+                          <td className="py-3.5 px-3 text-center whitespace-nowrap">
                             {order.status === 'PENDING' ? (
-                              <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                              <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200/70">
                                 Chờ gửi
                               </span>
                             ) : order.status === 'SENT' ? (
-                              <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
+                              <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200/70">
                                 Đã gửi NCC
                               </span>
                             ) : order.status === 'CONFIRMED' ? (
-                              <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-200">
+                              <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-indigo-50 text-indigo-700 border border-indigo-200/70">
                                 NCC xác nhận
                               </span>
                             ) : order.status === 'COMPLETED' ? (
-                              <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                              <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/70">
                                 Đã hoàn tất
                               </span>
                             ) : (
-                              <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                              <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
                                 {order.status}
                               </span>
                             )}
                           </td>
-                          <td className="p-3.5 text-center">
+                          {/* Thao tác (Sticky Right) */}
+                          <td className="py-3.5 px-3 text-center sticky right-0 z-10 bg-white group-hover:bg-slate-50/70 border-l border-slate-200/60 shadow-[-2px_0_4px_-2px_rgba(0,0,0,0.05)] transition-colors">
                             <div className="inline-flex items-center gap-1.5">
                               <button
                                 onClick={() => handleOpenPrintModal(order.id)}
-                                className="px-2.5 py-1.5 rounded-lg text-purple-700 bg-purple-50 hover:bg-purple-100 text-xs font-semibold flex items-center gap-1 transition-colors"
+                                className="px-2.5 py-1.5 rounded-lg text-purple-700 bg-purple-50/80 hover:bg-purple-100 text-xs font-medium inline-flex items-center gap-1.5 transition-colors"
                                 title="Xem bản in / Xuất PDF / Excel"
                               >
-                                <span>📄</span>
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
                                 <span>Xem bản in</span>
                               </button>
                             </div>

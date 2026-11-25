@@ -96,29 +96,26 @@ const LoginPage = () => {
 
         {/* Cột phải: Thẻ Form Đăng nhập */}
         <div className="lg:col-span-5 flex justify-center lg:justify-end">
-          <div className="w-full max-w-[440px] bg-white/95 backdrop-blur-md rounded-[32px] shadow-[0_20px_50px_rgba(88,28,135,0.12)] p-8 sm:p-10 md:p-12 border border-white relative overflow-hidden">
+          <div className="w-full max-w-[420px] bg-white/95 backdrop-blur-md rounded-2xl shadow-xl p-8 sm:p-10 border border-slate-200/80 relative overflow-hidden">
             
-            {/* Họa tiết góc phải trên nhẹ nhàng giống thiết kế */}
-            <div className="absolute -top-12 -right-12 w-36 h-36 bg-purple-100/50 rounded-full pointer-events-none" />
-
-            <h2 className="text-2xl sm:text-[28px] font-bold text-[#1E1B4B] text-center mb-8 relative z-10">
+            <h2 className="text-2xl font-bold text-slate-900 text-center mb-6 relative z-10">
               Đăng nhập
             </h2>
 
             {error && (
-              <div className="mb-5 p-3.5 bg-red-50 border border-red-100 rounded-xl">
-                <p className="text-sm text-red-600 text-center font-medium">
+              <div className="mb-4 p-2.5 bg-rose-50 border border-rose-200/70 rounded-lg">
+                <p className="text-xs text-rose-700 text-center font-medium">
                   {error}
                 </p>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
+            <form onSubmit={handleSubmit} className="space-y-3.5 relative z-10">
               {/* Ô nhập Email */}
               <div className="relative flex items-center">
-                <div className="absolute left-4 text-[#312E81] pointer-events-none">
+                <div className="absolute left-3.5 text-slate-400 pointer-events-none">
                   <svg
-                    className="w-5 h-5"
+                    className="w-4 h-4"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -131,7 +128,7 @@ const LoginPage = () => {
                   value={form.email}
                   onChange={handleChange}
                   placeholder="Nhập địa chỉ email"
-                  className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all"
+                  className="w-full pl-10 pr-3.5 py-2.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-purple-600 transition-colors"
                   autoComplete="email"
                   disabled={loading}
                 />
@@ -139,9 +136,9 @@ const LoginPage = () => {
 
               {/* Ô nhập Mật khẩu */}
               <div className="relative flex items-center">
-                <div className="absolute left-4 text-[#312E81] pointer-events-none">
+                <div className="absolute left-3.5 text-slate-400 pointer-events-none">
                   <svg
-                    className="w-5 h-5"
+                    className="w-4 h-4"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -154,19 +151,19 @@ const LoginPage = () => {
                   value={form.password}
                   onChange={handleChange}
                   placeholder="Nhập mật khẩu"
-                  className="w-full pl-12 pr-12 py-3.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all"
+                  className="w-full pl-10 pr-10 py-2.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-purple-600 transition-colors"
                   autoComplete="current-password"
                   disabled={loading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((p) => !p)}
-                  className="absolute right-4 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-3 text-slate-400 hover:text-slate-600 transition-colors"
                   tabIndex={-1}
                 >
                   {showPassword ? (
                     <svg
-                      className="w-5 h-5"
+                      className="w-4 h-4"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -186,7 +183,7 @@ const LoginPage = () => {
                     </svg>
                   ) : (
                     <svg
-                      className="w-5 h-5"
+                      className="w-4 h-4"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -202,23 +199,22 @@ const LoginPage = () => {
                 </button>
               </div>
 
-              {/* Nút Đăng nhập Gradient Tím */}
+              {/* Nút Đăng nhập */}
               <div className="pt-2">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#8B5CF6] via-[#7C3AED] to-[#5B21B6] hover:from-[#7C3AED] hover:to-[#4C1D95] text-white font-semibold text-base shadow-lg shadow-purple-600/25 hover:shadow-purple-600/40 transition-all duration-200 flex items-center justify-center gap-2.5 disabled:opacity-60 cursor-pointer"
+                  className="w-full py-2.5 px-5 rounded-lg bg-purple-700 hover:bg-purple-800 text-white font-medium text-xs shadow-xs transition-colors flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
                 >
                   {loading ? (
                     <>
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       <span>Đang đăng nhập...</span>
                     </>
                   ) : (
                     <>
-                      {/* Icon mũi tên đăng nhập giống ảnh */}
                       <svg
-                        className="w-5 h-5"
+                        className="w-4 h-4"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -238,14 +234,14 @@ const LoginPage = () => {
             </form>
 
             {/* Dòng phân cách "Hoặc" */}
-            <div className="my-7 flex items-center justify-center gap-3">
-              <div className="h-[1px] bg-gray-200 flex-1 max-w-[70px]" />
-              <span className="text-xs text-gray-500 font-medium">Hoặc</span>
-              <div className="h-[1px] bg-gray-200 flex-1 max-w-[70px]" />
+            <div className="my-6 flex items-center justify-center gap-3">
+              <div className="h-[1px] bg-slate-200 flex-1 max-w-[70px]" />
+              <span className="text-xs text-slate-400 font-medium">Hoặc</span>
+              <div className="h-[1px] bg-slate-200 flex-1 max-w-[70px]" />
             </div>
 
             {/* Bản quyền bên dưới form */}
-            <p className="text-center text-xs text-gray-400">
+            <p className="text-center text-[11px] text-slate-400">
               © 2024 Lumié Smart Warehouse. All rights reserved.
             </p>
           </div>

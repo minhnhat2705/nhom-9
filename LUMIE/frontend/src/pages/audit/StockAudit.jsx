@@ -396,16 +396,16 @@ const StockAuditPage = () => {
         )}
 
         {/* HEADER & HÀNH ĐỘNG */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-800 p-6 rounded-2xl text-white shadow-md">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/20 text-purple-100 whitespace-nowrap">
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200/80">
                 {isManager ? 'Quyền Quản lý kho' : 'Quyền Nhân viên kho'}
               </span>
-              <span className="text-purple-300 text-xs">• Nghiệp vụ kiểm kê định kỳ & đột xuất</span>
+              <span className="text-slate-400 text-xs">• Nghiệp vụ kiểm kê định kỳ & đột xuất</span>
             </div>
-            <h1 className="text-2xl font-bold tracking-tight">Kiểm kê tồn kho</h1>
-            <p className="text-purple-200 text-sm mt-1">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">Kiểm kê tồn kho</h1>
+            <p className="text-slate-500 text-xs mt-1 max-w-3xl leading-relaxed">
               {isManager
                 ? 'Tạo đợt kiểm kê, theo dõi tiến độ đếm và duyệt điều chỉnh số lượng tồn kho theo số liệu thực tế.'
                 : 'Thực hiện kiểm đếm thực tế tại các dãy kệ trong kho và nhập kết quả kiểm kê gửi Quản lý phê duyệt.'}
@@ -417,9 +417,9 @@ const StockAuditPage = () => {
             <div className="shrink-0">
               <button
                 onClick={handleOpenCreateAuditModal}
-                className="px-5 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2 whitespace-nowrap"
+                className="px-4 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5 whitespace-nowrap"
               >
-                <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
                 <span>Tạo đợt kiểm kê</span>
@@ -432,46 +432,46 @@ const StockAuditPage = () => {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3.5">
           <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs">
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider block">Tổng số đợt</span>
-            <div className="mt-2 text-2xl font-bold text-slate-900">{stats.total}</div>
-            <div className="text-[11px] text-purple-600 font-medium mt-1">Tất cả đợt kiểm kê</div>
+            <div className="mt-2 text-2xl font-bold font-sans tabular-nums text-slate-900">{stats.total}</div>
+            <div className="text-[11px] text-purple-700 font-medium mt-1">Tất cả đợt kiểm kê</div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl border border-amber-200 bg-amber-50/20 shadow-xs">
-            <span className="text-xs font-medium text-amber-700 uppercase tracking-wider flex items-center gap-1.5 whitespace-nowrap">
-              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+          <div className="bg-white p-4 rounded-xl border border-amber-200/80 shadow-xs">
+            <span className="text-xs font-medium text-amber-800 uppercase tracking-wider flex items-center gap-1.5 whitespace-nowrap">
+              <span className="w-2 h-2 rounded-full bg-amber-500"></span>
               Chờ đếm hàng
             </span>
-            <div className="mt-2 text-2xl font-bold text-amber-600">{stats.pending}</div>
-            <div className="text-[11px] text-amber-700/80 mt-1">Nhân viên đang đếm</div>
+            <div className="mt-2 text-2xl font-bold font-sans tabular-nums text-amber-700">{stats.pending}</div>
+            <div className="text-[11px] text-slate-500 mt-1">Nhân viên đang đếm</div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl border border-indigo-200 bg-indigo-50/20 shadow-xs">
-            <span className="text-xs font-medium text-indigo-700 uppercase tracking-wider flex items-center gap-1.5 whitespace-nowrap">
-              <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
+          <div className="bg-white p-4 rounded-xl border border-purple-200/80 shadow-xs">
+            <span className="text-xs font-medium text-purple-800 uppercase tracking-wider flex items-center gap-1.5 whitespace-nowrap">
+              <span className="w-2 h-2 rounded-full bg-purple-600"></span>
               Chờ duyệt chênh lệch
             </span>
-            <div className="mt-2 text-2xl font-bold text-indigo-600">{stats.counted}</div>
-            <div className="text-[11px] text-indigo-700/80 mt-1">Quản lý cần phê duyệt</div>
+            <div className="mt-2 text-2xl font-bold font-sans tabular-nums text-purple-700">{stats.counted}</div>
+            <div className="text-[11px] text-slate-500 mt-1">Quản lý cần phê duyệt</div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl border border-emerald-200 bg-emerald-50/20 shadow-xs">
-            <span className="text-xs font-medium text-emerald-700 uppercase tracking-wider flex items-center gap-1.5 whitespace-nowrap">
-              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <div className="bg-white p-4 rounded-xl border border-emerald-200/80 shadow-xs">
+            <span className="text-xs font-medium text-emerald-800 uppercase tracking-wider flex items-center gap-1.5 whitespace-nowrap">
+              <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
               Đã hoàn thành
             </span>
-            <div className="mt-2 text-2xl font-bold text-emerald-600">{stats.completed}</div>
-            <div className="text-[11px] text-emerald-700/80 mt-1">Đã cân đối tồn kho</div>
+            <div className="mt-2 text-2xl font-bold font-sans tabular-nums text-emerald-700">{stats.completed}</div>
+            <div className="text-[11px] text-slate-500 mt-1">Đã cân đối tồn kho</div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs col-span-2 md:col-span-1">
+          <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs col-span-2 md:col-span-1">
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider block">Đã hủy bỏ</span>
-            <div className="mt-2 text-2xl font-bold text-slate-500">{stats.cancelled}</div>
+            <div className="mt-2 text-2xl font-bold font-sans tabular-nums text-slate-500">{stats.cancelled}</div>
             <div className="text-[11px] text-slate-400 mt-1">Đợt không thực hiện</div>
           </div>
         </div>
 
         {/* BỘ LỌC TÌM KIẾM */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row gap-3">
+        <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row gap-3">
           <div className="flex-1 relative">
             <input
               type="text"
@@ -481,7 +481,7 @@ const StockAuditPage = () => {
                 setSearch(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full pl-9 pr-3.5 py-2 border border-slate-200 rounded-lg text-sm outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
+              className="w-full pl-9 pr-3.5 py-2 border border-slate-200/80 rounded-lg text-xs outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-600"
             />
             <svg className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -494,7 +494,7 @@ const StockAuditPage = () => {
               setStatusFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white whitespace-nowrap"
+            className="px-3 py-2 border border-slate-200/80 rounded-lg text-xs bg-white text-slate-700 whitespace-nowrap focus:outline-hidden focus:border-purple-600"
           >
             <option value="">Tất cả trạng thái</option>
             <option value="PENDING">Chờ đếm hàng (PENDING)</option>
@@ -521,9 +521,9 @@ const StockAuditPage = () => {
         </div>
 
         {/* BẢNG DANH SÁCH ĐỢT KIỂM KÊ */}
-        <div className="bg-white rounded-2xl border border-purple-100 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-            <h2 className="text-base font-bold text-slate-800">
+        <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+          <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+            <h2 className="text-sm font-bold text-slate-800">
               Danh sách đợt kiểm kê ({pagination.total} đợt)
             </h2>
           </div>
@@ -535,25 +535,29 @@ const StockAuditPage = () => {
             </div>
           ) : auditsList.length === 0 ? (
             <div className="p-16 text-center text-slate-500">
-              <div className="text-4xl mb-2">📋</div>
-              <p className="font-semibold text-slate-700">Chưa có đợt kiểm kê nào</p>
+              <div className="w-10 h-10 mx-auto mb-2 text-slate-400">
+                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+              </div>
+              <p className="font-semibold text-slate-700 text-sm">Chưa có đợt kiểm kê nào</p>
               <p className="text-xs text-slate-400 mt-1">
                 {isManager ? 'Bấm "+ Tạo đợt kiểm kê" phía trên để khởi tạo đợt kiểm tra kho mới' : 'Chưa có đợt kiểm kê nào được giao cho kho'}
               </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm text-slate-600">
-                <thead className="bg-slate-50/80 text-xs uppercase font-semibold text-slate-500 border-b border-slate-100">
+              <table className="w-full text-left text-xs text-slate-600">
+                <thead className="bg-slate-50/75 text-[11px] uppercase font-semibold text-slate-500 border-b border-slate-200/80 tracking-wider">
                   <tr>
-                    <th className="px-5 py-3.5 whitespace-nowrap">Mã đợt</th>
-                    <th className="px-5 py-3.5 whitespace-nowrap">Kho kiểm kê</th>
-                    <th className="px-5 py-3.5 whitespace-nowrap">Người tạo / Phân công</th>
-                    <th className="px-5 py-3.5 text-right whitespace-nowrap">Tồn hệ thống</th>
-                    <th className="px-5 py-3.5 text-right whitespace-nowrap">Thực tế đếm</th>
-                    <th className="px-5 py-3.5 text-right whitespace-nowrap">Chênh lệch</th>
-                    <th className="px-5 py-3.5 text-center whitespace-nowrap">Trạng thái</th>
-                    <th className="px-5 py-3.5 text-right whitespace-nowrap">Thao tác</th>
+                    <th className="px-5 py-3 whitespace-nowrap">Mã đợt</th>
+                    <th className="px-5 py-3 whitespace-nowrap">Kho kiểm kê</th>
+                    <th className="px-5 py-3 whitespace-nowrap">Người tạo / Phân công</th>
+                    <th className="px-5 py-3 text-right whitespace-nowrap">Tồn hệ thống</th>
+                    <th className="px-5 py-3 text-right whitespace-nowrap">Thực tế đếm</th>
+                    <th className="px-5 py-3 text-right whitespace-nowrap">Chênh lệch</th>
+                    <th className="px-5 py-3 text-center whitespace-nowrap">Trạng thái</th>
+                    <th className="px-5 py-3 text-right whitespace-nowrap">Thao tác</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -565,7 +569,7 @@ const StockAuditPage = () => {
 
                     return (
                       <tr key={audit.id} className="hover:bg-slate-50/60 transition-colors">
-                        <td className="px-5 py-4 font-mono font-bold text-purple-700 whitespace-nowrap">
+                        <td className="px-5 py-3.5 font-sans font-bold text-purple-700 whitespace-nowrap">
                           {audit.audit_code}
                           <div className="text-[11px] text-slate-400 font-normal">
                             {new Date(audit.created_at).toLocaleDateString('vi-VN', {
@@ -578,14 +582,14 @@ const StockAuditPage = () => {
                           </div>
                         </td>
 
-                        <td className="px-5 py-4 font-medium text-slate-800 whitespace-nowrap">
+                        <td className="px-5 py-3.5 font-medium text-slate-800 whitespace-nowrap">
                           {audit.warehouse?.warehouse_name}
-                          <div className="text-[11px] text-slate-400 font-mono">
+                          <div className="text-[11px] text-slate-400">
                             {audit.warehouse?.warehouse_code} • {audit._count?.items || 0} mặt hàng
                           </div>
                         </td>
 
-                        <td className="px-5 py-4 whitespace-nowrap">
+                        <td className="px-5 py-3.5 whitespace-nowrap">
                           <div className="text-xs font-semibold text-slate-700">
                             Tạo bởi: <span className="font-medium text-slate-600">{audit.created_by?.full_name}</span>
                           </div>
@@ -594,11 +598,11 @@ const StockAuditPage = () => {
                           </div>
                         </td>
 
-                        <td className="px-5 py-4 text-right font-mono font-semibold text-slate-700 whitespace-nowrap">
+                        <td className="px-5 py-3.5 text-right font-sans font-semibold tabular-nums text-slate-700 whitespace-nowrap">
                           {audit.total_system_qty.toLocaleString('vi-VN')} chiếc
                         </td>
 
-                        <td className="px-5 py-4 text-right font-mono font-bold whitespace-nowrap">
+                        <td className="px-5 py-3.5 text-right font-sans font-bold tabular-nums whitespace-nowrap">
                           {isPending ? (
                             <span className="text-slate-400 italic text-xs">Chưa đếm</span>
                           ) : (
@@ -606,43 +610,43 @@ const StockAuditPage = () => {
                           )}
                         </td>
 
-                        <td className="px-5 py-4 text-right font-mono font-bold whitespace-nowrap">
+                        <td className="px-5 py-3.5 text-right font-sans font-bold tabular-nums whitespace-nowrap">
                           {isPending ? (
                             <span className="text-slate-400">—</span>
                           ) : audit.total_discrepancy === 0 ? (
-                            <span className="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded text-xs">Khớp 100%</span>
+                            <span className="text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded text-xs">Khớp 100%</span>
                           ) : audit.total_discrepancy > 0 ? (
-                            <span className="text-blue-600 bg-blue-50 px-2 py-0.5 rounded text-xs">
+                            <span className="text-blue-700 bg-blue-50 border border-blue-200/80 px-2 py-0.5 rounded text-xs">
                               +{audit.total_discrepancy} (Thừa)
                             </span>
                           ) : (
-                            <span className="text-rose-600 bg-rose-50 px-2 py-0.5 rounded text-xs">
+                            <span className="text-rose-700 bg-rose-50 border border-rose-200/80 px-2 py-0.5 rounded text-xs">
                               {audit.total_discrepancy} (Thiếu)
                             </span>
                           )}
                         </td>
 
-                        <td className="px-5 py-4 text-center whitespace-nowrap">
+                        <td className="px-5 py-3.5 text-center whitespace-nowrap">
                           <span
                             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border whitespace-nowrap ${
                               isCompleted
-                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                ? 'bg-emerald-50 text-emerald-800 border-emerald-200/80'
                                 : isCounted
-                                ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
+                                ? 'bg-purple-50 text-purple-800 border-purple-200/80'
                                 : isCancelled
-                                ? 'bg-slate-100 text-slate-600 border-slate-200'
-                                : 'bg-amber-50 text-amber-700 border-amber-200'
+                                ? 'bg-slate-100 text-slate-600 border-slate-200/80'
+                                : 'bg-amber-50 text-amber-800 border-amber-200/80'
                             }`}
                           >
                             <span
                               className={`w-1.5 h-1.5 rounded-full shrink-0 ${
                                 isCompleted
-                                  ? 'bg-emerald-500'
+                                  ? 'bg-emerald-600'
                                   : isCounted
-                                  ? 'bg-indigo-500'
+                                  ? 'bg-purple-600'
                                   : isCancelled
                                   ? 'bg-slate-400'
-                                  : 'bg-amber-500 animate-pulse'
+                                  : 'bg-amber-500'
                               }`}
                             ></span>
                             <span>
@@ -752,11 +756,11 @@ const StockAuditPage = () => {
         {/* ============================================================ */}
         {showCreateModal && isManager && (
           <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden border border-purple-100">
-              <div className="px-6 py-4 bg-gradient-to-r from-purple-800 to-indigo-800 text-white flex items-center justify-between shrink-0">
+            <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden border border-slate-200">
+              <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
                 <div>
                   <h3 className="text-base font-bold">Tạo đợt kiểm kê tồn kho mới</h3>
-                  <p className="text-xs text-purple-200">Chức năng phân quyền riêng cho Quản lý kho</p>
+                  <p className="text-xs text-slate-400">Chức năng phân quyền riêng cho Quản lý kho</p>
                 </div>
                 <button
                   onClick={() => setShowCreateModal(false)}
@@ -826,7 +830,7 @@ const StockAuditPage = () => {
                     <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
                       Mặt hàng đưa vào đợt kiểm kê ({whItemsPreview.length} mặt hàng)
                     </h4>
-                    <span className="text-xs text-purple-700 font-semibold">
+                    <span className="text-xs text-purple-700 font-semibold font-sans tabular-nums">
                       Tổng tồn hệ thống: {whItemsPreview.reduce((sum, it) => sum + it.system_quantity, 0).toLocaleString('vi-VN')} chiếc
                     </span>
                   </div>
@@ -852,12 +856,12 @@ const StockAuditPage = () => {
                             <tr key={it.variant_id} className="hover:bg-slate-50/50">
                               <td className="p-2.5">
                                 <div className="font-semibold text-slate-800">{it.product_name}</div>
-                                <div className="font-mono text-[11px] text-purple-700">{it.sku} (Size {it.size} - Màu {it.color})</div>
+                                <div className="text-[11px] text-purple-700">{it.sku} (Size {it.size} - Màu {it.color})</div>
                               </td>
-                              <td className="p-2.5 text-center font-mono font-bold text-purple-700">
+                              <td className="p-2.5 text-center font-bold text-purple-700">
                                 {it.shelf_location}
                               </td>
-                              <td className="p-2.5 text-right font-mono font-bold text-slate-900">
+                              <td className="p-2.5 text-right font-sans font-bold tabular-nums text-slate-900">
                                 {it.system_quantity} chiếc
                               </td>
                             </tr>
@@ -880,7 +884,7 @@ const StockAuditPage = () => {
                   <button
                     type="submit"
                     disabled={createLoading || whItemsPreview.length === 0}
-                    className="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold shadow-sm flex items-center gap-2 disabled:opacity-50"
+                    className="px-5 py-2 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-sm font-semibold shadow-xs flex items-center gap-2 disabled:opacity-50"
                   >
                     {createLoading && <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>}
                     Xác nhận tạo đợt kiểm kê
@@ -896,12 +900,12 @@ const StockAuditPage = () => {
         {/* ============================================================ */}
         {showCountModal && isStaff && auditToCount && (
           <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] flex flex-col overflow-hidden border border-amber-200">
-              <div className="px-6 py-4 bg-gradient-to-r from-amber-600 to-purple-800 text-white flex items-center justify-between shrink-0">
+            <div className="bg-white rounded-2xl shadow-xl max-w-4xl w-full max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
+              <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
                 <div>
                   <h3 className="text-base font-bold">Nhập kết quả kiểm đếm thực tế</h3>
-                  <p className="text-xs text-amber-200">
-                    Đợt kiểm kê: <span className="font-mono font-bold">{auditToCount.audit_code}</span> • Kho: {auditToCount.warehouse?.warehouse_name}
+                  <p className="text-xs text-slate-400">
+                    Đợt kiểm kê: <span className="font-sans font-bold text-purple-300">{auditToCount.audit_code}</span> • Kho: {auditToCount.warehouse?.warehouse_name}
                   </p>
                 </div>
                 <button
@@ -913,11 +917,11 @@ const StockAuditPage = () => {
               </div>
 
               <form onSubmit={handleSubmitCount} className="flex-1 overflow-y-auto p-6 space-y-4">
-                <div className="bg-amber-50/60 p-3.5 rounded-xl border border-amber-200/80 text-xs text-amber-900 flex items-center justify-between">
+                <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 text-xs text-slate-700 flex items-center justify-between">
                   <div>
                     <span className="font-bold">Hướng dẫn:</span> Nhân viên tiến hành đếm số lượng thực tế tại từng kệ và điền vào ô <strong>Số lượng thực tế</strong>. Nếu có chênh lệch thừa/thiếu, vui lòng nhập lý do giải trình.
                   </div>
-                  <div className="text-right shrink-0 ml-4 font-mono">
+                  <div className="text-right shrink-0 ml-4 font-sans tabular-nums">
                     Tổng mặt hàng: <strong>{countItems.length}</strong>
                   </div>
                 </div>
@@ -945,17 +949,17 @@ const StockAuditPage = () => {
 
                         return (
                           <tr key={it.id} className="hover:bg-slate-50/60">
-                            <td className="p-3 text-center text-slate-400 font-mono">{idx + 1}</td>
+                            <td className="p-3 text-center text-slate-400 font-sans tabular-nums">{idx + 1}</td>
                             <td className="p-3">
                               <div className="font-semibold text-slate-800">{it.product_name}</div>
-                              <div className="font-mono text-[11px] text-purple-700">
+                              <div className="text-[11px] text-purple-700">
                                 {it.sku} (Size {it.size} - Màu {it.color})
                               </div>
                             </td>
-                            <td className="p-3 text-center font-mono font-bold text-purple-700 bg-purple-50/30">
+                            <td className="p-3 text-center font-bold text-purple-700 bg-purple-50/30">
                               {it.shelf_location}
                             </td>
-                            <td className="p-3 text-right font-mono font-bold text-slate-700">
+                            <td className="p-3 text-right font-sans font-bold tabular-nums text-slate-700">
                               {it.system_quantity} chiếc
                             </td>
                             <td className="p-3">
@@ -965,10 +969,10 @@ const StockAuditPage = () => {
                                 required
                                 value={it.actual_quantity}
                                 onChange={(e) => handleCountQtyChange(idx, e.target.value)}
-                                className="w-full px-2.5 py-1.5 border border-amber-300 rounded-lg text-sm font-mono font-bold text-right text-slate-900 bg-amber-50/20 focus:border-amber-500 focus:bg-white outline-hidden"
+                                className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-sans font-bold tabular-nums text-right text-slate-900 bg-white focus:border-purple-600 outline-hidden"
                               />
                             </td>
-                            <td className="p-3 text-right font-mono font-bold">
+                            <td className="p-3 text-right font-sans font-bold tabular-nums">
                               {actual === '' ? (
                                 <span className="text-slate-400">—</span>
                               ) : diff === 0 ? (
@@ -1020,7 +1024,7 @@ const StockAuditPage = () => {
                   <button
                     type="submit"
                     disabled={countLoading}
-                    className="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold shadow-sm flex items-center gap-2"
+                    className="px-5 py-2 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-sm font-semibold shadow-xs flex items-center gap-2"
                   >
                     {countLoading && <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>}
                     Gửi kết quả kiểm kê cho Quản lý
@@ -1036,12 +1040,12 @@ const StockAuditPage = () => {
         {/* ============================================================ */}
         {showApproveModal && isManager && auditToApprove && (
           <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden border border-emerald-200">
-              <div className="px-6 py-4 bg-gradient-to-r from-emerald-700 to-purple-800 text-white flex items-center justify-between shrink-0">
+            <div className="bg-white rounded-2xl shadow-xl max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden border border-slate-200">
+              <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
                 <div>
                   <h3 className="text-base font-bold">Duyệt điều chỉnh chênh lệch tồn kho</h3>
-                  <p className="text-xs text-emerald-100">
-                    Đợt: <span className="font-mono font-bold">{auditToApprove.audit_code}</span> • Kho: {auditToApprove.warehouse?.warehouse_name}
+                  <p className="text-xs text-slate-400">
+                    Đợt: <span className="font-sans font-bold text-purple-300">{auditToApprove.audit_code}</span> • Kho: {auditToApprove.warehouse?.warehouse_name}
                   </p>
                 </div>
                 <button
@@ -1054,27 +1058,27 @@ const StockAuditPage = () => {
 
               <div className="flex-1 overflow-y-auto p-6 space-y-4">
                 <div className="grid grid-cols-3 gap-3 text-center">
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
                     <span className="text-[11px] text-slate-500 uppercase font-medium">Tồn trên phần mềm</span>
-                    <div className="text-lg font-bold font-mono text-slate-800 mt-1">
+                    <div className="text-lg font-bold font-sans tabular-nums text-slate-800 mt-1">
                       {auditToApprove.total_system_qty.toLocaleString('vi-VN')} chiếc
                     </div>
                   </div>
-                  <div className="p-3 bg-indigo-50 rounded-xl border border-indigo-200">
-                    <span className="text-[11px] text-indigo-700 uppercase font-medium">Thực tế nhân viên đếm</span>
-                    <div className="text-lg font-bold font-mono text-indigo-700 mt-1">
+                  <div className="p-3 bg-purple-50/60 rounded-xl border border-purple-200/80">
+                    <span className="text-[11px] text-purple-800 uppercase font-medium">Thực tế nhân viên đếm</span>
+                    <div className="text-lg font-bold font-sans tabular-nums text-purple-800 mt-1">
                       {auditToApprove.total_actual_qty.toLocaleString('vi-VN')} chiếc
                     </div>
                   </div>
-                  <div className="p-3 bg-amber-50 rounded-xl border border-amber-200">
-                    <span className="text-[11px] text-amber-700 uppercase font-medium">Tổng chênh lệch</span>
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                    <span className="text-[11px] text-slate-600 uppercase font-medium">Tổng chênh lệch</span>
                     <div
-                      className={`text-lg font-bold font-mono mt-1 ${
+                      className={`text-lg font-bold font-sans tabular-nums mt-1 ${
                         auditToApprove.total_discrepancy === 0
-                          ? 'text-emerald-600'
+                          ? 'text-emerald-700'
                           : auditToApprove.total_discrepancy > 0
-                          ? 'text-blue-600'
-                          : 'text-rose-600'
+                          ? 'text-blue-700'
+                          : 'text-rose-700'
                       }`}
                     >
                       {auditToApprove.total_discrepancy >= 0 ? `+${auditToApprove.total_discrepancy}` : auditToApprove.total_discrepancy} chiếc
@@ -1090,7 +1094,7 @@ const StockAuditPage = () => {
                         <th className="p-2.5">Sản phẩm / SKU</th>
                         <th className="p-2.5 text-center">Kệ</th>
                         <th className="p-2.5 text-right">Phần mềm</th>
-                        <th className="p-2.5 text-right font-bold text-indigo-700">Thực tế</th>
+                        <th className="p-2.5 text-right font-bold text-purple-800">Thực tế</th>
                         <th className="p-2.5 text-right">Chênh lệch</th>
                         <th className="p-2.5">Giải trình nhân viên</th>
                       </tr>
@@ -1100,22 +1104,22 @@ const StockAuditPage = () => {
                         <tr key={it.id} className="hover:bg-slate-50/50">
                           <td className="p-2.5">
                             <div className="font-semibold text-slate-800">{it.variant?.product?.product_name}</div>
-                            <div className="font-mono text-[11px] text-purple-700">{it.variant?.sku}</div>
+                            <div className="text-[11px] text-purple-700">{it.variant?.sku}</div>
                           </td>
-                          <td className="p-2.5 text-center font-mono font-bold text-purple-700">
+                          <td className="p-2.5 text-center font-bold text-purple-700">
                             {it.shelf_location}
                           </td>
-                          <td className="p-2.5 text-right font-mono">{it.system_quantity}</td>
-                          <td className="p-2.5 text-right font-mono font-bold text-indigo-700">
+                          <td className="p-2.5 text-right font-sans font-medium tabular-nums">{it.system_quantity}</td>
+                          <td className="p-2.5 text-right font-sans font-bold tabular-nums text-purple-800">
                             {it.actual_quantity !== null ? it.actual_quantity : '—'}
                           </td>
-                          <td className="p-2.5 text-right font-mono font-bold">
+                          <td className="p-2.5 text-right font-sans font-bold tabular-nums">
                             {it.discrepancy === 0 ? (
-                              <span className="text-emerald-600">0</span>
+                              <span className="text-emerald-700">0</span>
                             ) : it.discrepancy > 0 ? (
-                              <span className="text-blue-600">+{it.discrepancy}</span>
+                              <span className="text-blue-700">+{it.discrepancy}</span>
                             ) : (
-                              <span className="text-rose-600">{it.discrepancy}</span>
+                              <span className="text-rose-700">{it.discrepancy}</span>
                             )}
                           </td>
                           <td className="p-2.5 text-slate-500 italic">
@@ -1138,7 +1142,7 @@ const StockAuditPage = () => {
                     className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white"
                   />
                   <p className="text-[11px] text-emerald-700 mt-1.5">
-                    ⚡ <strong>Hành động này sẽ:</strong> Tự động điều chỉnh số lượng tồn kho thực tế trong CSDL của kho này khớp 100% với số lượng thực tế nhân viên đã đếm.
+                    <strong>Hành động này sẽ:</strong> Tự động điều chỉnh số lượng tồn kho thực tế trong CSDL của kho này khớp 100% với số lượng thực tế nhân viên đã đếm.
                   </p>
                 </div>
 
@@ -1155,7 +1159,7 @@ const StockAuditPage = () => {
                     type="button"
                     disabled={approveLoading}
                     onClick={handleConfirmApprove}
-                    className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-sm flex items-center gap-2"
+                    className="px-5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-sm font-bold shadow-xs flex items-center gap-2"
                   >
                     {approveLoading && <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>}
                     Xác nhận Duyệt & Đồng bộ tồn kho
@@ -1171,12 +1175,12 @@ const StockAuditPage = () => {
         {/* ============================================================ */}
         {selectedAudit && (
           <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] flex flex-col overflow-hidden border border-purple-100">
+            <div className="bg-white rounded-2xl shadow-xl max-w-4xl w-full max-h-[92vh] flex flex-col overflow-hidden border border-slate-200">
               <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
                 <div>
                   <h3 className="text-base font-bold">Chi tiết đợt kiểm kê tồn kho</h3>
                   <p className="text-xs text-slate-400">
-                    Mã đợt: <span className="font-mono text-purple-300 font-bold">{selectedAudit.audit_code}</span> • Kho: {selectedAudit.warehouse?.warehouse_name}
+                    Mã đợt: <span className="font-sans text-purple-300 font-bold">{selectedAudit.audit_code}</span> • Kho: {selectedAudit.warehouse?.warehouse_name}
                   </p>
                 </div>
                 <button
@@ -1238,28 +1242,28 @@ const StockAuditPage = () => {
                         <tr key={it.id} className="hover:bg-slate-50/50">
                           <td className="p-3">
                             <div className="font-semibold text-slate-800">{it.variant?.product?.product_name}</div>
-                            <div className="font-mono text-[11px] text-purple-700">
+                            <div className="text-[11px] text-purple-700">
                               {it.variant?.sku} (Size {it.variant?.size} - Màu {it.variant?.color})
                             </div>
                           </td>
-                          <td className="p-3 text-center font-mono font-bold text-purple-700">
+                          <td className="p-3 text-center font-bold text-purple-700">
                             {it.shelf_location}
                           </td>
-                          <td className="p-3 text-right font-mono font-bold text-slate-700">
+                          <td className="p-3 text-right font-sans font-bold tabular-nums text-slate-700">
                             {it.system_quantity} chiếc
                           </td>
-                          <td className="p-3 text-right font-mono font-bold text-slate-900">
+                          <td className="p-3 text-right font-sans font-bold tabular-nums text-slate-900">
                             {it.actual_quantity !== null ? `${it.actual_quantity} chiếc` : '—'}
                           </td>
-                          <td className="p-3 text-right font-mono font-bold">
+                          <td className="p-3 text-right font-sans font-bold tabular-nums">
                             {it.actual_quantity === null ? (
                               <span className="text-slate-400">—</span>
                             ) : it.discrepancy === 0 ? (
-                              <span className="text-emerald-600">0 (Khớp)</span>
+                              <span className="text-emerald-700">0 (Khớp)</span>
                             ) : it.discrepancy > 0 ? (
-                              <span className="text-blue-600">+{it.discrepancy} (Thừa)</span>
+                              <span className="text-blue-700">+{it.discrepancy} (Thừa)</span>
                             ) : (
-                              <span className="text-rose-600">{it.discrepancy} (Thiếu)</span>
+                              <span className="text-rose-700">{it.discrepancy} (Thiếu)</span>
                             )}
                           </td>
                           <td className="p-3 text-slate-500 italic">
@@ -1286,14 +1290,16 @@ const StockAuditPage = () => {
         {/* MODAL HỦY ĐỢT KIỂM KÊ (CHỈ QUẢN LÝ) */}
         {cancelModal.open && (
           <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
-              <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-rose-50/50">
+            <div className="bg-white rounded-2xl max-w-md w-full shadow-xl border border-slate-200 overflow-hidden">
+              <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center text-lg">
-                    ⚠️
+                  <div className="w-9 h-9 rounded-lg bg-rose-50 text-rose-700 flex items-center justify-center border border-rose-200/80">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-slate-800">Xác nhận hủy đợt kiểm kê</h3>
+                    <h3 className="text-sm font-bold text-slate-800">Xác nhận hủy đợt kiểm kê</h3>
                     <p className="text-xs text-slate-500">Thao tác này sẽ hủy đợt kiểm kê và không thể hoàn tác</p>
                   </div>
                 </div>
@@ -1305,7 +1311,7 @@ const StockAuditPage = () => {
                 </button>
               </div>
 
-              <div className="p-6 space-y-4">
+              <div className="p-5 space-y-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">
                     Lý do hủy đợt kiểm kê <span className="text-rose-500">*</span>
@@ -1315,7 +1321,7 @@ const StockAuditPage = () => {
                     placeholder="Nhập lý do hủy đợt kiểm kê này..."
                     value={cancelModal.reason}
                     onChange={(e) => setCancelModal((prev) => ({ ...prev, reason: e.target.value }))}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
+                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs focus:outline-hidden focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
                   />
                 </div>
 

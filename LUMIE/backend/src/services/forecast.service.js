@@ -498,18 +498,24 @@ const getSampleTemplateData = async () => {
 
 /**
  * TẠO DỮ LIỆU BÁN HÀNG LỊCH SỬ MẪU (12 THÁNG - DETERMINISTIC)
- * Giúp Quản lý kho có ngay bộ dữ liệu chuẩn 52 tuần để demo và kiểm thử AI dự báo
- * Bao gồm quy luật mùa vụ (Thu-Đông, Xuân-Hè), tỷ lệ size thực tế (S: 20%, M: 35%, L: 30%, XL: 15%),
- * và dành riêng 1 sản phẩm có < 8 tuần dữ liệu để test trực quan kịch bản Category Fallback.
+ * Giúp Quản lý kho có ngay bộ dữ liệu chuẩn 52 tuần cho toàn bộ danh mục & sản phẩm để demo và kiểm thử AI dự báo.
+ * - Đặc tính mùa vụ thực tế theo từng nhóm hàng (Áo khoác đỉnh mùa đông; Áo thun/Quần short/Polo đỉnh mùa hè; Đầm/Váy đỉnh lễ hội & du lịch; Quần jean/Sơ mi bán đều).
+ * - Dao động tự nhiên từng tuần và xu hướng tăng trưởng riêng cho từng mã sản phẩm, giúp biểu đồ uốn lượn trực quan, khác biệt và sinh động.
+ * - Dành riêng sản phẩm thứ 2 (SP002) có < 8 tuần dữ liệu để phục vụ kiểm thử kịch bản Category Fallback (US-35).
+ * - Tự động tạo file CSV trả về để trình duyệt tải ngay về máy khi sinh dữ liệu.
  */
 const generateSampleSalesData = async (months = 12) => {
   const [warehouses, products] = await Promise.all([
-    prisma.warehouse.findMany({ select: { id: true, warehouse_code: true } }),
+    prisma.warehouse.findMany({
+      where: { status: 'ACTIVE' },
+      select: { id: true, warehouse_code: true },
+    }),
     prisma.product.findMany({
+      where: { status: 'ACTIVE' },
       include: {
+        category: { select: { id: true, category_code: true, category_name: true } },
         variants: { select: { id: true, sku: true, size: true, selling_price: true } },
       },
-      take: 15,
     }),
   ]);
 
@@ -517,10 +523,12 @@ const generateSampleSalesData = async (months = 12) => {
     throw new Error('Chưa có kho hoặc sản phẩm để sinh dữ liệu mẫu');
   }
 
+  // Xóa sạch dữ liệu cũ để dữ liệu mới cập nhật đồng bộ, không bị lẫn các bước phẳng cũ
+  await prisma.historicalSale.deleteMany({});
+
   const today = new Date();
   const daysTotal = Math.max(365, months * 30);
-  const startDate = new Date(today);
-  startDate.setDate(startDate.getDate() - daysTotal);
+  const startDate = new Date(today.getTime() - daysTotal * 86400000);
 
   const sampleBatch = [];
 
@@ -534,39 +542,82 @@ const generateSampleSalesData = async (months = 12) => {
     return 1.0;
   };
 
-  // Sinh dữ liệu định kỳ hàng tuần (52 tuần)
-  for (let d = 0; d <= daysTotal; d += 7) {
-    const currentDate = new Date(startDate);
-    currentDate.setDate(startDate.getDate() + d);
-    const dayOfWeek = currentDate.getDay();
-    const month = currentDate.getMonth() + 1; // 1-12
+  // Hệ số mùa vụ theo danh mục hàng hóa
+  const getCategorySeasonalFactor = (catCode, month, weekOfYear) => {
+    const code = (catCode || '').toUpperCase().trim();
+    const angle = (weekOfYear / 52) * 2 * Math.PI;
 
-    // Quy luật mùa vụ:
-    // Thu - Đông (Tháng 10 - Tháng 1): Hệ số cao 1.35
-    // Xuân - Hè (Tháng 5 - Tháng 7): Hệ số 1.15
-    // Các tháng bình thường: Hệ số 0.90
-    const weekendFactor = (dayOfWeek === 0 || dayOfWeek === 6 || dayOfWeek === 5) ? 1.3 : 0.95;
-    const seasonFactor = (month >= 10 || month <= 1) ? 1.35 : (month >= 5 && month <= 7 ? 1.15 : 0.90);
+    switch (code) {
+      case 'AKH': // Áo khoác: Đỉnh cao Thu-Đông (T10-T1), chạm đáy mùa Hè (T5-T7)
+        return Math.max(0.3, 1.15 + 0.75 * Math.cos(angle) + (month >= 11 || month <= 1 ? 0.25 : 0));
+
+      case 'ATH': // Áo thun: Đỉnh mùa Hè (T5-T8), giảm sâu mùa Đông (T11-T1)
+      case 'QSH': // Quần short
+      case 'APO': // Áo polo
+        return Math.max(0.35, 1.1 - 0.65 * Math.cos(angle) + (month >= 5 && month <= 7 ? 0.25 : 0));
+
+      case 'DAM': // Đầm & Váy: Đỉnh lễ hội cưới hỏi/Tết (T12-T1) & hè du lịch (T5-T7)
+      case 'VAY':
+        return Math.max(0.5, 1.05 + 0.35 * Math.cos(2 * angle) + (month === 12 || month === 1 ? 0.3 : 0));
+
+      case 'DTT': // Đồ thể thao: Đỉnh T2-T4 & hè T5-T7
+        return Math.max(0.6, 1.0 + 0.35 * Math.sin(angle) + (month >= 2 && month <= 4 ? 0.25 : 0));
+
+      case 'ASM': // Áo sơ mi: Ổn định, nhích vào mùa tựu trường (T8-9) & Tết
+        return Math.max(0.7, 1.0 + 0.18 * Math.cos(angle) + (month === 8 || month === 9 || month >= 12 || month <= 1 ? 0.2 : 0));
+
+      case 'QJE': // Quần jean & Quần dài: Nhu cầu quanh năm, tăng nhẹ dịp lễ Tết
+      case 'QDA':
+      default:
+        return Math.max(0.7, 1.0 + 0.22 * Math.cos(angle) + (month >= 11 || month <= 1 ? 0.2 : 0));
+    }
+  };
+
+  // Dao động tự nhiên từng tuần theo mã sản phẩm (deterministic, tái lặp)
+  const getProductWeeklyVariation = (prodId, weekIndex) => {
+    const seed1 = (prodId * 7 + 13) % 100;
+    const seed2 = (prodId * 11 + 29) % 100;
+    const wave1 = 0.12 * Math.sin((weekIndex * 2.3) + seed1);
+    const wave2 = 0.08 * Math.cos((weekIndex * 4.7) + seed2);
+    const paydayBump = (weekIndex % 4 === 3) ? 0.12 : 0.0;
+    return 1.0 + wave1 + wave2 + paydayBump;
+  };
+
+  // Sinh dữ liệu định kỳ hàng tuần (52 tuần)
+  const totalWeeks = Math.floor(daysTotal / 7);
+  for (let w = 0; w <= totalWeeks; w++) {
+    const currentDate = new Date(startDate.getTime() + w * 7 * 86400000);
+    const month = currentDate.getMonth() + 1; // 1-12
+    const weekOfYear = Math.min(52, w + 1);
 
     products.forEach((prod, pIdx) => {
-      // Dành riêng sản phẩm thứ 2 (pIdx === 1) CHỈ sinh dữ liệu trong 4 tuần gần nhất (< 8 tuần)
-      // Để phục vụ kiểm thử trực quan kịch bản "Chưa đủ dữ liệu (< 8 tuần)" & Category Fallback ở US-35
-      const isShortHistoryProduct = (pIdx === 1);
-      const daysFromEnd = daysTotal - d;
-      if (isShortHistoryProduct && daysFromEnd > 28) {
-        return; // Bỏ qua các tuần cũ để sản phẩm này chỉ có đúng 4 tuần dữ liệu
+      // Dành riêng sản phẩm thứ 2 (pIdx === 1 hoặc SP002) CHỈ có 4 tuần dữ liệu (< 8 tuần)
+      // để kiểm thử kịch bản Category Fallback ở US-35
+      const isShortHistoryProduct = (pIdx === 1 || prod.product_code === 'SP002');
+      const weeksFromEnd = totalWeeks - w;
+      if (isShortHistoryProduct && weeksFromEnd > 4) {
+        return;
       }
 
-      // Mức nhu cầu cơ sở theo mẫu
-      const baseProductDemand = 12 + (pIdx % 6) * 4;
+      // Nhu cầu cơ sở riêng biệt theo từng sản phẩm
+      const baseDemand = 16 + ((prod.id * 13 + (pIdx % 7) * 5) % 28);
+      // Xu hướng tăng trưởng riêng (trend nhẹ)
+      const annualTrendFactor = 1.0 + (((prod.id % 7) - 3) * 0.03);
+      const weeklyTrend = Math.pow(annualTrendFactor, (weekOfYear / 52));
+      // Mùa vụ theo danh mục
+      const catSeasonal = getCategorySeasonalFactor(prod.category?.category_code, month, weekOfYear);
+      // Biến thiên tự nhiên từng tuần
+      const weeklyVar = getProductWeeklyVariation(prod.id, w);
+
+      const productDemand = baseDemand * catSeasonal * weeklyVar * weeklyTrend;
 
       prod.variants.forEach((v) => {
         const sizeMult = getSizeMultiplier(v.size);
 
         // Phân bổ vào 3 kho đại diện
         warehouses.slice(0, 3).forEach((wh, wIdx) => {
-          const whFactor = wIdx === 0 ? 1.4 : (wIdx === 1 ? 1.0 : 0.7);
-          const qty = Math.max(1, Math.round(baseProductDemand * weekendFactor * seasonFactor * sizeMult * whFactor));
+          const whFactor = wIdx === 0 ? 1.3 : (wIdx === 1 ? 0.9 : 0.6);
+          const qty = Math.max(1, Math.round(productDemand * sizeMult * whFactor));
           const price = Number(v.selling_price) || 250000;
 
           sampleBatch.push({
@@ -581,8 +632,20 @@ const generateSampleSalesData = async (months = 12) => {
     });
   }
 
-  // Nạp qua uploadSalesData để chạy toàn bộ quy trình validate và deduplication
-  return uploadSalesData(sampleBatch, true);
+  // Tạo nội dung CSV chuẩn UTF-8 BOM
+  const csvHeaders = 'date,warehouse,sku,quantity,price\n';
+  const csvRows = sampleBatch.map((r) => `${r.date},${r.warehouse},${r.sku},${r.quantity},${r.price}`).join('\n');
+  const csvContent = '\uFEFF' + csvHeaders + csvRows;
+
+  // Nạp qua uploadSalesData để chạy toàn bộ quy trình validate và ghi DB
+  const uploadResult = await uploadSalesData(sampleBatch, true);
+
+  return {
+    ...uploadResult,
+    csvContent,
+    filename: `du_lieu_ban_hang_12_thang_${new Date().toISOString().slice(0, 10)}.csv`,
+    total_generated: sampleBatch.length,
+  };
 };
 
 /**

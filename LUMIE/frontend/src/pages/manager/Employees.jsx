@@ -20,9 +20,9 @@ import warehouseService from '../../services/warehouseService';
 
 const StatusBadge = ({ status }) => {
   const styles = {
-    ACTIVE: 'bg-[#E6F4EA] text-[#1E8E3E]',
-    INACTIVE: 'bg-gray-100 text-gray-600',
-    LOCKED: 'bg-red-50 text-red-600',
+    ACTIVE: 'badge-success',
+    INACTIVE: 'badge-critical',
+    LOCKED: 'badge-critical',
   };
   const labels = {
     ACTIVE: 'Hoạt động',
@@ -32,7 +32,7 @@ const StatusBadge = ({ status }) => {
 
   return (
     <span
-      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+      className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium ${
         styles[status] || styles.INACTIVE
       }`}
     >
@@ -155,84 +155,84 @@ const UserFormModal = ({ isOpen, onClose, onSuccess, warehouses, editUser = null
 
   return (
     <div
-      className="fixed inset-0 bg-[#1E1B4B]/40 backdrop-blur-xs z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(88,28,135,0.18)] border border-purple-50 w-full max-w-md overflow-hidden"
+        className="bg-white rounded-xl shadow-lg border border-slate-200/80 w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-6 border-b border-gray-100">
-          <h3 className="text-base font-bold text-[#1E1B4B]">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 bg-slate-50/50">
+          <h3 className="text-sm font-semibold text-slate-900">
             {isEdit ? 'Chỉnh sửa thông tin' : 'Thêm nhân viên mới'}
           </h3>
           <button
             onClick={onClose}
-            className="p-1.5 hover:bg-purple-50 text-gray-400 hover:text-[#6D28D9] rounded-lg transition-colors cursor-pointer"
+            className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-5 space-y-3.5">
           {errors.submit && (
-            <div className="p-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
+            <div className="p-2.5 bg-rose-50 border border-rose-200/70 rounded-lg text-xs text-rose-700">
               {errors.submit}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-[#1E1B4B] mb-1.5">Họ và tên *</label>
+            <label className="block text-[11px] font-medium text-slate-700 mb-1">Họ và tên *</label>
             <input
               type="text"
               value={form.full_name}
               onChange={(e) => setForm((p) => ({ ...p, full_name: e.target.value }))}
-              className={`w-full px-4 py-2.5 bg-white border rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all ${
-                errors.full_name ? 'border-red-300' : 'border-gray-200'
+              className={`w-full px-3 py-1.5 bg-white border rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-purple-600 transition-colors ${
+                errors.full_name ? 'border-rose-300' : 'border-slate-200'
               }`}
               placeholder="Nguyễn Văn A"
             />
-            {errors.full_name && <p className="text-xs text-red-500 mt-1">{errors.full_name}</p>}
+            {errors.full_name && <p className="text-[11px] text-rose-600 mt-1">{errors.full_name}</p>}
           </div>
 
           {!isEdit && (
             <div>
-              <label className="block text-sm font-medium text-[#1E1B4B] mb-1.5">Email *</label>
+              <label className="block text-[11px] font-medium text-slate-700 mb-1">Email *</label>
               <input
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
-                className={`w-full px-4 py-2.5 bg-white border rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all ${
-                  errors.email ? 'border-red-300' : 'border-gray-200'
+                className={`w-full px-3 py-1.5 bg-white border rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-purple-600 transition-colors ${
+                  errors.email ? 'border-rose-300' : 'border-slate-200'
                 }`}
                 placeholder="email@lumie.vn"
               />
-              {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
+              {errors.email && <p className="text-[11px] text-rose-600 mt-1">{errors.email}</p>}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-[#1E1B4B] mb-1.5">Số điện thoại</label>
+            <label className="block text-[11px] font-medium text-slate-700 mb-1">Số điện thoại</label>
             <input
               type="tel"
               value={form.phone}
               onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
-              className={`w-full px-4 py-2.5 bg-white border rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all ${
-                errors.phone ? 'border-red-300' : 'border-gray-200'
+              className={`w-full px-3 py-1.5 bg-white border rounded-lg text-xs font-sans tabular-nums text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-purple-600 transition-colors ${
+                errors.phone ? 'border-rose-300' : 'border-slate-200'
               }`}
               placeholder="0912345678"
             />
-            {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
+            {errors.phone && <p className="text-[11px] text-rose-600 mt-1">{errors.phone}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#1E1B4B] mb-1.5">Kho phụ trách</label>
+            <label className="block text-[11px] font-medium text-slate-700 mb-1">Kho phụ trách</label>
             <select
               value={form.warehouse_id}
               onChange={(e) => setForm((p) => ({ ...p, warehouse_id: e.target.value }))}
-              className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all"
+              className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600 transition-colors cursor-pointer"
             >
               <option value="">— Chưa phân công —</option>
               {warehouses.map((w) => (
@@ -245,35 +245,35 @@ const UserFormModal = ({ isOpen, onClose, onSuccess, warehouses, editUser = null
 
           {!isEdit && (
             <div>
-              <label className="block text-sm font-medium text-[#1E1B4B] mb-1.5">Mật khẩu tạm thời *</label>
+              <label className="block text-[11px] font-medium text-slate-700 mb-1">Mật khẩu tạm thời *</label>
               <input
                 type="text"
                 value={form.password}
                 onChange={(e) => setForm((p) => ({ ...p, password: e.target.value }))}
-                className={`w-full px-4 py-2.5 bg-white border rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all ${
-                  errors.password ? 'border-red-300' : 'border-gray-200'
+                className={`w-full px-3 py-1.5 bg-white border rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-purple-600 transition-colors ${
+                  errors.password ? 'border-rose-300' : 'border-slate-200'
                 }`}
                 placeholder="Ít nhất 8 ký tự, có chữ và số"
               />
-              {errors.password && <p className="text-xs text-red-500 mt-1">{errors.password}</p>}
-              <p className="text-xs text-gray-400 mt-1">
+              {errors.password && <p className="text-[11px] text-rose-600 mt-1">{errors.password}</p>}
+              <p className="text-[11px] text-slate-400 mt-1">
                 Nhân viên sẽ được yêu cầu đổi khi đăng nhập lần đầu
               </p>
             </div>
           )}
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-sm font-medium text-gray-700 transition-colors cursor-pointer"
+              className="px-3.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-medium text-slate-700 transition-colors cursor-pointer"
             >
               Hủy
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#4F46E5] hover:from-[#6D28D9] hover:to-[#4338CA] text-white text-sm font-medium shadow-md shadow-purple-500/20 transition-all disabled:opacity-50 cursor-pointer"
+              className="px-4 py-1.5 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-xs font-medium shadow-xs transition-colors disabled:opacity-50 cursor-pointer"
             >
               {loading ? 'Đang lưu...' : isEdit ? 'Lưu thay đổi' : 'Tạo tài khoản'}
             </button>
@@ -298,29 +298,29 @@ const ConfirmModal = ({
   if (!isOpen) return null;
   return (
     <div
-      className="fixed inset-0 bg-[#1E1B4B]/40 backdrop-blur-xs z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(88,28,135,0.18)] border border-purple-50 w-full max-w-sm p-6"
+        className="bg-white rounded-xl shadow-lg border border-slate-200/80 w-full max-w-sm p-5 animate-in fade-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="text-base font-bold text-[#1E1B4B] mb-2">{title}</h3>
-        <p className="text-sm text-gray-500 mb-6 leading-relaxed">{message}</p>
-        <div className="flex gap-3">
+        <h3 className="text-sm font-semibold text-slate-900 mb-1.5">{title}</h3>
+        <p className="text-xs text-slate-600 mb-4 leading-relaxed">{message}</p>
+        <div className="flex justify-end gap-2">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-sm font-medium text-gray-700 transition-colors cursor-pointer"
+            className="px-3.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-medium text-slate-700 transition-colors cursor-pointer"
           >
             Hủy
           </button>
           <button
             onClick={onConfirm}
             disabled={loading}
-            className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-all duration-200 disabled:opacity-50 cursor-pointer ${
+            className={`px-4 py-1.5 rounded-lg text-xs font-medium text-white transition-colors disabled:opacity-50 cursor-pointer shadow-xs ${
               danger
-                ? 'bg-red-500 hover:bg-red-600 shadow-md shadow-red-500/20'
-                : 'bg-gradient-to-r from-[#7C3AED] to-[#4F46E5] hover:from-[#6D28D9] hover:to-[#4338CA] shadow-md shadow-purple-500/20'
+                ? 'bg-rose-600 hover:bg-rose-700'
+                : 'bg-purple-700 hover:bg-purple-800'
             }`}
           >
             {loading ? 'Đang xử lý...' : confirmLabel}
@@ -366,60 +366,60 @@ const ResetPasswordModal = ({ isOpen, onClose, onSuccess, user }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-[#1E1B4B]/40 backdrop-blur-xs z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(88,28,135,0.18)] border border-purple-50 w-full max-w-sm overflow-hidden"
+        className="bg-white rounded-xl shadow-lg border border-slate-200/80 w-full max-w-sm overflow-hidden animate-in fade-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-6 border-b border-gray-100">
-          <h3 className="text-base font-bold text-[#1E1B4B]">Đặt lại mật khẩu</h3>
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 bg-slate-50/50">
+          <h3 className="text-sm font-semibold text-slate-900">Đặt lại mật khẩu</h3>
           <button
             onClick={onClose}
-            className="p-1.5 hover:bg-purple-50 text-gray-400 hover:text-[#6D28D9] rounded-lg transition-colors cursor-pointer"
+            className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <p className="text-sm text-gray-500 leading-relaxed">
+        <form onSubmit={handleSubmit} className="p-5 space-y-3.5">
+          <p className="text-xs text-slate-600 leading-relaxed">
             Đặt mật khẩu mới cho{' '}
-            <span className="font-semibold text-[#1E1B4B]">{user?.full_name}</span>. Nhân viên sẽ
+            <span className="font-semibold text-slate-900">{user?.full_name}</span>. Nhân viên sẽ
             được yêu cầu đổi mật khẩu khi đăng nhập lần tiếp theo.
           </p>
           {error && (
-            <div className="p-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
+            <div className="p-2.5 bg-rose-50 border border-rose-200/70 rounded-lg text-xs text-rose-700">
               {error}
             </div>
           )}
           <div>
-            <label className="block text-sm font-medium text-[#1E1B4B] mb-1.5">Mật khẩu mới *</label>
+            <label className="block text-[11px] font-medium text-slate-700 mb-1">Mật khẩu mới *</label>
             <input
               type="text"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className={`w-full px-4 py-2.5 bg-white border rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all ${
-                error ? 'border-red-300' : 'border-gray-200'
+              className={`w-full px-3 py-1.5 bg-white border rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-purple-600 transition-colors ${
+                error ? 'border-rose-300' : 'border-slate-200'
               }`}
               placeholder="Nhập mật khẩu mới (ít nhất 8 ký tự)"
               autoComplete="new-password"
             />
           </div>
-          <div className="flex gap-3 pt-2">
+          <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-sm font-medium text-gray-700 transition-colors cursor-pointer"
+              className="px-3.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-medium text-slate-700 transition-colors cursor-pointer"
             >
               Hủy
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#4F46E5] hover:from-[#6D28D9] hover:to-[#4338CA] text-white text-sm font-medium shadow-md shadow-purple-500/20 transition-all disabled:opacity-50 cursor-pointer"
+              className="px-4 py-1.5 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-xs font-medium shadow-xs transition-colors disabled:opacity-50 cursor-pointer"
             >
               {loading ? 'Đang lưu...' : 'Đặt lại mật khẩu'}
             </button>
@@ -508,48 +508,48 @@ const EmployeesPage = () => {
       {/* Notifications */}
       {notification && (
         <div
-          className={`fixed top-5 right-5 z-50 px-4 py-3 rounded-xl shadow-lg text-sm font-medium transition-all ${
+          className={`fixed top-4 right-4 z-50 px-4 py-2.5 rounded-lg shadow-md border text-xs font-medium transition-all ${
             notification.type === 'error'
-              ? 'bg-red-50 text-red-700 border border-red-100'
-              : 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+              ? 'bg-rose-50 text-rose-800 border-rose-200'
+              : 'bg-emerald-50 text-emerald-800 border-emerald-200'
           }`}
         >
           {notification.message}
         </div>
       )}
 
-      <div className="max-w-7xl">
+      <div className="w-full">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
           <div>
-            <h1 className="text-2xl sm:text-[26px] font-bold text-[#1E1B4B]">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
               Quản lý nhân viên
             </h1>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-xs text-slate-500 mt-0.5 font-sans tabular-nums">
               {pagination.total} nhân viên kho
             </p>
           </div>
           <button
             onClick={() => setFormModal({ open: true, editUser: null })}
-            className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#4F46E5] hover:from-[#6D28D9] hover:to-[#4338CA] text-white text-sm font-medium shadow-md shadow-purple-500/25 hover:shadow-lg hover:shadow-purple-500/35 transition-all duration-200 cursor-pointer"
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-xs font-medium shadow-xs transition-colors cursor-pointer"
           >
             <span>+ Thêm nhân viên</span>
           </button>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-2xl border border-purple-50 shadow-[0_8px_24px_rgba(88,28,135,0.05)] p-4 mb-5 flex flex-col sm:flex-row gap-3">
-          <form onSubmit={handleSearch} className="flex gap-2.5 flex-1">
+        <div className="card-base p-3 border border-slate-200/80 rounded-xl mb-4 bg-white flex flex-col sm:flex-row gap-2.5">
+          <form onSubmit={handleSearch} className="flex gap-2 flex-1">
             <input
               type="text"
               placeholder="Tìm theo tên hoặc email..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="flex-1 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all"
+              className="flex-1 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-purple-600 transition-colors"
             />
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#1E1B4B] to-[#312E81] hover:from-[#312E81] hover:to-[#4338CA] text-white text-sm font-medium shadow-sm transition-all cursor-pointer"
+              className="px-4 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-900 text-white text-xs font-medium shadow-xs transition-colors cursor-pointer"
             >
               Tìm
             </button>
@@ -560,7 +560,7 @@ const EmployeesPage = () => {
                   setSearch('');
                   setSearchInput('');
                 }}
-                className="px-4 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-sm font-medium text-gray-600 transition-colors cursor-pointer"
+                className="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-medium text-slate-600 transition-colors cursor-pointer"
               >
                 Xóa
               </button>
@@ -570,7 +570,7 @@ const EmployeesPage = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-[#1E1B4B] font-medium focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-purple-500/15 transition-all w-auto sm:w-48 cursor-pointer"
+            className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-purple-600 transition-colors w-auto sm:w-44 cursor-pointer"
           >
             <option value="">Tất cả trạng thái</option>
             <option value="ACTIVE">Hoạt động</option>
@@ -579,71 +579,71 @@ const EmployeesPage = () => {
         </div>
 
         {/* Table */}
-        <div className="bg-white rounded-2xl border border-purple-50 shadow-[0_8px_24px_rgba(88,28,135,0.06)] overflow-hidden">
+        <div className="card-base border border-slate-200/80 rounded-xl overflow-hidden bg-white shadow-xs">
           {loading ? (
             <div className="p-12 text-center">
-              <div className="w-8 h-8 border-2 border-[#7C3AED] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-              <p className="text-sm text-gray-400">Đang tải...</p>
+              <div className="w-7 h-7 border-2 border-purple-700 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+              <p className="text-xs text-slate-400">Đang tải...</p>
             </div>
           ) : users.length === 0 ? (
             <div className="p-12 text-center">
-              <p className="text-gray-400 text-sm">Không tìm thấy nhân viên nào.</p>
+              <p className="text-slate-400 text-xs">Không tìm thấy nhân viên nào.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full text-left">
                 <thead>
-                  <tr className="border-b border-gray-100">
-                    <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-6 py-4">
+                  <tr className="bg-slate-50/75 border-b border-slate-200/80">
+                    <th className="text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider px-4 py-2.5">
                       Nhân viên
                     </th>
-                    <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-6 py-4 hidden md:table-cell">
+                    <th className="text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider px-4 py-2.5 hidden md:table-cell">
                       Kho phụ trách
                     </th>
-                    <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-6 py-4">
+                    <th className="text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider px-4 py-2.5">
                       Trạng thái
                     </th>
-                    <th className="text-right text-xs font-semibold text-gray-500 uppercase tracking-wider px-6 py-4">
+                    <th className="text-right text-[11px] font-semibold text-slate-500 uppercase tracking-wider px-4 py-2.5">
                       Thao tác
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-slate-100">
                   {users.map((user) => (
                     <tr
                       key={user.id}
-                      className="hover:bg-purple-50/30 transition-colors"
+                      className="hover:bg-slate-50/60 transition-colors"
                     >
-                      <td className="px-6 py-4">
+                      <td className="px-4 py-3">
                         <div>
-                          <p className="text-sm font-semibold text-[#1E1B4B]">
+                          <p className="text-xs font-semibold text-slate-900">
                             {user.full_name}
                           </p>
-                          <p className="text-xs text-gray-500 mt-0.5">{user.email}</p>
+                          <p className="text-[11px] text-slate-500 mt-0.5">{user.email}</p>
                           {user.phone && (
-                            <p className="text-xs text-gray-500">{user.phone}</p>
+                            <p className="text-[11px] text-slate-500 font-sans tabular-nums">{user.phone}</p>
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4 hidden md:table-cell">
-                        <p className="text-sm text-gray-700">
+                      <td className="px-4 py-3 hidden md:table-cell">
+                        <p className="text-xs text-slate-700">
                           {user.warehouse ? user.warehouse.warehouse_name : '—'}
                         </p>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 py-3 whitespace-nowrap">
                         <StatusBadge status={user.status} />
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                      <td className="px-4 py-3 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => setFormModal({ open: true, editUser: user })}
-                            className="text-xs font-medium text-gray-600 hover:text-[#1E1B4B] px-2.5 py-1.5 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
+                            className="text-xs font-medium text-slate-600 hover:text-slate-900 px-2 py-1 hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
                           >
                             Sửa
                           </button>
                           <button
                             onClick={() => setResetPasswordModal({ open: true, user })}
-                            className="text-xs font-medium text-[#4F46E5] hover:text-[#3730A3] px-2.5 py-1.5 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer"
+                            className="text-xs font-medium text-purple-700 hover:text-purple-800 px-2 py-1 hover:bg-purple-50 rounded-md transition-colors cursor-pointer"
                           >
                             Đặt lại MK
                           </button>
@@ -651,10 +651,10 @@ const EmployeesPage = () => {
                             onClick={() =>
                               setConfirmModal({ open: true, type: 'status', user })
                             }
-                            className={`text-xs font-medium px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer ${
+                            className={`text-xs font-medium px-2 py-1 rounded-md transition-colors cursor-pointer ${
                               user.status === 'ACTIVE'
-                                ? 'text-[#B45309] hover:bg-amber-50'
-                                : 'text-emerald-600 hover:bg-emerald-50'
+                                ? 'text-amber-800 hover:bg-amber-50'
+                                : 'text-emerald-700 hover:bg-emerald-50'
                             }`}
                           >
                             {user.status === 'ACTIVE' ? 'Vô hiệu hóa' : 'Kích hoạt'}
@@ -663,7 +663,7 @@ const EmployeesPage = () => {
                             onClick={() =>
                               setConfirmModal({ open: true, type: 'delete', user })
                             }
-                            className="text-xs font-medium text-[#DC2626] hover:text-red-700 px-2.5 py-1.5 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                            className="text-xs font-medium text-rose-600 hover:text-rose-700 px-2 py-1 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
                           >
                             Xóa
                           </button>
@@ -678,22 +678,22 @@ const EmployeesPage = () => {
 
           {/* Pagination */}
           {pagination.totalPages > 1 && (
-            <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-              <p className="text-sm text-gray-500">
+            <div className="px-4 py-3 border-t border-slate-100 flex items-center justify-between">
+              <p className="text-xs text-slate-500 font-sans tabular-nums">
                 Trang {pagination.page} / {pagination.totalPages} ({pagination.total} kết quả)
               </p>
               <div className="flex gap-2">
                 <button
                   onClick={() => fetchUsers(pagination.page - 1)}
                   disabled={pagination.page === 1}
-                  className="px-3.5 py-1.5 text-sm font-medium text-[#1E1B4B] border border-gray-200 rounded-xl hover:bg-purple-50/50 hover:border-purple-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                  className="px-3 py-1 text-xs font-medium text-slate-700 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 >
                   ← Trước
                 </button>
                 <button
                   onClick={() => fetchUsers(pagination.page + 1)}
                   disabled={pagination.page === pagination.totalPages}
-                  className="px-3.5 py-1.5 text-sm font-medium text-[#1E1B4B] border border-gray-200 rounded-xl hover:bg-purple-50/50 hover:border-purple-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                  className="px-3 py-1 text-xs font-medium text-slate-700 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 >
                   Tiếp →
                 </button>

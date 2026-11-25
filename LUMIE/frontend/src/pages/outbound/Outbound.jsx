@@ -603,25 +603,20 @@ const OutboundPage = () => {
 
   return (
     <MainLayout>
-      <div className="p-6 max-w-7xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-6">
         {/* HEADER */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
           <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-                Xuất kho & Điều chuyển hàng
-              </h1>
-              <span
-                className={`text-xs px-2.5 py-1 rounded-full font-medium ${
-                  isManager
-                    ? 'bg-purple-100 text-purple-700 border border-purple-200'
-                    : 'bg-blue-100 text-blue-700 border border-blue-200'
-                }`}
-              >
+            <div className="flex items-center gap-2 mb-1">
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200/80">
                 {isManager ? 'Quyền Quản lý kho' : 'Quyền Nhân viên kho'}
               </span>
+              <span className="text-slate-400 text-xs">• Nghiệp vụ phân phối & luân chuyển hàng</span>
             </div>
-            <p className="text-sm text-slate-500 mt-1">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">
+              Xuất kho & Điều chuyển hàng
+            </h1>
+            <p className="text-slate-500 text-xs mt-1 max-w-3xl leading-relaxed">
               Xem lịch sử xuất kho, quản lý điều chuyển luân chuyển kho hàng giữa các chi nhánh dành cho Quản lý và Nhân viên.
             </p>
           </div>
@@ -632,9 +627,9 @@ const OutboundPage = () => {
               {activeTab === 'exports' ? (
                 <button
                   onClick={handleOpenCreateExportModal}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium rounded-xl hover:from-purple-700 hover:to-indigo-700 shadow-md shadow-purple-500/20 active:scale-95 transition-all text-sm"
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-purple-700 hover:bg-purple-800 text-white font-semibold rounded-lg shadow-xs transition-colors text-xs whitespace-nowrap"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
                   <span>Tạo phiếu xuất kho</span>
@@ -642,9 +637,9 @@ const OutboundPage = () => {
               ) : (
                 <button
                   onClick={handleOpenCreateTransferModal}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-medium rounded-xl hover:from-indigo-700 hover:to-blue-700 shadow-md shadow-indigo-500/20 active:scale-95 transition-all text-sm"
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-purple-700 hover:bg-purple-800 text-white font-semibold rounded-lg shadow-xs transition-colors text-xs whitespace-nowrap"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                   </svg>
                   <span>Tạo phiếu điều chuyển</span>
@@ -656,16 +651,16 @@ const OutboundPage = () => {
 
         {/* THÔNG BÁO */}
         {successMsg && (
-          <div className="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-sm">
-            <svg className="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex items-center gap-3 p-3.5 bg-emerald-50 border border-emerald-200/80 text-emerald-800 rounded-xl text-xs">
+            <svg className="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
             <span className="font-medium">{successMsg}</span>
           </div>
         )}
         {errorMsg && (
-          <div className="flex items-center gap-3 p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-sm">
-            <svg className="w-5 h-5 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex items-center gap-3 p-3.5 bg-rose-50 border border-rose-200/80 text-rose-800 rounded-xl text-xs">
+            <svg className="w-4 h-4 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <span>{errorMsg}</span>
@@ -673,12 +668,12 @@ const OutboundPage = () => {
         )}
 
         {/* TABS ĐIỀU HƯỚNG: LỊCH SỬ XUẤT KHO & LỊCH SỬ ĐIỀU CHUYỂN */}
-        <div className="flex border-b border-slate-200 space-x-6 text-sm font-semibold">
+        <div className="flex border-b border-slate-200/80 space-x-6 text-xs font-semibold">
           <button
             onClick={() => setActiveTab('exports')}
             className={`pb-3 border-b-2 flex items-center gap-2 transition-colors ${
               activeTab === 'exports'
-                ? 'border-purple-600 text-purple-700'
+                ? 'border-purple-700 text-purple-700'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
@@ -686,7 +681,7 @@ const OutboundPage = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
             <span>Lịch sử xuất kho</span>
-            <span className="px-2 py-0.5 rounded-full text-xs bg-slate-100 text-slate-600 font-mono">
+            <span className="px-2 py-0.5 rounded-full text-[11px] bg-slate-100 text-slate-600 font-sans tabular-nums font-bold">
               {exportStats.total}
             </span>
           </button>
@@ -695,7 +690,7 @@ const OutboundPage = () => {
             onClick={() => setActiveTab('transfers')}
             className={`pb-3 border-b-2 flex items-center gap-2 transition-colors ${
               activeTab === 'transfers'
-                ? 'border-indigo-600 text-indigo-700'
+                ? 'border-purple-700 text-purple-700'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
@@ -703,7 +698,7 @@ const OutboundPage = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
             </svg>
             <span>Lịch sử điều chuyển</span>
-            <span className="px-2 py-0.5 rounded-full text-xs bg-slate-100 text-slate-600 font-mono">
+            <span className="px-2 py-0.5 rounded-full text-[11px] bg-slate-100 text-slate-600 font-sans tabular-nums font-bold">
               {transferStats.total}
             </span>
           </button>
@@ -715,47 +710,52 @@ const OutboundPage = () => {
         {activeTab === 'exports' && (
           <div className="space-y-4">
             {/* KPI STATS */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
               <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs">
-                <span className="text-xs font-medium text-slate-500 uppercase">Tổng phiếu xuất</span>
-                <div className="mt-2 text-2xl font-bold text-slate-800">{exportStats.total}</div>
+                <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Tổng phiếu xuất</span>
+                <div className="mt-2 text-2xl font-bold font-sans tabular-nums text-slate-900">{exportStats.total}</div>
               </div>
-              <div className="bg-white p-4 rounded-xl border border-amber-200 bg-amber-50/20 shadow-xs">
-                <span className="text-xs font-medium text-amber-700 uppercase flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+              <div className="bg-white p-4 rounded-xl border border-amber-200/80 shadow-xs">
+                <span className="text-xs font-medium text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-amber-500"></span>
                   Chờ duyệt
                 </span>
-                <div className="mt-2 text-2xl font-bold text-amber-600">{exportStats.pending}</div>
+                <div className="mt-2 text-2xl font-bold font-sans tabular-nums text-amber-700">{exportStats.pending}</div>
               </div>
-              <div className="bg-white p-4 rounded-xl border border-emerald-200 bg-emerald-50/20 shadow-xs">
-                <span className="text-xs font-medium text-emerald-700 uppercase flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <div className="bg-white p-4 rounded-xl border border-emerald-200/80 shadow-xs">
+                <span className="text-xs font-medium text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
                   Đã duyệt (Đã xuất)
                 </span>
-                <div className="mt-2 text-2xl font-bold text-emerald-600">{exportStats.approved}</div>
+                <div className="mt-2 text-2xl font-bold font-sans tabular-nums text-emerald-700">{exportStats.approved}</div>
               </div>
-              <div className="bg-white p-4 rounded-xl border border-rose-200 bg-rose-50/20 shadow-xs">
-                <span className="text-xs font-medium text-rose-700 uppercase flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-rose-500"></span>
+              <div className="bg-white p-4 rounded-xl border border-rose-200/80 shadow-xs">
+                <span className="text-xs font-medium text-rose-800 uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-rose-600"></span>
                   Đã từ chối
                 </span>
-                <div className="mt-2 text-2xl font-bold text-rose-600">{exportStats.rejected}</div>
+                <div className="mt-2 text-2xl font-bold font-sans tabular-nums text-rose-700">{exportStats.rejected}</div>
               </div>
             </div>
 
             {/* BỘ LỌC TÌM KIẾM */}
             <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row gap-3">
-              <input
-                type="text"
-                placeholder="Tìm mã phiếu (PXK...), khách hàng, người lập..."
-                value={exportSearch}
-                onChange={(e) => setExportSearch(e.target.value)}
-                className="flex-1 px-3.5 py-2 border border-slate-200 rounded-lg text-sm outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
-              />
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  placeholder="Tìm mã phiếu (PXK...), khách hàng, người lập..."
+                  value={exportSearch}
+                  onChange={(e) => setExportSearch(e.target.value)}
+                  className="w-full pl-9 pr-3.5 py-2 border border-slate-200/80 rounded-lg text-xs outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-600"
+                />
+                <svg className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
               <select
                 value={exportStatus}
                 onChange={(e) => setExportStatus(e.target.value)}
-                className="px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white"
+                className="px-3 py-2 border border-slate-200/80 rounded-lg text-xs bg-white text-slate-700 focus:outline-hidden focus:border-purple-600"
               >
                 <option value="">Tất cả trạng thái</option>
                 <option value="PENDING">Chờ duyệt</option>
@@ -765,7 +765,7 @@ const OutboundPage = () => {
               <select
                 value={exportWh}
                 onChange={(e) => setExportWh(e.target.value)}
-                className="px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white"
+                className="px-3 py-2 border border-slate-200/80 rounded-lg text-xs bg-white text-slate-700 focus:outline-hidden focus:border-purple-600"
               >
                 <option value="">Tất cả kho xuất</option>
                 {formDataMeta.warehouses.map((wh) => (
@@ -777,36 +777,36 @@ const OutboundPage = () => {
             </div>
 
             {/* BẢNG LỊCH SỬ XUẤT KHO */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                <h2 className="text-base font-semibold text-slate-800">
+            <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+              <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+                <h2 className="text-sm font-bold text-slate-800">
                   Danh sách lịch sử phiếu xuất kho ({exportsList.length} phiếu)
                 </h2>
               </div>
               {exportLoading ? (
-                <div className="p-12 text-center text-slate-400">Đang tải danh sách phiếu xuất...</div>
+                <div className="p-12 text-center text-slate-400 text-xs">Đang tải danh sách phiếu xuất...</div>
               ) : exportsList.length === 0 ? (
-                <div className="p-12 text-center text-slate-500">Chưa có phiếu xuất kho nào</div>
+                <div className="p-12 text-center text-slate-500 text-xs">Chưa có phiếu xuất kho nào</div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-sm text-slate-600">
-                    <thead className="bg-slate-50/75 text-xs uppercase font-semibold text-slate-500 border-b border-slate-100">
+                  <table className="w-full text-left text-xs text-slate-600">
+                    <thead className="bg-slate-50/75 text-[11px] uppercase font-semibold text-slate-500 border-b border-slate-200/80 tracking-wider">
                       <tr>
-                        <th className="px-5 py-3.5">Mã phiếu</th>
-                        <th className="px-5 py-3.5">Ngày tạo</th>
-                        <th className="px-5 py-3.5">Kho xuất</th>
-                        <th className="px-5 py-3.5">Loại xuất / Đối tác</th>
-                        <th className="px-5 py-3.5">Người lập (NV)</th>
-                        <th className="px-5 py-3.5 text-right">SL / Tổng tiền</th>
-                        <th className="px-5 py-3.5 text-center">Trạng thái</th>
-                        <th className="px-5 py-3.5 text-right">Thao tác</th>
+                        <th className="px-5 py-3 whitespace-nowrap">Mã phiếu</th>
+                        <th className="px-5 py-3 whitespace-nowrap">Ngày tạo</th>
+                        <th className="px-5 py-3 whitespace-nowrap">Kho xuất</th>
+                        <th className="px-5 py-3 whitespace-nowrap">Loại xuất / Đối tác</th>
+                        <th className="px-5 py-3 whitespace-nowrap">Người lập (NV)</th>
+                        <th className="px-5 py-3 text-right whitespace-nowrap">SL / Tổng tiền</th>
+                        <th className="px-5 py-3 text-center whitespace-nowrap">Trạng thái</th>
+                        <th className="px-5 py-3 text-right whitespace-nowrap">Thao tác</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {exportsList.map((exp) => (
-                        <tr key={exp.id} className="hover:bg-slate-50/60">
-                          <td className="px-5 py-4 font-mono font-semibold text-purple-700">{exp.export_code}</td>
-                          <td className="px-5 py-4 text-xs text-slate-500">
+                        <tr key={exp.id} className="hover:bg-slate-50/60 transition-colors">
+                          <td className="px-5 py-3.5 font-sans font-bold text-purple-700 whitespace-nowrap">{exp.export_code}</td>
+                          <td className="px-5 py-3.5 text-xs text-slate-500 whitespace-nowrap">
                             {new Date(exp.created_at).toLocaleDateString('vi-VN', {
                               day: '2-digit',
                               month: '2-digit',
@@ -815,8 +815,8 @@ const OutboundPage = () => {
                               minute: '2-digit',
                             })}
                           </td>
-                          <td className="px-5 py-4 font-medium text-slate-800">{exp.warehouse?.warehouse_name}</td>
-                          <td className="px-5 py-4">
+                          <td className="px-5 py-3.5 font-medium text-slate-800 whitespace-nowrap">{exp.warehouse?.warehouse_name}</td>
+                          <td className="px-5 py-3.5 whitespace-nowrap">
                             <span className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-medium">
                               {exp.export_type === 'SALE'
                                 ? 'Xuất bán hàng'
@@ -832,33 +832,42 @@ const OutboundPage = () => {
                               <div className="text-xs text-slate-500 mt-0.5">{exp.customer_name}</div>
                             )}
                           </td>
-                          <td className="px-5 py-4 font-medium text-slate-700">{exp.created_by?.full_name}</td>
-                          <td className="px-5 py-4 text-right">
-                            <div className="font-semibold text-slate-800">{exp.total_quantity} cái</div>
-                            <div className="text-xs text-slate-500">
+                          <td className="px-5 py-3.5 font-medium text-slate-700 whitespace-nowrap">{exp.created_by?.full_name}</td>
+                          <td className="px-5 py-3.5 text-right whitespace-nowrap">
+                            <div className="font-sans font-bold tabular-nums text-slate-900">{exp.total_quantity} cái</div>
+                            <div className="text-xs text-slate-500 font-sans tabular-nums font-medium">
                               {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(exp.total_amount)}
                             </div>
                           </td>
-                          <td className="px-5 py-4 text-center">
+                          <td className="px-5 py-3.5 text-center whitespace-nowrap">
                             <span
-                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${
                                 exp.status === 'APPROVED'
-                                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                  ? 'bg-emerald-50 text-emerald-800 border-emerald-200/80'
                                   : exp.status === 'REJECTED'
-                                  ? 'bg-rose-50 text-rose-700 border-rose-200'
-                                  : 'bg-amber-50 text-amber-700 border-amber-200'
+                                  ? 'bg-rose-50 text-rose-800 border-rose-200/80'
+                                  : 'bg-amber-50 text-amber-800 border-amber-200/80'
                               }`}
                             >
+                              <span
+                                className={`w-1.5 h-1.5 rounded-full ${
+                                  exp.status === 'APPROVED'
+                                    ? 'bg-emerald-600'
+                                    : exp.status === 'REJECTED'
+                                    ? 'bg-rose-600'
+                                    : 'bg-amber-500'
+                                }`}
+                              ></span>
                               {exp.status === 'APPROVED' ? 'Đã duyệt' : (exp.status === 'REJECTED' ? 'Từ chối' : 'Chờ duyệt')}
                             </span>
                           </td>
-                          <td className="px-5 py-4 text-right">
+                          <td className="px-5 py-3.5 text-right whitespace-nowrap">
                             <div className="flex items-center justify-end gap-1.5">
                               {/* Xem chi tiết (CẢ NHÂN VIÊN VÀ QUẢN LÝ) */}
                               <button
                                 onClick={() => handleOpenExportDetail(exp)}
                                 title="Xem chi tiết phiếu xuất"
-                                className="p-1.5 text-slate-500 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                                className="p-1.5 text-slate-500 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors"
                               >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -871,13 +880,13 @@ const OutboundPage = () => {
                                 <>
                                   <button
                                     onClick={() => handleOpenApproveModal('export', exp)}
-                                    className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-lg"
+                                    className="px-2.5 py-1 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold rounded-lg shadow-xs transition-colors"
                                   >
                                     Duyệt xuất
                                   </button>
                                   <button
                                     onClick={() => handleOpenRejectModal('export', exp)}
-                                    className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-medium rounded-lg"
+                                    className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200/80 text-xs font-semibold rounded-lg transition-colors"
                                   >
                                     Từ chối
                                   </button>
@@ -901,47 +910,52 @@ const OutboundPage = () => {
         {activeTab === 'transfers' && (
           <div className="space-y-4">
             {/* KPI STATS */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
               <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs">
-                <span className="text-xs font-medium text-slate-500 uppercase">Tổng phiếu điều chuyển</span>
-                <div className="mt-2 text-2xl font-bold text-slate-800">{transferStats.total}</div>
+                <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Tổng phiếu điều chuyển</span>
+                <div className="mt-2 text-2xl font-bold font-sans tabular-nums text-slate-900">{transferStats.total}</div>
               </div>
-              <div className="bg-white p-4 rounded-xl border border-amber-200 bg-amber-50/20 shadow-xs">
-                <span className="text-xs font-medium text-amber-700 uppercase flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+              <div className="bg-white p-4 rounded-xl border border-amber-200/80 shadow-xs">
+                <span className="text-xs font-medium text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-amber-500"></span>
                   Chờ duyệt & Xác nhận
                 </span>
-                <div className="mt-2 text-2xl font-bold text-amber-600">{transferStats.pending}</div>
+                <div className="mt-2 text-2xl font-bold font-sans tabular-nums text-amber-700">{transferStats.pending}</div>
               </div>
-              <div className="bg-white p-4 rounded-xl border border-emerald-200 bg-emerald-50/20 shadow-xs">
-                <span className="text-xs font-medium text-emerald-700 uppercase flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <div className="bg-white p-4 rounded-xl border border-emerald-200/80 shadow-xs">
+                <span className="text-xs font-medium text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
                   Đã duyệt & Nhận hàng
                 </span>
-                <div className="mt-2 text-2xl font-bold text-emerald-600">{transferStats.approved}</div>
+                <div className="mt-2 text-2xl font-bold font-sans tabular-nums text-emerald-700">{transferStats.approved}</div>
               </div>
-              <div className="bg-white p-4 rounded-xl border border-rose-200 bg-rose-50/20 shadow-xs">
-                <span className="text-xs font-medium text-rose-700 uppercase flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-rose-500"></span>
+              <div className="bg-white p-4 rounded-xl border border-rose-200/80 shadow-xs">
+                <span className="text-xs font-medium text-rose-800 uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-rose-600"></span>
                   Đã từ chối
                 </span>
-                <div className="mt-2 text-2xl font-bold text-rose-600">{transferStats.rejected}</div>
+                <div className="mt-2 text-2xl font-bold font-sans tabular-nums text-rose-700">{transferStats.rejected}</div>
               </div>
             </div>
 
             {/* BỘ LỌC TÌM KIẾM */}
             <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row gap-3">
-              <input
-                type="text"
-                placeholder="Tìm mã điều chuyển (PDC...), ghi chú, người lập..."
-                value={transferSearch}
-                onChange={(e) => setTransferSearch(e.target.value)}
-                className="flex-1 px-3.5 py-2 border border-slate-200 rounded-lg text-sm outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
-              />
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  placeholder="Tìm mã điều chuyển (PDC...), ghi chú, người lập..."
+                  value={transferSearch}
+                  onChange={(e) => setTransferSearch(e.target.value)}
+                  className="w-full pl-9 pr-3.5 py-2 border border-slate-200/80 rounded-lg text-xs outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-600"
+                />
+                <svg className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
               <select
                 value={transferStatus}
                 onChange={(e) => setTransferStatus(e.target.value)}
-                className="px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white"
+                className="px-3 py-2 border border-slate-200/80 rounded-lg text-xs bg-white text-slate-700 focus:outline-hidden focus:border-purple-600"
               >
                 <option value="">Tất cả trạng thái</option>
                 <option value="PENDING">Chờ duyệt</option>
@@ -951,7 +965,7 @@ const OutboundPage = () => {
               <select
                 value={transferFromWh}
                 onChange={(e) => setTransferFromWh(e.target.value)}
-                className="px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white"
+                className="px-3 py-2 border border-slate-200/80 rounded-lg text-xs bg-white text-slate-700 focus:outline-hidden focus:border-purple-600"
               >
                 <option value="">Tất cả kho nguồn</option>
                 {formDataMeta.warehouses.map((wh) => (
@@ -963,36 +977,36 @@ const OutboundPage = () => {
             </div>
 
             {/* BẢNG LỊCH SỬ ĐIỀU CHUYỂN HÀNG */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                <h2 className="text-base font-semibold text-slate-800">
+            <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+              <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+                <h2 className="text-sm font-bold text-slate-800">
                   Danh sách lịch sử phiếu điều chuyển ({transfersList.length} phiếu)
                 </h2>
               </div>
               {transferLoading ? (
-                <div className="p-12 text-center text-slate-400">Đang tải danh sách phiếu điều chuyển...</div>
+                <div className="p-12 text-center text-slate-400 text-xs">Đang tải danh sách phiếu điều chuyển...</div>
               ) : transfersList.length === 0 ? (
-                <div className="p-12 text-center text-slate-500">Chưa có phiếu điều chuyển nào</div>
+                <div className="p-12 text-center text-slate-500 text-xs">Chưa có phiếu điều chuyển nào</div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-sm text-slate-600">
-                    <thead className="bg-slate-50/75 text-xs uppercase font-semibold text-slate-500 border-b border-slate-100">
+                  <table className="w-full text-left text-xs text-slate-600">
+                    <thead className="bg-slate-50/75 text-[11px] uppercase font-semibold text-slate-500 border-b border-slate-200/80 tracking-wider">
                       <tr>
-                        <th className="px-5 py-3.5">Mã phiếu</th>
-                        <th className="px-5 py-3.5">Ngày tạo</th>
-                        <th className="px-5 py-3.5">Từ kho (Kho xuất)</th>
-                        <th className="px-5 py-3.5">Đến kho (Kho nhận)</th>
-                        <th className="px-5 py-3.5">Người lập (NV)</th>
-                        <th className="px-5 py-3.5 text-right">Tổng số lượng</th>
-                        <th className="px-5 py-3.5 text-center">Trạng thái</th>
-                        <th className="px-5 py-3.5 text-right">Thao tác</th>
+                        <th className="px-5 py-3 whitespace-nowrap">Mã phiếu</th>
+                        <th className="px-5 py-3 whitespace-nowrap">Ngày tạo</th>
+                        <th className="px-5 py-3 whitespace-nowrap">Từ kho (Kho xuất)</th>
+                        <th className="px-5 py-3 whitespace-nowrap">Đến kho (Kho nhận)</th>
+                        <th className="px-5 py-3 whitespace-nowrap">Người lập (NV)</th>
+                        <th className="px-5 py-3 text-right whitespace-nowrap">Tổng số lượng</th>
+                        <th className="px-5 py-3 text-center whitespace-nowrap">Trạng thái</th>
+                        <th className="px-5 py-3 text-right whitespace-nowrap">Thao tác</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {transfersList.map((trf) => (
-                        <tr key={trf.id} className="hover:bg-slate-50/60">
-                          <td className="px-5 py-4 font-mono font-semibold text-indigo-700">{trf.transfer_code}</td>
-                          <td className="px-5 py-4 text-xs text-slate-500">
+                        <tr key={trf.id} className="hover:bg-slate-50/60 transition-colors">
+                          <td className="px-5 py-3.5 font-sans font-bold text-purple-700 whitespace-nowrap">{trf.transfer_code}</td>
+                          <td className="px-5 py-3.5 text-xs text-slate-500 whitespace-nowrap">
                             {new Date(trf.created_at).toLocaleDateString('vi-VN', {
                               day: '2-digit',
                               month: '2-digit',
@@ -1001,41 +1015,50 @@ const OutboundPage = () => {
                               minute: '2-digit',
                             })}
                           </td>
-                          <td className="px-5 py-4 font-medium text-slate-800">
+                          <td className="px-5 py-3.5 font-medium text-slate-800 whitespace-nowrap">
                             {trf.from_warehouse?.warehouse_name}
                           </td>
-                          <td className="px-5 py-4 font-medium text-slate-800">
-                            <span className="inline-flex items-center gap-1.5 text-indigo-600">
+                          <td className="px-5 py-3.5 font-medium text-slate-800 whitespace-nowrap">
+                            <span className="inline-flex items-center gap-1.5 text-purple-700">
                               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                               </svg>
                               {trf.to_warehouse?.warehouse_name}
                             </span>
                           </td>
-                          <td className="px-5 py-4 font-medium text-slate-700">{trf.created_by?.full_name}</td>
-                          <td className="px-5 py-4 text-right font-bold text-slate-800">
+                          <td className="px-5 py-3.5 font-medium text-slate-700 whitespace-nowrap">{trf.created_by?.full_name}</td>
+                          <td className="px-5 py-3.5 text-right font-sans font-bold tabular-nums text-slate-900 whitespace-nowrap">
                             {trf.total_quantity} cái
                           </td>
-                          <td className="px-5 py-4 text-center">
+                          <td className="px-5 py-3.5 text-center whitespace-nowrap">
                             <span
-                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${
                                 trf.status === 'APPROVED'
-                                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                  ? 'bg-emerald-50 text-emerald-800 border-emerald-200/80'
                                   : trf.status === 'REJECTED'
-                                  ? 'bg-rose-50 text-rose-700 border-rose-200'
-                                  : 'bg-amber-50 text-amber-700 border-amber-200'
+                                  ? 'bg-rose-50 text-rose-800 border-rose-200/80'
+                                  : 'bg-amber-50 text-amber-800 border-amber-200/80'
                               }`}
                             >
+                              <span
+                                className={`w-1.5 h-1.5 rounded-full ${
+                                  trf.status === 'APPROVED'
+                                    ? 'bg-emerald-600'
+                                    : trf.status === 'REJECTED'
+                                    ? 'bg-rose-600'
+                                    : 'bg-amber-500'
+                                }`}
+                              ></span>
                               {trf.status === 'APPROVED' ? 'Đã nhận hàng' : (trf.status === 'REJECTED' ? 'Từ chối' : 'Chờ duyệt')}
                             </span>
                           </td>
-                          <td className="px-5 py-4 text-right">
+                          <td className="px-5 py-3.5 text-right whitespace-nowrap">
                             <div className="flex items-center justify-end gap-1.5">
                               {/* Xem chi tiết (CẢ NHÂN VIÊN VÀ QUẢN LÝ) */}
                               <button
                                 onClick={() => handleOpenTransferDetail(trf)}
                                 title="Xem chi tiết phiếu điều chuyển"
-                                className="p-1.5 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                                className="p-1.5 text-slate-500 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors"
                               >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -1048,13 +1071,13 @@ const OutboundPage = () => {
                                 <>
                                   <button
                                     onClick={() => handleOpenApproveModal('transfer', trf)}
-                                    className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium rounded-lg"
+                                    className="px-2.5 py-1 bg-purple-700 hover:bg-purple-800 text-white text-xs font-semibold rounded-lg shadow-xs transition-colors"
                                   >
                                     Duyệt nhận hàng
                                   </button>
                                   <button
                                     onClick={() => handleOpenRejectModal('transfer', trf)}
-                                    className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-medium rounded-lg"
+                                    className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200/80 text-xs font-semibold rounded-lg transition-colors"
                                   >
                                     Từ chối
                                   </button>
@@ -1075,12 +1098,14 @@ const OutboundPage = () => {
         {/* ============================================================ */}
         {/* MODAL 1: TẠO PHIẾU XUẤT KHO (CHỈ DÀNH CHO NHÂN VIÊN) */}
         {/* ============================================================ */}
+        {/* MODAL 1: TẠO PHIẾU XUẤT KHO (CHỈ DÀNH CHO NHÂN VIÊN) */}
+        {/* ============================================================ */}
         {showCreateExportModal && isStaff && (
-          <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100 animate-fadeIn my-auto">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-xl border border-slate-200/80 animate-fadeIn my-auto">
+              <div className="px-6 py-4 border-b border-slate-200/80 flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900">Tạo phiếu xuất kho mới</h3>
+                  <h3 className="text-base font-bold text-slate-900">Tạo phiếu xuất kho mới</h3>
                   <p className="text-xs text-slate-500 mt-0.5">Dành cho Nhân viên kho • Chuyển Quản lý phê duyệt</p>
                 </div>
                 <button onClick={() => setShowCreateExportModal(false)} className="text-slate-400 hover:text-slate-600 p-1">
@@ -1100,7 +1125,7 @@ const OutboundPage = () => {
                       value={newExportData.warehouse_id}
                       onChange={(e) => handleExportWarehouseChange(e.target.value)}
                       required
-                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white font-medium"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white font-medium focus:ring-1 focus:ring-purple-600"
                     >
                       <option value="">-- Chọn kho xuất --</option>
                       {formDataMeta.warehouses.map((wh) => (
@@ -1115,7 +1140,7 @@ const OutboundPage = () => {
                     <select
                       value={newExportData.export_type}
                       onChange={(e) => setNewExportData((prev) => ({ ...prev, export_type: e.target.value }))}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:ring-1 focus:ring-purple-600"
                     >
                       <option value="SALE">Xuất bán hàng / Đơn hàng</option>
                       <option value="RETURN_SUPPLIER">Xuất trả nhà cung cấp</option>
@@ -1133,7 +1158,7 @@ const OutboundPage = () => {
                       value={newExportData.customer_name}
                       onChange={(e) => setNewExportData((prev) => ({ ...prev, customer_name: e.target.value }))}
                       required
-                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:ring-1 focus:ring-purple-600"
                     />
                   </div>
                 </div>
@@ -1148,7 +1173,7 @@ const OutboundPage = () => {
                     value={newExportData.notes}
                     onChange={(e) => setNewExportData((prev) => ({ ...prev, notes: e.target.value }))}
                     required
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white"
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
@@ -1156,7 +1181,7 @@ const OutboundPage = () => {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="text-sm font-bold text-slate-800 uppercase">Danh sách mặt hàng xuất</h4>
+                      <h4 className="text-xs font-bold text-slate-700 uppercase">Danh sách mặt hàng xuất</h4>
                       <p className="text-[11px] text-slate-500">
                         Danh sách sản phẩm được tự động lọc và ưu tiên các mặt hàng đang có sẵn trong kho này.
                       </p>
@@ -1164,15 +1189,15 @@ const OutboundPage = () => {
                     <button
                       type="button"
                       onClick={handleAddExportRow}
-                      className="text-xs font-semibold text-purple-600 bg-purple-50 hover:bg-purple-100 px-3 py-1.5 rounded-lg transition-colors"
+                      className="text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 px-3 py-1.5 rounded-lg transition-colors"
                     >
                       + Thêm sản phẩm
                     </button>
                   </div>
 
-                  <div className="border border-slate-200 rounded-xl overflow-hidden">
+                  <div className="border border-slate-200/80 rounded-xl overflow-hidden">
                     <table className="w-full text-left text-xs text-slate-600">
-                      <thead className="bg-slate-50 font-semibold text-slate-500 border-b border-slate-200">
+                      <thead className="bg-slate-50 font-semibold text-slate-600 border-b border-slate-200/80">
                         <tr>
                           <th className="px-3 py-2.5">Sản phẩm / SKU (Ưu tiên còn hàng)</th>
                           <th className="px-3 py-2.5 w-32 text-center">Tồn tại kho</th>
@@ -1195,44 +1220,44 @@ const OutboundPage = () => {
                                   value={row.variant_id}
                                   onChange={(e) => handleExportItemChange(idx, 'variant_id', e.target.value)}
                                   required
-                                  className="w-full px-2.5 py-2 border border-slate-200 rounded-lg text-xs bg-white focus:ring-1 focus:ring-purple-500 font-medium"
+                                  className="w-full px-2.5 py-2 border border-slate-200 rounded-lg text-xs bg-white focus:ring-1 focus:ring-purple-600 font-medium"
                                 >
                                   <option value="">-- Chọn sản phẩm xuất --</option>
                                   {exportAvailableVariants.filter((v) => v.stockAtWh > 0).length > 0 && (
-                                    <optgroup label="✅ HÀNG CÓ SẴN TẠI KHO NÀY (CÒN HÀNG)">
+                                    <optgroup label="HÀNG CÓ SẴN TẠI KHO NÀY (CÒN HÀNG)">
                                       {exportAvailableVariants
                                         .filter((v) => v.stockAtWh > 0)
                                         .map((v) => (
                                           <option key={v.id} value={v.id}>
-                                            🔥 [TỒN: {v.stockAtWh} CÁI - KỆ {v.shelfAtWh}] {v.product?.product_code} - {v.product?.product_name} ({v.color}, Size {v.size})
+                                            [Tồn: {v.stockAtWh} cái - Kệ {v.shelfAtWh}] {v.product?.product_code} - {v.product?.product_name} ({v.color}, Size {v.size})
                                           </option>
                                         ))}
                                     </optgroup>
                                   )}
                                   {exportAvailableVariants.filter((v) => v.stockAtWh <= 0).length > 0 && (
-                                    <optgroup label="⚠️ HÀNG CHƯA CÓ TỒN KHO TẠI KHO NÀY (TỒN: 0)">
+                                    <optgroup label="HÀNG CHƯA CÓ TỒN KHO TẠI KHO NÀY (TỒN: 0)">
                                       {exportAvailableVariants
                                         .filter((v) => v.stockAtWh <= 0)
                                         .map((v) => (
                                           <option key={v.id} value={v.id} disabled>
-                                            ⛔ [HẾT HÀNG TẠI KHO NÀY] {v.product?.product_code} - {v.product?.product_name} ({v.color}, Size {v.size})
+                                            [Hết hàng tại kho] {v.product?.product_code} - {v.product?.product_name} ({v.color}, Size {v.size})
                                           </option>
                                         ))}
                                     </optgroup>
                                   )}
                                 </select>
                               </td>
-                              <td className="p-2 text-center font-bold">
+                              <td className="p-2 text-center">
                                 {row.variant_id ? (
                                   stock > 0 ? (
                                     <div className="inline-flex flex-col items-center">
-                                      <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-xs">
+                                      <span className="badge-success text-xs font-semibold tabular-nums">
                                         Còn {stock} chiếc
                                       </span>
-                                      <span className="text-[10px] text-slate-400 font-mono mt-0.5">Kệ: {shelf}</span>
+                                      <span className="text-[10px] text-slate-500 mt-0.5 font-medium">Kệ: {shelf}</span>
                                     </div>
                                   ) : (
-                                    <span className="text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 text-xs">
+                                    <span className="badge-critical text-xs font-semibold tabular-nums">
                                       Tồn: 0 chiếc
                                     </span>
                                   )
@@ -1249,7 +1274,7 @@ const OutboundPage = () => {
                                   onChange={(e) => handleExportItemChange(idx, 'quantity', e.target.value)}
                                   required
                                   disabled={stock <= 0}
-                                  className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs font-semibold text-center disabled:bg-slate-100 disabled:text-slate-400"
+                                  className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs font-sans font-bold tabular-nums text-center disabled:bg-slate-100 disabled:text-slate-400"
                                 />
                               </td>
                               <td className="p-2">
@@ -1259,11 +1284,11 @@ const OutboundPage = () => {
                                   step="1000"
                                   value={row.unit_price}
                                   onChange={(e) => handleExportItemChange(idx, 'unit_price', e.target.value)}
-                                  className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs font-mono text-right"
+                                  className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs font-sans font-semibold tabular-nums text-right"
                                 />
                               </td>
-                              <td className="p-2 text-right font-mono font-bold text-slate-800">
-                                {new Intl.NumberFormat('vi-VN').format(lineTotal)} đ
+                              <td className="p-2 text-right font-sans font-bold tabular-nums text-slate-900 whitespace-nowrap">
+                                {new Intl.NumberFormat('vi-VN').format(lineTotal)} ₫
                               </td>
                               <td className="p-2 text-center">
                                 <button
@@ -1282,28 +1307,28 @@ const OutboundPage = () => {
                     </table>
                   </div>
 
-                  <div className="bg-purple-50/50 border border-purple-100 rounded-xl p-4 flex items-center justify-between">
-                    <span className="text-xs text-purple-900 font-medium">
-                      Tổng số lượng xuất: <b className="text-purple-700 text-sm">{exportCalculations.totalQty} chiếc</b>
+                  <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex items-center justify-between">
+                    <span className="text-xs text-slate-700 font-medium">
+                      Tổng số lượng xuất: <b className="text-slate-900 text-sm font-sans font-bold tabular-nums">{exportCalculations.totalQty} chiếc</b>
                     </span>
-                    <span className="text-sm font-bold text-slate-900">
-                      Tổng tiền: <b className="text-purple-700 font-mono">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(exportCalculations.totalAmt)}</b>
+                    <span className="text-sm font-medium text-slate-700">
+                      Tổng tiền: <b className="text-purple-700 text-base font-sans font-bold tabular-nums ml-1">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(exportCalculations.totalAmt)}</b>
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200/80">
                   <button
                     type="button"
                     onClick={() => setShowCreateExportModal(false)}
-                    className="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-sm hover:bg-slate-50"
+                    className="px-4 py-2 border border-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50"
                   >
                     Hủy bỏ
                   </button>
                   <button
                     type="submit"
                     disabled={actionLoading}
-                    className="px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl text-sm font-medium shadow-md hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50"
+                    className="px-5 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-lg text-sm font-medium shadow-xs disabled:opacity-50 transition-colors"
                   >
                     Gửi phiếu xuất kho
                   </button>
@@ -1317,11 +1342,11 @@ const OutboundPage = () => {
         {/* MODAL 2: TẠO PHIẾU ĐIỀU CHUYỂN (CHỈ DÀNH CHO NHÂN VIÊN) */}
         {/* ============================================================ */}
         {showCreateTransferModal && isStaff && (
-          <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100 animate-fadeIn my-auto">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-xl border border-slate-200/80 animate-fadeIn my-auto">
+              <div className="px-6 py-4 border-b border-slate-200/80 flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900">Tạo phiếu điều chuyển giữa các kho</h3>
+                  <h3 className="text-base font-bold text-slate-900">Tạo phiếu điều chuyển giữa các kho</h3>
                   <p className="text-xs text-slate-500 mt-0.5">Dành cho Nhân viên kho • Chuyển Quản lý duyệt & xác nhận</p>
                 </div>
                 <button onClick={() => setShowCreateTransferModal(false)} className="text-slate-400 hover:text-slate-600 p-1">
@@ -1341,7 +1366,7 @@ const OutboundPage = () => {
                       value={newTransferData.from_warehouse_id}
                       onChange={(e) => handleTransferFromWarehouseChange(e.target.value)}
                       required
-                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white font-medium"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white font-medium focus:ring-1 focus:ring-purple-600"
                     >
                       <option value="">-- Chọn kho nguồn xuất đi --</option>
                       {formDataMeta.warehouses.map((wh) => (
@@ -1359,7 +1384,7 @@ const OutboundPage = () => {
                       value={newTransferData.to_warehouse_id}
                       onChange={(e) => setNewTransferData((prev) => ({ ...prev, to_warehouse_id: e.target.value }))}
                       required
-                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white font-medium"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white font-medium focus:ring-1 focus:ring-purple-600"
                     >
                       <option value="">-- Chọn kho đích nhận hàng --</option>
                       {formDataMeta.warehouses
@@ -1381,7 +1406,7 @@ const OutboundPage = () => {
                       value={newTransferData.notes}
                       onChange={(e) => setNewTransferData((prev) => ({ ...prev, notes: e.target.value }))}
                       required
-                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:ring-1 focus:ring-purple-600"
                     />
                   </div>
                 </div>
@@ -1390,7 +1415,7 @@ const OutboundPage = () => {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="text-sm font-bold text-slate-800 uppercase">Danh sách mặt hàng điều chuyển</h4>
+                      <h4 className="text-xs font-bold text-slate-700 uppercase">Danh sách mặt hàng điều chuyển</h4>
                       <p className="text-[11px] text-slate-500">
                         Danh sách sản phẩm được tự động lọc và ưu tiên các mặt hàng đang có sẵn trong kho nguồn.
                       </p>
@@ -1398,15 +1423,15 @@ const OutboundPage = () => {
                     <button
                       type="button"
                       onClick={handleAddTransferRow}
-                      className="text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-colors"
+                      className="text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 px-3 py-1.5 rounded-lg transition-colors"
                     >
                       + Thêm sản phẩm
                     </button>
                   </div>
 
-                  <div className="border border-slate-200 rounded-xl overflow-hidden">
+                  <div className="border border-slate-200/80 rounded-xl overflow-hidden">
                     <table className="w-full text-left text-xs text-slate-600">
-                      <thead className="bg-slate-50 font-semibold text-slate-500 border-b border-slate-200">
+                      <thead className="bg-slate-50 font-semibold text-slate-600 border-b border-slate-200/80">
                         <tr>
                           <th className="px-3 py-2.5">Sản phẩm / SKU (Ưu tiên còn hàng)</th>
                           <th className="px-3 py-2.5 w-32 text-center">Tồn kho nguồn</th>
@@ -1427,44 +1452,44 @@ const OutboundPage = () => {
                                   value={row.variant_id}
                                   onChange={(e) => handleTransferItemChange(idx, 'variant_id', e.target.value)}
                                   required
-                                  className="w-full px-2.5 py-2 border border-slate-200 rounded-lg text-xs bg-white focus:ring-1 focus:ring-indigo-500 font-medium"
+                                  className="w-full px-2.5 py-2 border border-slate-200 rounded-lg text-xs bg-white focus:ring-1 focus:ring-purple-600 font-medium"
                                 >
                                   <option value="">-- Chọn sản phẩm điều chuyển --</option>
                                   {transferAvailableVariants.filter((v) => v.stockAtWh > 0).length > 0 && (
-                                    <optgroup label="✅ HÀNG CÓ SẴN TẠI KHO NGUỒN (CÒN HÀNG)">
+                                    <optgroup label="HÀNG CÓ SẴN TẠI KHO NGUỒN (CÒN HÀNG)">
                                       {transferAvailableVariants
                                         .filter((v) => v.stockAtWh > 0)
                                         .map((v) => (
                                           <option key={v.id} value={v.id}>
-                                            🔥 [TỒN: {v.stockAtWh} CÁI - KỆ {v.shelfAtWh}] {v.product?.product_code} - {v.product?.product_name} ({v.color}, Size {v.size})
+                                            [Tồn: {v.stockAtWh} cái - Kệ {v.shelfAtWh}] {v.product?.product_code} - {v.product?.product_name} ({v.color}, Size {v.size})
                                           </option>
                                         ))}
                                     </optgroup>
                                   )}
                                   {transferAvailableVariants.filter((v) => v.stockAtWh <= 0).length > 0 && (
-                                    <optgroup label="⚠️ HÀNG CHƯA CÓ TỒN KHO TẠI KHO NGUỒN (TỒN: 0)">
+                                    <optgroup label="HÀNG CHƯA CÓ TỒN KHO TẠI KHO NGUỒN (TỒN: 0)">
                                       {transferAvailableVariants
                                         .filter((v) => v.stockAtWh <= 0)
                                         .map((v) => (
                                           <option key={v.id} value={v.id} disabled>
-                                            ⛔ [HẾT HÀNG TẠI KHO NGUỒN] {v.product?.product_code} - {v.product?.product_name} ({v.color}, Size {v.size})
+                                            [Hết hàng tại kho nguồn] {v.product?.product_code} - {v.product?.product_name} ({v.color}, Size {v.size})
                                           </option>
                                         ))}
                                     </optgroup>
                                   )}
                                 </select>
                               </td>
-                              <td className="p-2 text-center font-bold">
+                              <td className="p-2 text-center">
                                 {row.variant_id ? (
                                   stock > 0 ? (
                                     <div className="inline-flex flex-col items-center">
-                                      <span className="text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 text-xs">
+                                      <span className="badge-info text-xs font-semibold tabular-nums">
                                         Còn {stock} chiếc
                                       </span>
-                                      <span className="text-[10px] text-slate-400 font-mono mt-0.5">Kệ nguồn: {shelf}</span>
+                                      <span className="text-[10px] text-slate-500 mt-0.5 font-medium">Kệ nguồn: {shelf}</span>
                                     </div>
                                   ) : (
-                                    <span className="text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 text-xs">
+                                    <span className="badge-critical text-xs font-semibold tabular-nums">
                                       Tồn: 0 chiếc
                                     </span>
                                   )
@@ -1481,7 +1506,7 @@ const OutboundPage = () => {
                                   onChange={(e) => handleTransferItemChange(idx, 'quantity', e.target.value)}
                                   required
                                   disabled={stock <= 0}
-                                  className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs font-semibold text-center disabled:bg-slate-100 disabled:text-slate-400"
+                                  className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs font-sans font-bold tabular-nums text-center disabled:bg-slate-100 disabled:text-slate-400"
                                 />
                               </td>
                               <td className="p-2">
@@ -1490,7 +1515,7 @@ const OutboundPage = () => {
                                   placeholder="Kệ A-01"
                                   value={row.to_shelf_location}
                                   onChange={(e) => handleTransferItemChange(idx, 'to_shelf_location', e.target.value)}
-                                  className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs text-center uppercase font-mono"
+                                  className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs text-center uppercase font-medium"
                                 />
                               </td>
                               <td className="p-2 text-center">
@@ -1510,25 +1535,25 @@ const OutboundPage = () => {
                     </table>
                   </div>
 
-                  <div className="bg-indigo-50/50 border border-indigo-100 rounded-xl p-4 flex items-center justify-between">
-                    <span className="text-xs text-indigo-900 font-medium">
-                      Tổng số lượng điều chuyển: <b className="text-indigo-700 text-sm">{transferTotalQty} sản phẩm</b>
+                  <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex items-center justify-between">
+                    <span className="text-xs text-slate-700 font-medium">
+                      Tổng số lượng điều chuyển: <b className="text-purple-700 text-sm font-sans font-bold tabular-nums ml-1">{transferTotalQty} sản phẩm</b>
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200/80">
                   <button
                     type="button"
                     onClick={() => setShowCreateTransferModal(false)}
-                    className="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-sm hover:bg-slate-50"
+                    className="px-4 py-2 border border-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50"
                   >
                     Hủy bỏ
                   </button>
                   <button
                     type="submit"
                     disabled={actionLoading}
-                    className="px-5 py-2 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-xl text-sm font-medium shadow-md hover:from-indigo-700 hover:to-blue-700 disabled:opacity-50"
+                    className="px-5 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-lg text-sm font-medium shadow-xs disabled:opacity-50 transition-colors"
                   >
                     Gửi phiếu điều chuyển
                   </button>
@@ -1542,12 +1567,12 @@ const OutboundPage = () => {
         {/* MODAL CHI TIẾT PHIẾU XUẤT KHO (CẢ QUẢN LÝ & NHÂN VIÊN) */}
         {/* ============================================================ */}
         {showExportDetail && selectedExport && (
-          <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100 animate-fadeIn my-auto">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-xl border border-slate-200/80 animate-fadeIn my-auto">
+              <div className="px-6 py-4 border-b border-slate-200/80 flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900">Chi tiết phiếu xuất: {selectedExport.export_code}</h3>
-                  <p className="text-xs text-slate-500">Kho xuất: {selectedExport.warehouse?.warehouse_name}</p>
+                  <h3 className="text-base font-bold text-slate-900">Chi tiết phiếu xuất: {selectedExport.export_code}</h3>
+                  <p className="text-xs text-slate-500 mt-0.5">Kho xuất: {selectedExport.warehouse?.warehouse_name}</p>
                 </div>
                 <button onClick={() => setShowExportDetail(false)} className="text-slate-400 hover:text-slate-600 p-1">
                   ✕
@@ -1555,28 +1580,28 @@ const OutboundPage = () => {
               </div>
 
               <div className="p-6 overflow-y-auto space-y-4 text-xs">
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 bg-slate-50 rounded-xl">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 bg-slate-50 border border-slate-200/80 rounded-xl">
                   <div>
-                    <span className="text-slate-400 font-semibold uppercase">Mục đích</span>
-                    <p className="font-bold text-slate-800 text-sm mt-0.5">{selectedExport.export_type}</p>
+                    <span className="text-slate-500 font-medium uppercase text-[11px]">Mục đích</span>
+                    <p className="font-semibold text-slate-800 text-sm mt-0.5">{selectedExport.export_type}</p>
                   </div>
                   <div>
-                    <span className="text-slate-400 font-semibold uppercase">Đối tác / Khách</span>
+                    <span className="text-slate-500 font-medium uppercase text-[11px]">Đối tác / Khách</span>
                     <p className="font-medium text-slate-800 text-sm mt-0.5">{selectedExport.customer_name || '—'}</p>
                   </div>
                   <div>
-                    <span className="text-slate-400 font-semibold uppercase">Người tạo</span>
+                    <span className="text-slate-500 font-medium uppercase text-[11px]">Người tạo</span>
                     <p className="font-medium text-slate-800 text-sm mt-0.5">{selectedExport.created_by?.full_name}</p>
                   </div>
                   <div>
-                    <span className="text-slate-400 font-semibold uppercase">Trạng thái</span>
-                    <p className="font-bold text-sm mt-0.5">
-                      <span className={`inline-block px-2.5 py-0.5 rounded-full ${
+                    <span className="text-slate-500 font-medium uppercase text-[11px]">Trạng thái</span>
+                    <p className="text-sm mt-0.5">
+                      <span className={`inline-block px-2.5 py-0.5 rounded text-xs font-semibold ${
                         selectedExport.status === 'APPROVED'
-                          ? 'bg-emerald-100 text-emerald-800'
+                          ? 'badge-success'
                           : selectedExport.status === 'REJECTED'
-                          ? 'bg-rose-100 text-rose-800'
-                          : 'bg-amber-100 text-amber-800'
+                          ? 'badge-critical'
+                          : 'badge-warning'
                       }`}>
                         {selectedExport.status}
                       </span>
@@ -1585,7 +1610,7 @@ const OutboundPage = () => {
                 </div>
 
                 {selectedExport.approved_by && (
-                  <div className={`p-3 rounded-xl border ${selectedExport.status === 'APPROVED' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-rose-50 text-rose-800 border-rose-200'}`}>
+                  <div className={`p-3 rounded-xl border text-xs ${selectedExport.status === 'APPROVED' ? 'bg-emerald-50 text-emerald-800 border-emerald-200/80' : 'bg-rose-50 text-rose-800 border-rose-200/80'}`}>
                     <b>{selectedExport.status === 'APPROVED' ? 'Quản lý đã duyệt xuất:' : 'Quản lý từ chối xuất:'}</b> {selectedExport.approved_by?.full_name} ({new Date(selectedExport.approved_at).toLocaleString('vi-VN')})
                     {selectedExport.rejection_reason && (
                       <p className="mt-1 text-rose-700">Lý do: {selectedExport.rejection_reason}</p>
@@ -1593,9 +1618,9 @@ const OutboundPage = () => {
                   </div>
                 )}
 
-                <div className="border border-slate-200 rounded-xl overflow-hidden">
+                <div className="border border-slate-200/80 rounded-xl overflow-hidden">
                   <table className="w-full text-left text-xs text-slate-600">
-                    <thead className="bg-slate-50 font-semibold border-b border-slate-200">
+                    <thead className="bg-slate-50 font-semibold text-slate-600 border-b border-slate-200/80">
                       <tr>
                         <th className="p-3">Sản phẩm</th>
                         <th className="p-3">SKU</th>
@@ -1608,10 +1633,10 @@ const OutboundPage = () => {
                       {selectedExport.items?.map((it) => (
                         <tr key={it.id}>
                           <td className="p-3 font-semibold text-slate-800">{it.variant?.product?.product_name}</td>
-                          <td className="p-3 font-mono text-purple-700">{it.variant?.sku}</td>
-                          <td className="p-3 text-right font-bold text-slate-900">{it.quantity}</td>
-                          <td className="p-3 text-right font-mono">{new Intl.NumberFormat('vi-VN').format(it.unit_price)} đ</td>
-                          <td className="p-3 text-right font-mono font-bold text-slate-900">{new Intl.NumberFormat('vi-VN').format(it.total_price)} đ</td>
+                          <td className="p-3 font-medium text-purple-700">{it.variant?.sku}</td>
+                          <td className="p-3 text-right font-sans font-bold tabular-nums text-slate-900">{it.quantity}</td>
+                          <td className="p-3 text-right font-sans font-semibold tabular-nums text-slate-700">{new Intl.NumberFormat('vi-VN').format(it.unit_price)} ₫</td>
+                          <td className="p-3 text-right font-sans font-bold tabular-nums text-slate-900 whitespace-nowrap">{new Intl.NumberFormat('vi-VN').format(it.total_price)} ₫</td>
                         </tr>
                       ))}
                     </tbody>
@@ -1619,8 +1644,8 @@ const OutboundPage = () => {
                 </div>
               </div>
 
-              <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-between">
-                <button onClick={() => setShowExportDetail(false)} className="px-4 py-2 border rounded-xl text-sm">
+              <div className="px-6 py-4 border-t border-slate-200/80 flex items-center justify-between">
+                <button onClick={() => setShowExportDetail(false)} className="px-4 py-2 border border-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50">
                   Đóng
                 </button>
                 {/* Chỉ Quản lý có nút Duyệt / Từ chối khi phiếu PENDING */}
@@ -1628,13 +1653,13 @@ const OutboundPage = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleOpenRejectModal('export', selectedExport)}
-                      className="px-4 py-2 bg-rose-50 text-rose-700 border border-rose-200 rounded-xl text-sm"
+                      className="px-4 py-2 bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 rounded-lg text-sm font-medium transition-colors"
                     >
                       Từ chối
                     </button>
                     <button
                       onClick={() => handleOpenApproveModal('export', selectedExport)}
-                      className="px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-medium"
+                      className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-medium shadow-xs transition-colors"
                     >
                       Duyệt xuất kho
                     </button>
@@ -1649,12 +1674,12 @@ const OutboundPage = () => {
         {/* MODAL CHI TIẾT PHIẾU ĐIỀU CHUYỂN (CẢ QUẢN LÝ & NHÂN VIÊN) */}
         {/* ============================================================ */}
         {showTransferDetail && selectedTransfer && (
-          <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100 animate-fadeIn my-auto">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-xl border border-slate-200/80 animate-fadeIn my-auto">
+              <div className="px-6 py-4 border-b border-slate-200/80 flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900">Chi tiết điều chuyển: {selectedTransfer.transfer_code}</h3>
-                  <p className="text-xs text-slate-500">
+                  <h3 className="text-base font-bold text-slate-900">Chi tiết điều chuyển: {selectedTransfer.transfer_code}</h3>
+                  <p className="text-xs text-slate-500 mt-0.5">
                     Từ: {selectedTransfer.from_warehouse?.warehouse_name} ➔ Đến: {selectedTransfer.to_warehouse?.warehouse_name}
                   </p>
                 </div>
@@ -1664,9 +1689,9 @@ const OutboundPage = () => {
               </div>
 
               <div className="p-6 overflow-y-auto space-y-4 text-xs">
-                <div className="border border-slate-200 rounded-xl overflow-hidden">
+                <div className="border border-slate-200/80 rounded-xl overflow-hidden">
                   <table className="w-full text-left text-xs text-slate-600">
-                    <thead className="bg-slate-50 font-semibold border-b border-slate-200">
+                    <thead className="bg-slate-50 font-semibold text-slate-600 border-b border-slate-200/80">
                       <tr>
                         <th className="p-3">Sản phẩm</th>
                         <th className="p-3">SKU</th>
@@ -1678,9 +1703,9 @@ const OutboundPage = () => {
                       {selectedTransfer.items?.map((it) => (
                         <tr key={it.id}>
                           <td className="p-3 font-semibold text-slate-800">{it.variant?.product?.product_name}</td>
-                          <td className="p-3 font-mono text-indigo-700">{it.variant?.sku}</td>
-                          <td className="p-3 text-center font-mono">{it.to_shelf_location || 'A-01'}</td>
-                          <td className="p-3 text-right font-bold text-slate-900">{it.quantity} chiếc</td>
+                          <td className="p-3 font-medium text-purple-700">{it.variant?.sku}</td>
+                          <td className="p-3 text-center font-medium">{it.to_shelf_location || 'A-01'}</td>
+                          <td className="p-3 text-right font-sans font-bold tabular-nums text-slate-900">{it.quantity} chiếc</td>
                         </tr>
                       ))}
                     </tbody>
@@ -1688,7 +1713,7 @@ const OutboundPage = () => {
                 </div>
 
                 {selectedTransfer.approved_by && (
-                  <div className={`p-3 rounded-xl border ${selectedTransfer.status === 'APPROVED' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-rose-50 text-rose-800 border-rose-200'}`}>
+                  <div className={`p-3 rounded-xl border text-xs ${selectedTransfer.status === 'APPROVED' ? 'bg-emerald-50 text-emerald-800 border-emerald-200/80' : 'bg-rose-50 text-rose-800 border-rose-200/80'}`}>
                     <b>{selectedTransfer.status === 'APPROVED' ? 'Quản lý đã duyệt & xác nhận nhận hàng:' : 'Quản lý từ chối điều chuyển:'}</b> {selectedTransfer.approved_by?.full_name} ({new Date(selectedTransfer.approved_at).toLocaleString('vi-VN')})
                     {selectedTransfer.rejection_reason && (
                       <p className="mt-1 text-rose-700">Lý do: {selectedTransfer.rejection_reason}</p>
@@ -1697,8 +1722,8 @@ const OutboundPage = () => {
                 )}
               </div>
 
-              <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-between">
-                <button onClick={() => setShowTransferDetail(false)} className="px-4 py-2 border rounded-xl text-sm">
+              <div className="px-6 py-4 border-t border-slate-200/80 flex items-center justify-between">
+                <button onClick={() => setShowTransferDetail(false)} className="px-4 py-2 border border-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50">
                   Đóng
                 </button>
                 {/* Chỉ Quản lý có nút Duyệt / Từ chối khi phiếu PENDING */}
@@ -1706,13 +1731,13 @@ const OutboundPage = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleOpenRejectModal('transfer', selectedTransfer)}
-                      className="px-4 py-2 bg-rose-50 text-rose-700 border border-rose-200 rounded-xl text-sm"
+                      className="px-4 py-2 bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 rounded-lg text-sm font-medium transition-colors"
                     >
                       Từ chối
                     </button>
                     <button
                       onClick={() => handleOpenApproveModal('transfer', selectedTransfer)}
-                      className="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-medium"
+                      className="px-4 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-lg text-sm font-medium shadow-xs transition-colors"
                     >
                       Duyệt & Nhận hàng
                     </button>
@@ -1727,24 +1752,24 @@ const OutboundPage = () => {
         {/* MODAL XÁC NHẬN DUYỆT (CHỈ QUẢN LÝ) */}
         {/* ============================================================ */}
         {showApproveModal && isManager && itemToProcess && (
-          <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-fadeIn">
-              <h3 className="text-lg font-bold text-slate-900">
+          <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200/80 animate-fadeIn">
+              <h3 className="text-base font-bold text-slate-900">
                 {itemToProcess.type === 'export' ? 'Xác nhận duyệt xuất kho?' : 'Duyệt và xác nhận nhận hàng điều chuyển?'}
               </h3>
-              <p className="text-sm text-slate-600 mt-2">
+              <p className="text-xs text-slate-600 mt-2">
                 {itemToProcess.type === 'export'
                   ? `Hàng hóa trong phiếu ${itemToProcess.data.export_code} sẽ được trừ tự động khỏi tồn kho.`
                   : `Hàng hóa trong phiếu ${itemToProcess.data.transfer_code} sẽ được trừ tại ${itemToProcess.data.from_warehouse?.warehouse_name} và cộng vào ${itemToProcess.data.to_warehouse?.warehouse_name}.`}
               </p>
               <div className="mt-6 flex justify-end gap-3">
-                <button onClick={() => setShowApproveModal(false)} className="px-4 py-2 border rounded-xl text-sm">
+                <button onClick={() => setShowApproveModal(false)} className="px-4 py-2 border border-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50">
                   Hủy
                 </button>
                 <button
                   onClick={handleConfirmApprove}
                   disabled={actionLoading}
-                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-medium shadow-md"
+                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-medium shadow-xs transition-colors"
                 >
                   Xác nhận duyệt
                 </button>
@@ -1757,9 +1782,9 @@ const OutboundPage = () => {
         {/* MODAL TỪ CHỐI (CHỈ QUẢN LÝ) */}
         {/* ============================================================ */}
         {showRejectModal && isManager && itemToProcess && (
-          <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-fadeIn">
-              <h3 className="text-lg font-bold text-slate-900">Từ chối phê duyệt</h3>
+          <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200/80 animate-fadeIn">
+              <h3 className="text-base font-bold text-slate-900">Từ chối phê duyệt</h3>
               <div className="mt-3">
                 <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">Lý do từ chối</label>
                 <textarea
@@ -1767,17 +1792,17 @@ const OutboundPage = () => {
                   placeholder="Nhập lý do gửi lại cho nhân viên..."
                   value={rejectionReason}
                   onChange={(e) => setRejectionReason(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-1 focus:ring-purple-600"
                 />
               </div>
               <div className="mt-5 flex justify-end gap-3">
-                <button onClick={() => setShowRejectModal(false)} className="px-4 py-2 border rounded-xl text-sm">
+                <button onClick={() => setShowRejectModal(false)} className="px-4 py-2 border border-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50">
                   Hủy
                 </button>
                 <button
                   onClick={handleConfirmReject}
                   disabled={actionLoading}
-                  className="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-medium shadow-md"
+                  className="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-sm font-medium shadow-xs transition-colors"
                 >
                   Xác nhận từ chối
                 </button>

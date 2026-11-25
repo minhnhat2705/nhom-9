@@ -210,68 +210,74 @@ const Reports = () => {
         )}
 
         {/* HEADER */}
-        <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-6 rounded-2xl text-white shadow-md">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-200 text-xs font-semibold uppercase tracking-wider mb-2 border border-indigo-400/30">
-                <span>📊</span>
-                <span>Theme 6: Accounting Reports & Analytics</span>
-                <span className="bg-indigo-400/30 px-2 py-0.5 rounded-full text-[10px] text-white font-mono">
-                  Dành riêng Quản lý kho
-                </span>
-              </div>
-              <h1 className="text-2xl font-bold tracking-tight">Báo cáo & Phân tích Kế toán Kho</h1>
-              <p className="text-slate-300 text-xs mt-1 max-w-2xl leading-relaxed">
-                Báo cáo tồn kho theo thời điểm (hỗ trợ truy ngược lịch sử thẻ kho) và Báo cáo Nhập – Xuất – Tồn theo kỳ đảm bảo cân bằng kế toán tuyệt đối.
-              </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200/80">
+                Sổ Báo Cáo Kế Toán Kho
+              </span>
+              <span className="text-slate-400 text-xs"></span>
             </div>
-
-            {/* Quick Export Actions */}
-            <div className="flex items-center gap-2 shrink-0">
-              <button
-                onClick={activeTab === 'inventory' ? handleExportInventoryCSV : handleExportInOutCSV}
-                className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold shadow-sm flex items-center gap-1.5 transition-all"
-              >
-                <span>📥</span>
-                <span>Xuất Excel (.csv)</span>
-              </button>
-
-              <button
-                onClick={() => setShowPrintModal(true)}
-                className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold shadow-sm flex items-center gap-1.5 transition-all"
-              >
-                <span>🖨️</span>
-                <span>In / Lưu PDF</span>
-              </button>
-            </div>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">Báo cáo & Phân tích Kế toán Kho</h1>
+            <p className="text-slate-500 text-xs mt-1 max-w-3xl leading-relaxed">
+              Báo cáo tồn kho theo thời điểm (hỗ trợ truy ngược lịch sử thẻ kho) và Báo cáo Nhập – Xuất – Tồn theo kỳ đảm bảo cân bằng kế toán tuyệt đối.
+            </p>
           </div>
 
-          {/* TABS SWITCHER */}
-          <div className="flex items-center gap-2 mt-6 pt-4 border-t border-slate-800">
+          {/* Quick Export Actions */}
+          <div className="flex items-center gap-2.5 shrink-0">
             <button
-              onClick={() => setActiveTab('inventory')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
-                activeTab === 'inventory'
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'text-slate-300 hover:bg-white/10'
-              }`}
+              onClick={activeTab === 'inventory' ? handleExportInventoryCSV : handleExportInOutCSV}
+              className="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer"
+              title="Xuất bảng dữ liệu hiện tại ra file Excel CSV"
             >
-              <span>📦</span>
-              <span>US-48: Báo cáo Tồn kho theo Thời điểm</span>
+              <svg className="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <span>Xuất Excel (.csv)</span>
             </button>
 
             <button
-              onClick={() => setActiveTab('in-out')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
-                activeTab === 'in-out'
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'text-slate-300 hover:bg-white/10'
-              }`}
+              onClick={() => setShowPrintModal(true)}
+              className="px-3.5 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all cursor-pointer"
             >
-              <span>🔄</span>
-              <span>US-49: Báo cáo Nhập – Xuất – Tồn theo Kỳ</span>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+              </svg>
+              <span>In / Lưu PDF</span>
             </button>
           </div>
+        </div>
+
+        {/* TABS SWITCHER */}
+        <div className="flex items-center gap-2 border-b border-slate-200/80 pb-2">
+          <button
+            onClick={() => setActiveTab('inventory')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'inventory'
+                ? 'bg-slate-800 text-white shadow-xs'
+                : 'text-slate-600 hover:bg-slate-100'
+            }`}
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+            <span>Báo cáo Tồn kho theo Thời điểm</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('in-out')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'in-out'
+                ? 'bg-slate-800 text-white shadow-xs'
+                : 'text-slate-600 hover:bg-slate-100'
+            }`}
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+            </svg>
+            <span>Báo cáo Nhập – Xuất – Tồn theo Kỳ</span>
+          </button>
         </div>
 
         {/* ============================================================
@@ -280,13 +286,13 @@ const Reports = () => {
         {activeTab === 'inventory' && (
           <div className="space-y-6">
             {/* BỘ LỌC US-48 */}
-            <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-wrap items-center gap-4 text-xs">
+            <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs flex flex-wrap items-center gap-4 text-xs">
               <div className="flex-1 min-w-[200px]">
-                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1">Nhóm báo cáo theo</label>
+                <label className="block text-[11px] font-semibold text-slate-500 uppercase mb-1">Nhóm báo cáo theo</label>
                 <select
                   value={invFilter.group_by}
                   onChange={(e) => setInvFilter((p) => ({ ...p, group_by: e.target.value }))}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl font-bold bg-white text-xs"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl font-medium bg-white text-xs text-slate-700 outline-none focus:border-purple-500 cursor-pointer"
                 >
                   <option value="category">Danh mục sản phẩm (Áo thun, Sơ mi, Áo khoác...)</option>
                   <option value="warehouse">Kho & Chi nhánh lưu trữ</option>
@@ -295,24 +301,24 @@ const Reports = () => {
               </div>
 
               <div className="flex-1 min-w-[180px]">
-                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1">
+                <label className="block text-[11px] font-semibold text-slate-500 uppercase mb-1">
                   Thời điểm xem tồn kho (As-of Date)
                 </label>
                 <input
                   type="date"
                   value={invFilter.as_of_date}
                   onChange={(e) => setInvFilter((p) => ({ ...p, as_of_date: e.target.value }))}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl font-mono text-xs"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-700 outline-none focus:border-purple-500"
                   title="Để trống nếu muốn xem tồn kho hiện tại; Chọn ngày quá khứ để truy ngược thẻ kho"
                 />
               </div>
 
               <div className="flex-1 min-w-[180px]">
-                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1">Kho áp dụng</label>
+                <label className="block text-[11px] font-semibold text-slate-500 uppercase mb-1">Kho áp dụng</label>
                 <select
                   value={invFilter.warehouse_id}
                   onChange={(e) => setInvFilter((p) => ({ ...p, warehouse_id: e.target.value }))}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl font-medium bg-white text-xs"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl font-medium bg-white text-xs text-slate-700 outline-none focus:border-purple-500 cursor-pointer"
                 >
                   <option value="ALL">Toàn hệ thống (Toàn bộ kho)</option>
                   {warehouses.map((wh) => (
@@ -326,7 +332,7 @@ const Reports = () => {
               <div className="pt-5">
                 <button
                   onClick={() => setInvFilter((p) => ({ ...p, as_of_date: '' }))}
-                  className="px-3 py-2 text-slate-600 hover:text-slate-900 border border-slate-200 rounded-xl hover:bg-slate-50 font-semibold"
+                  className="px-3 py-2 text-slate-600 hover:text-slate-900 border border-slate-200 rounded-xl hover:bg-slate-50 font-semibold cursor-pointer"
                 >
                   Xem hôm nay
                 </button>
@@ -336,30 +342,30 @@ const Reports = () => {
             {/* THẺ TỔNG HỢP US-48 */}
             {invReport && (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
-                  <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tổng số phân nhóm</div>
-                  <div className="text-2xl font-black text-slate-800 mt-1 font-mono">{invReport.groups?.length} nhóm</div>
-                  <div className="text-xs text-slate-500 mt-0.5">
+                <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+                  <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Tổng số phân nhóm</div>
+                  <div className="text-2xl font-bold text-slate-800 mt-1 tabular-nums">{invReport.groups?.length} nhóm</div>
+                  <div className="text-xs text-slate-500 mt-1">
                     {invFilter.group_by === 'category' ? 'Danh mục thời trang' : invFilter.group_by === 'warehouse' ? 'Chi nhánh kho' : 'Bộ sưu tập'}
                   </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-indigo-200/80 shadow-xs bg-indigo-50/20">
-                  <div className="text-[11px] font-bold text-indigo-700 uppercase tracking-wider">Tổng sản lượng tồn kho</div>
-                  <div className="text-2xl font-black text-indigo-900 mt-1 font-mono">
+                <div className="bg-white p-4 rounded-xl border border-indigo-200/80 shadow-xs bg-indigo-50/15 flex flex-col justify-between">
+                  <div className="text-[11px] font-semibold text-indigo-700 uppercase tracking-wider">Tổng sản lượng tồn kho</div>
+                  <div className="text-2xl font-bold text-indigo-900 mt-1 tabular-nums">
                     {Number(invReport.grandTotalQty).toLocaleString('vi-VN')} chiếc
                   </div>
-                  <div className="text-xs text-indigo-600 mt-0.5">
+                  <div className="text-xs text-indigo-600 mt-1">
                     {invReport.is_time_travel ? `Tại thời điểm ${invReport.as_of_date}` : 'Tồn thực tế hiện tại'}
                   </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-purple-200/80 shadow-xs bg-purple-50/20">
-                  <div className="text-[11px] font-bold text-purple-700 uppercase tracking-wider">Tổng giá trị vốn tồn kho</div>
-                  <div className="text-2xl font-black text-purple-900 mt-1 font-mono">
+                <div className="bg-white p-4 rounded-xl border border-purple-200/80 shadow-xs bg-purple-50/15 flex flex-col justify-between">
+                  <div className="text-[11px] font-semibold text-purple-700 uppercase tracking-wider">Tổng giá trị vốn tồn kho</div>
+                  <div className="text-2xl font-bold text-purple-900 mt-1 tabular-nums">
                     {Number(invReport.grandTotalValue).toLocaleString('vi-VN')} đ
                   </div>
-                  <div className="text-xs text-purple-600 mt-0.5">Tính theo giá nhập thực tế (VNĐ)</div>
+                  <div className="text-xs text-purple-600 mt-1">Tính theo giá nhập thực tế (VNĐ)</div>
                 </div>
               </div>
             )}
@@ -397,17 +403,17 @@ const Reports = () => {
                       <>
                         {invReport.groups.map((g, idx) => (
                           <tr key={g.group_key} className="hover:bg-slate-50/60 transition-colors">
-                            <td className="p-3.5 text-center font-mono text-slate-400">{idx + 1}</td>
-                            <td className="p-3.5 font-mono font-bold text-slate-700">{g.group_code}</td>
+                            <td className="p-3.5 text-center text-slate-400">{idx + 1}</td>
+                            <td className="p-3.5 font-semibold text-slate-700">{g.group_code}</td>
                             <td className="p-3.5 font-bold text-slate-900">{g.group_name}</td>
-                            <td className="p-3.5 text-right font-mono text-slate-600">{g.sku_count} SKU</td>
-                            <td className="p-3.5 text-right font-mono font-bold text-indigo-900">
+                            <td className="p-3.5 text-right tabular-nums text-slate-600">{g.sku_count} SKU</td>
+                            <td className="p-3.5 text-right tabular-nums font-bold text-indigo-900">
                               {Number(g.total_quantity).toLocaleString('vi-VN')} chiếc
                             </td>
-                            <td className="p-3.5 text-right font-mono font-bold text-purple-950 text-sm">
+                            <td className="p-3.5 text-right tabular-nums font-bold text-purple-950 text-sm">
                               {Number(g.total_value).toLocaleString('vi-VN')} đ
                             </td>
-                            <td className="p-3.5 text-right font-mono font-semibold text-slate-700">
+                            <td className="p-3.5 text-right tabular-nums font-semibold text-slate-700">
                               <span className="inline-block px-2 py-0.5 rounded-full bg-slate-100 text-slate-800">
                                 {g.percentage}%
                               </span>
@@ -416,17 +422,17 @@ const Reports = () => {
                         ))}
 
                         {/* DÒNG TỔNG CỘNG TOÀN BỘ HỆ THỐNG */}
-                        <tr className="bg-purple-100/60 font-black border-t-2 border-purple-300 text-purple-950">
+                        <tr className="bg-purple-50 font-bold border-t-2 border-purple-200 text-purple-950">
                           <td colSpan={3} className="p-4 uppercase text-xs">
                             ∑ TỔNG CỘNG TOÀN HỆ THỐNG:
                           </td>
-                          <td className="p-4 text-right font-mono">
+                          <td className="p-4 text-right tabular-nums">
                             {invReport.groups.reduce((s, g) => s + g.sku_count, 0)} SKU
                           </td>
-                          <td className="p-4 text-right font-mono text-indigo-950 text-sm">
+                          <td className="p-4 text-right tabular-nums text-indigo-950 text-sm">
                             {Number(invReport.grandTotalQty).toLocaleString('vi-VN')} chiếc
                           </td>
-                          <td className="p-4 text-right font-mono text-purple-950 text-base">
+                          <td className="p-4 text-right tabular-nums text-purple-950 text-base">
                             {Number(invReport.grandTotalValue).toLocaleString('vi-VN')} đ
                           </td>
                           <td className="p-4 text-right font-mono text-sm">100.0%</td>
@@ -559,34 +565,34 @@ const Reports = () => {
                       <>
                         {inOutData.map((row, idx) => (
                           <tr key={row.variant_id} className="hover:bg-slate-50/60 transition-colors">
-                            <td className="p-3 text-center font-mono text-slate-400">
+                            <td className="p-3 text-center text-slate-400">
                               {(inOutPagination.page - 1) * inOutPagination.limit + idx + 1}
                             </td>
                             <td className="p-3">
-                              <div className="font-bold text-slate-800 line-clamp-1">{row.product_name}</div>
-                              <div className="font-mono text-[11px] text-purple-700 font-semibold">
+                              <div className="font-semibold text-slate-800 line-clamp-1">{row.product_name}</div>
+                              <div className="text-[11px] text-purple-700 font-semibold">
                                 {row.sku} • {row.size} / {row.color}
                               </div>
                             </td>
-                            <td className="p-3 text-right font-mono text-slate-600">
+                            <td className="p-3 text-right tabular-nums text-slate-600">
                               {Number(row.import_price).toLocaleString('vi-VN')} đ
                             </td>
-                            <td className="p-3 text-right font-mono font-semibold bg-slate-50/70">
+                            <td className="p-3 text-right tabular-nums font-semibold bg-slate-50/70">
                               {row.opening_stock}
                             </td>
-                            <td className="p-3 text-right font-mono font-semibold text-emerald-700 bg-emerald-50/30">
+                            <td className="p-3 text-right tabular-nums font-semibold text-emerald-700 bg-emerald-50/30">
                               +{row.inbound_quantity}
                             </td>
-                            <td className="p-3 text-right font-mono font-semibold text-rose-700 bg-rose-50/30">
+                            <td className="p-3 text-right tabular-nums font-semibold text-rose-700 bg-rose-50/30">
                               -{row.outbound_quantity}
                             </td>
-                            <td className="p-3 text-right font-mono text-amber-800 bg-amber-50/30">
+                            <td className="p-3 text-right tabular-nums text-amber-800 bg-amber-50/30">
                               {row.audit_difference >= 0 ? `+${row.audit_difference}` : row.audit_difference}
                             </td>
-                            <td className="p-3 text-right font-mono font-bold text-purple-950 bg-purple-50/50 text-sm">
+                            <td className="p-3 text-right tabular-nums font-bold text-purple-950 bg-purple-50/50 text-sm">
                               {row.closing_stock}
                             </td>
-                            <td className="p-3 text-right font-mono font-black text-purple-950">
+                            <td className="p-3 text-right tabular-nums font-bold text-purple-950">
                               {Number(row.closing_value).toLocaleString('vi-VN')} đ
                             </td>
                             <td className="p-3 text-center">
@@ -605,26 +611,26 @@ const Reports = () => {
 
                         {/* DÒNG TỔNG CỘNG TOÀN BẢNG */}
                         {inOutTotals && (
-                          <tr className="bg-purple-100/70 font-black border-t-2 border-purple-300 text-purple-950">
+                          <tr className="bg-purple-50 font-bold border-t-2 border-purple-200 text-purple-950">
                             <td colSpan={3} className="p-3.5 uppercase text-xs">
                               ∑ TỔNG CỘNG ĐỐI SOÁT:
                             </td>
-                            <td className="p-3.5 text-right font-mono text-slate-900">
+                            <td className="p-3.5 text-right tabular-nums text-slate-900">
                               {inOutTotals.opening_stock}
                             </td>
-                            <td className="p-3.5 text-right font-mono text-emerald-900">
+                            <td className="p-3.5 text-right tabular-nums text-emerald-900">
                               +{inOutTotals.inbound_quantity}
                             </td>
-                            <td className="p-3.5 text-right font-mono text-rose-900">
+                            <td className="p-3.5 text-right tabular-nums text-rose-900">
                               -{inOutTotals.outbound_quantity}
                             </td>
-                            <td className="p-3.5 text-right font-mono text-amber-900">
+                            <td className="p-3.5 text-right tabular-nums text-amber-900">
                               {inOutTotals.audit_difference >= 0 ? `+${inOutTotals.audit_difference}` : inOutTotals.audit_difference}
                             </td>
-                            <td className="p-3.5 text-right font-mono text-purple-950 text-sm">
+                            <td className="p-3.5 text-right tabular-nums text-purple-950 text-sm">
                               {inOutTotals.closing_stock}
                             </td>
-                            <td className="p-3.5 text-right font-mono text-purple-950 text-base">
+                            <td className="p-3.5 text-right tabular-nums text-purple-950 text-base">
                               {Number(inOutTotals.closing_value).toLocaleString('vi-VN')} đ
                             </td>
                             <td className="p-3.5 text-center">

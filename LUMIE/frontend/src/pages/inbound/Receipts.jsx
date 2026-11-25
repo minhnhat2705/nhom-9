@@ -280,25 +280,20 @@ const ReceiptsPage = () => {
 
   return (
     <MainLayout>
-      <div className="p-6 max-w-7xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-6">
         {/* HEADER VÀ HÀNH ĐỘNG */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
           <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-                Quản lý Nhập kho
-              </h1>
-              <span
-                className={`text-xs px-2.5 py-1 rounded-full font-medium ${
-                  isManager
-                    ? 'bg-purple-100 text-purple-700 border border-purple-200'
-                    : 'bg-blue-100 text-blue-700 border border-blue-200'
-                }`}
-              >
+            <div className="flex items-center gap-2 mb-1">
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200/80">
                 {isManager ? 'Quyền Quản lý kho' : 'Quyền Nhân viên kho'}
               </span>
+              <span className="text-slate-400 text-xs">• Nghiệp vụ tiếp nhận và nhập kho</span>
             </div>
-            <p className="text-sm text-slate-500 mt-1">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">
+              Quản lý Nhập kho
+            </h1>
+            <p className="text-slate-500 text-xs mt-1 max-w-3xl leading-relaxed">
               Xem lịch sử phiếu nhập kho, theo dõi tiến độ duyệt và kiểm soát lượng hàng vào các kho chi nhánh.
             </p>
           </div>
@@ -307,9 +302,9 @@ const ReceiptsPage = () => {
           {isStaff && (
             <button
               onClick={() => setShowCreateModal(true)}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium rounded-xl hover:from-purple-700 hover:to-indigo-700 shadow-md shadow-purple-500/20 active:scale-95 transition-all text-sm shrink-0"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-purple-700 hover:bg-purple-800 text-white font-semibold rounded-lg shadow-xs transition-colors text-xs shrink-0 whitespace-nowrap"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
               <span>Tạo phiếu nhập kho</span>
@@ -319,16 +314,16 @@ const ReceiptsPage = () => {
 
         {/* THÔNG BÁO THÀNH CÔNG / LỖI */}
         {successMsg && (
-          <div className="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-sm animate-fadeIn">
-            <svg className="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex items-center gap-3 p-3.5 bg-emerald-50 border border-emerald-200/80 text-emerald-800 rounded-xl text-xs">
+            <svg className="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
             <span className="font-medium">{successMsg}</span>
           </div>
         )}
         {error && (
-          <div className="flex items-center gap-3 p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-sm">
-            <svg className="w-5 h-5 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex items-center gap-3 p-3.5 bg-rose-50 border border-rose-200/80 text-rose-800 rounded-xl text-xs">
+            <svg className="w-4 h-4 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <span>{error}</span>
@@ -336,42 +331,42 @@ const ReceiptsPage = () => {
         )}
 
         {/* STATS TIỆN ÍCH */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
           <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs">
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Tổng phiếu nhập</span>
             <div className="mt-2 flex items-baseline justify-between">
-              <span className="text-2xl font-bold text-slate-800">{stats.total}</span>
+              <span className="text-2xl font-bold font-sans tabular-nums text-slate-900">{stats.total}</span>
               <span className="text-xs text-slate-400">tất cả phiếu</span>
             </div>
           </div>
-          <div className="bg-white p-4 rounded-xl border border-amber-200 bg-amber-50/20 shadow-xs">
-            <span className="text-xs font-medium text-amber-700 uppercase tracking-wider flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+          <div className="bg-white p-4 rounded-xl border border-amber-200/80 shadow-xs">
+            <span className="text-xs font-medium text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-amber-500"></span>
               Chờ duyệt
             </span>
             <div className="mt-2 flex items-baseline justify-between">
-              <span className="text-2xl font-bold text-amber-600">{stats.pending}</span>
-              <span className="text-xs text-amber-600/70">yêu cầu chờ</span>
+              <span className="text-2xl font-bold font-sans tabular-nums text-amber-700">{stats.pending}</span>
+              <span className="text-xs text-slate-400">yêu cầu chờ</span>
             </div>
           </div>
-          <div className="bg-white p-4 rounded-xl border border-emerald-200 bg-emerald-50/20 shadow-xs">
-            <span className="text-xs font-medium text-emerald-700 uppercase tracking-wider flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <div className="bg-white p-4 rounded-xl border border-emerald-200/80 shadow-xs">
+            <span className="text-xs font-medium text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
               Đã duyệt (Đã nhập)
             </span>
             <div className="mt-2 flex items-baseline justify-between">
-              <span className="text-2xl font-bold text-emerald-600">{stats.approved}</span>
-              <span className="text-xs text-emerald-600/70">thành công</span>
+              <span className="text-2xl font-bold font-sans tabular-nums text-emerald-700">{stats.approved}</span>
+              <span className="text-xs text-slate-400">thành công</span>
             </div>
           </div>
-          <div className="bg-white p-4 rounded-xl border border-rose-200 bg-rose-50/20 shadow-xs">
-            <span className="text-xs font-medium text-rose-700 uppercase tracking-wider flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-rose-500"></span>
+          <div className="bg-white p-4 rounded-xl border border-rose-200/80 shadow-xs">
+            <span className="text-xs font-medium text-rose-800 uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-rose-600"></span>
               Đã từ chối
             </span>
             <div className="mt-2 flex items-baseline justify-between">
-              <span className="text-2xl font-bold text-rose-600">{stats.rejected}</span>
-              <span className="text-xs text-rose-600/70">không duyệt</span>
+              <span className="text-2xl font-bold font-sans tabular-nums text-rose-700">{stats.rejected}</span>
+              <span className="text-xs text-slate-400">không duyệt</span>
             </div>
           </div>
         </div>
@@ -380,7 +375,7 @@ const ReceiptsPage = () => {
         <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
           <div className="flex-1 flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
-              <svg className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <input
@@ -388,13 +383,13 @@ const ReceiptsPage = () => {
                 placeholder="Tìm mã phiếu (PNK...), ghi chú, người tạo..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
+                className="w-full pl-9 pr-3.5 py-2 border border-slate-200/80 rounded-lg text-xs focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-600"
               />
             </div>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white text-slate-700 focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
+              className="px-3 py-2 border border-slate-200/80 rounded-lg text-xs bg-white text-slate-700 focus:outline-hidden focus:border-purple-600"
             >
               <option value="">Tất cả trạng thái</option>
               <option value="PENDING">Chờ duyệt</option>
@@ -404,7 +399,7 @@ const ReceiptsPage = () => {
             <select
               value={warehouseFilter}
               onChange={(e) => setWarehouseFilter(e.target.value)}
-              className="px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white text-slate-700 focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
+              className="px-3 py-2 border border-slate-200/80 rounded-lg text-xs bg-white text-slate-700 focus:outline-hidden focus:border-purple-600"
             >
               <option value="">Tất cả kho hàng</option>
               {formDataMeta.warehouses?.map((wh) => (
@@ -429,9 +424,9 @@ const ReceiptsPage = () => {
         </div>
 
         {/* BẢNG LỊCH SỬ PHIẾU NHẬP KHO (DÀNH CHO CẢ QUẢN LÝ VÀ NHÂN VIÊN) */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-            <h2 className="text-base font-semibold text-slate-800">
+        <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+          <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+            <h2 className="text-sm font-bold text-slate-800">
               Lịch sử phiếu nhập kho ({receipts.length} phiếu)
             </h2>
           </div>
@@ -446,29 +441,29 @@ const ReceiptsPage = () => {
             </div>
           ) : receipts.length === 0 ? (
             <div className="p-12 text-center">
-              <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-purple-50 flex items-center justify-center text-purple-600">
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <p className="text-slate-600 font-medium">Chưa có phiếu nhập kho nào</p>
-              <p className="text-slate-400 text-sm mt-1">
+              <p className="text-slate-700 font-semibold text-sm">Chưa có phiếu nhập kho nào</p>
+              <p className="text-slate-400 text-xs mt-1">
                 {isStaff ? 'Hãy bấm "Tạo phiếu nhập kho" để bắt đầu nhập hàng mới.' : 'Chưa có phiếu nhập nào được gửi lên.'}
               </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm text-slate-600">
-                <thead className="bg-slate-50/75 text-xs uppercase font-semibold text-slate-500 border-b border-slate-100">
+              <table className="w-full text-left text-xs text-slate-600">
+                <thead className="bg-slate-50/75 text-[11px] uppercase font-semibold text-slate-500 border-b border-slate-200/80 tracking-wider">
                   <tr>
-                    <th className="px-5 py-3.5">Mã phiếu</th>
-                    <th className="px-5 py-3.5">Ngày tạo</th>
-                    <th className="px-5 py-3.5">Kho nhập</th>
-                    <th className="px-5 py-3.5">Nhà cung cấp</th>
-                    <th className="px-5 py-3.5">Người lập (NV)</th>
-                    <th className="px-5 py-3.5 text-right">SL / Tổng tiền</th>
-                    <th className="px-5 py-3.5 text-center">Trạng thái</th>
-                    <th className="px-5 py-3.5 text-right">Thao tác</th>
+                    <th className="px-5 py-3 whitespace-nowrap">Mã phiếu</th>
+                    <th className="px-5 py-3 whitespace-nowrap">Ngày tạo</th>
+                    <th className="px-5 py-3 whitespace-nowrap">Kho nhập</th>
+                    <th className="px-5 py-3 whitespace-nowrap">Nhà cung cấp</th>
+                    <th className="px-5 py-3 whitespace-nowrap">Người lập (NV)</th>
+                    <th className="px-5 py-3 text-right whitespace-nowrap">SL / Tổng tiền</th>
+                    <th className="px-5 py-3 text-center whitespace-nowrap">Trạng thái</th>
+                    <th className="px-5 py-3 text-right whitespace-nowrap">Thao tác</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -476,27 +471,27 @@ const ReceiptsPage = () => {
                     const statusConfig = {
                       PENDING: {
                         label: 'Chờ duyệt',
-                        cls: 'bg-amber-50 text-amber-700 border-amber-200',
+                        cls: 'bg-amber-50 text-amber-800 border-amber-200/80',
                         dot: 'bg-amber-500',
                       },
                       APPROVED: {
                         label: 'Đã duyệt',
-                        cls: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-                        dot: 'bg-emerald-500',
+                        cls: 'bg-emerald-50 text-emerald-800 border-emerald-200/80',
+                        dot: 'bg-emerald-600',
                       },
                       REJECTED: {
                         label: 'Từ chối',
-                        cls: 'bg-rose-50 text-rose-700 border-rose-200',
-                        dot: 'bg-rose-500',
+                        cls: 'bg-rose-50 text-rose-800 border-rose-200/80',
+                        dot: 'bg-rose-600',
                       },
                     }[rc.status] || { label: rc.status, cls: 'bg-slate-50 text-slate-700', dot: 'bg-slate-400' };
 
                     return (
                       <tr key={rc.id} className="hover:bg-slate-50/60 transition-colors">
-                        <td className="px-5 py-4 font-mono font-semibold text-purple-700">
+                        <td className="px-5 py-3.5 font-sans font-bold text-purple-700 whitespace-nowrap">
                           {rc.receipt_code}
                         </td>
-                        <td className="px-5 py-4 text-xs text-slate-500">
+                        <td className="px-5 py-3.5 text-xs text-slate-500 whitespace-nowrap">
                           {new Date(rc.created_at).toLocaleDateString('vi-VN', {
                             day: '2-digit',
                             month: '2-digit',
@@ -505,36 +500,36 @@ const ReceiptsPage = () => {
                             minute: '2-digit',
                           })}
                         </td>
-                        <td className="px-5 py-4 font-medium text-slate-800">
+                        <td className="px-5 py-3.5 font-medium text-slate-800 whitespace-nowrap">
                           {rc.warehouse?.warehouse_name || 'N/A'}
                         </td>
-                        <td className="px-5 py-4 text-slate-600">
+                        <td className="px-5 py-3.5 text-slate-600 whitespace-nowrap">
                           {rc.supplier?.supplier_name || rc.supplier?.brand_name || 'Nhập nội bộ / Khác'}
                         </td>
-                        <td className="px-5 py-4 text-slate-700">
+                        <td className="px-5 py-3.5 text-slate-700 whitespace-nowrap">
                           <span className="font-medium">{rc.created_by?.full_name}</span>
                         </td>
-                        <td className="px-5 py-4 text-right">
-                          <div className="font-semibold text-slate-800">{rc.total_quantity} cái</div>
-                          <div className="text-xs text-slate-500">
+                        <td className="px-5 py-3.5 text-right whitespace-nowrap">
+                          <div className="font-sans font-bold tabular-nums text-slate-900">{rc.total_quantity} cái</div>
+                          <div className="text-xs text-slate-500 font-sans tabular-nums font-medium">
                             {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(rc.total_amount)}
                           </div>
                         </td>
-                        <td className="px-5 py-4 text-center">
+                        <td className="px-5 py-3.5 text-center whitespace-nowrap">
                           <span
-                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${statusConfig.cls}`}
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${statusConfig.cls}`}
                           >
                             <span className={`w-1.5 h-1.5 rounded-full ${statusConfig.dot}`}></span>
                             {statusConfig.label}
                           </span>
                         </td>
-                        <td className="px-5 py-4 text-right">
+                        <td className="px-5 py-3.5 text-right whitespace-nowrap">
                           <div className="flex items-center justify-end gap-1.5">
                             {/* Nút Xem chi tiết: CẢ QUẢN LÝ VÀ NHÂN VIÊN ĐỀU CÓ */}
                             <button
                               onClick={() => handleOpenDetail(rc)}
                               title="Xem chi tiết phiếu"
-                              className="p-1.5 text-slate-500 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                              className="p-1.5 text-slate-500 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -548,7 +543,7 @@ const ReceiptsPage = () => {
                                 <button
                                   onClick={() => handleOpenApprove(rc)}
                                   title="Duyệt phiếu nhập kho"
-                                  className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-lg shadow-xs transition-colors flex items-center gap-1"
+                                  className="px-2.5 py-1 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold rounded-lg shadow-xs transition-colors flex items-center gap-1"
                                 >
                                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -558,7 +553,7 @@ const ReceiptsPage = () => {
                                 <button
                                   onClick={() => handleOpenReject(rc)}
                                   title="Từ chối phiếu nhập"
-                                  className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-medium rounded-lg transition-colors flex items-center gap-1"
+                                  className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200/80 text-xs font-semibold rounded-lg transition-colors flex items-center gap-1"
                                 >
                                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -583,22 +578,20 @@ const ReceiptsPage = () => {
         {/* ============================================================ */}
         {showCreateModal && isStaff && (
           <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100 animate-fadeIn my-auto">
+            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-xl border border-slate-200 animate-fadeIn my-auto overflow-hidden">
               {/* Header Modal */}
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+              <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900">Tạo phiếu nhập kho mới</h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <h3 className="text-base font-bold">Tạo phiếu nhập kho mới</h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
                     Chức năng dành cho Nhân viên kho • Phiếu sẽ chuyển sang trạng thái "Chờ duyệt" gửi Quản lý
                   </p>
                 </div>
                 <button
                   onClick={() => setShowCreateModal(false)}
-                  className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
+                  className="p-1 rounded-lg hover:bg-white/10 text-white/80"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+                  ✕
                 </button>
               </div>
 
@@ -616,7 +609,7 @@ const ReceiptsPage = () => {
                         setNewReceiptData((prev) => ({ ...prev, warehouse_id: e.target.value }))
                       }
                       required
-                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-600"
                     >
                       <option value="">-- Chọn kho nhập --</option>
                       {formDataMeta.warehouses?.map((wh) => (
@@ -637,7 +630,7 @@ const ReceiptsPage = () => {
                       onChange={(e) =>
                         setNewReceiptData((prev) => ({ ...prev, supplier_id: e.target.value }))
                       }
-                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-600"
                     >
                       <option value="">-- Nhập nội bộ / Chọn NCC --</option>
                       {formDataMeta.suppliers?.map((sup) => (
@@ -659,7 +652,7 @@ const ReceiptsPage = () => {
                       value={newReceiptData.notes}
                       onChange={(e) => setNewReceiptData((prev) => ({ ...prev, notes: e.target.value }))}
                       required
-                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-600"
                     />
                   </div>
                 </div>
@@ -667,15 +660,15 @@ const ReceiptsPage = () => {
                 {/* DANH SÁCH MẶT HÀNG NHẬP */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-bold text-slate-800 uppercase tracking-wider">
+                    <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
                       Danh sách mặt hàng nhập ({newReceiptData.items.length})
                     </h4>
                     <button
                       type="button"
                       onClick={handleAddItemRow}
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-600 hover:text-purple-700 bg-purple-50 hover:bg-purple-100 px-3 py-1.5 rounded-lg transition-colors"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-700 hover:text-purple-800 bg-purple-50 hover:bg-purple-100 px-3 py-1.5 rounded-lg transition-colors border border-purple-200/80"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                       </svg>
                       Thêm sản phẩm
@@ -705,7 +698,7 @@ const ReceiptsPage = () => {
                                   value={row.variant_id}
                                   onChange={(e) => handleItemChange(idx, 'variant_id', e.target.value)}
                                   required
-                                  className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs bg-white focus:ring-1 focus:ring-purple-500"
+                                  className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs bg-white focus:ring-1 focus:ring-purple-600"
                                 >
                                   <option value="">-- Chọn sản phẩm & SKU --</option>
                                   {formDataMeta.variants?.map((v) => (
@@ -722,7 +715,7 @@ const ReceiptsPage = () => {
                                   value={row.quantity}
                                   onChange={(e) => handleItemChange(idx, 'quantity', e.target.value)}
                                   required
-                                  className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs font-semibold text-center focus:ring-1 focus:ring-purple-500"
+                                  className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs font-semibold text-center focus:ring-1 focus:ring-purple-600"
                                 />
                               </td>
                               <td className="p-2">
@@ -733,7 +726,7 @@ const ReceiptsPage = () => {
                                   value={row.unit_price}
                                   onChange={(e) => handleItemChange(idx, 'unit_price', e.target.value)}
                                   required
-                                  className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs font-mono text-right focus:ring-1 focus:ring-purple-500"
+                                  className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs font-sans font-semibold tabular-nums text-right focus:ring-1 focus:ring-purple-600"
                                 />
                               </td>
                               <td className="p-2">
@@ -742,10 +735,10 @@ const ReceiptsPage = () => {
                                   placeholder="Kệ A-01"
                                   value={row.shelf_location || ''}
                                   onChange={(e) => handleItemChange(idx, 'shelf_location', e.target.value)}
-                                  className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs text-center uppercase font-mono focus:ring-1 focus:ring-purple-500"
+                                  className="w-full px-2 py-1.5 border border-slate-200 rounded text-xs text-center uppercase font-bold text-purple-700 focus:ring-1 focus:ring-purple-600"
                                 />
                               </td>
-                              <td className="p-2 text-right font-semibold text-slate-800 font-mono">
+                              <td className="p-2 text-right font-sans font-bold tabular-nums text-slate-800">
                                 {new Intl.NumberFormat('vi-VN').format(lineTotal)} đ
                               </td>
                               <td className="p-2 text-center">
@@ -771,10 +764,10 @@ const ReceiptsPage = () => {
                   <div className="bg-purple-50/50 border border-purple-100 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
                     <div className="text-xs text-purple-900 font-medium">
                       Tổng số mặt hàng: <span className="font-bold">{newReceiptData.items.length}</span> • Tổng số lượng nhập:{' '}
-                      <span className="font-bold text-sm text-purple-700">{formCalculations.totalQty} cái</span>
+                      <span className="font-sans font-bold text-sm text-purple-700 tabular-nums">{formCalculations.totalQty} cái</span>
                     </div>
                     <div className="text-sm font-bold text-slate-900">
-                      Tổng tiền: <span className="text-lg text-purple-700 font-mono">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(formCalculations.totalAmt)}</span>
+                      Tổng tiền: <span className="text-lg text-purple-700 font-sans font-bold tabular-nums">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(formCalculations.totalAmt)}</span>
                     </div>
                   </div>
                 </div>
@@ -791,7 +784,7 @@ const ReceiptsPage = () => {
                   <button
                     type="submit"
                     disabled={actionLoading}
-                    className="px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl text-sm font-medium shadow-md shadow-purple-500/20 disabled:opacity-50 transition-all flex items-center gap-2"
+                    className="px-5 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-sm font-semibold shadow-xs disabled:opacity-50 transition-colors flex items-center gap-2"
                   >
                     {actionLoading && (
                       <svg className="w-4 h-4 animate-spin text-white" fill="none" viewBox="0 0 24 24">
@@ -812,27 +805,25 @@ const ReceiptsPage = () => {
         {/* ============================================================ */}
         {showDetailModal && selectedReceipt && (
           <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100 animate-fadeIn my-auto">
+            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-xl border border-slate-200 animate-fadeIn my-auto overflow-hidden">
               {/* Header */}
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+              <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-bold text-slate-900">Chi tiết phiếu nhập:</h3>
-                    <span className="font-mono font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">
+                    <h3 className="text-base font-bold">Chi tiết phiếu nhập:</h3>
+                    <span className="font-sans font-bold text-purple-300 bg-white/10 px-2 py-0.5 rounded border border-white/20">
                       {selectedReceipt.receipt_code}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <p className="text-xs text-slate-400 mt-0.5">
                     Tạo ngày {new Date(selectedReceipt.created_at).toLocaleString('vi-VN')}
                   </p>
                 </div>
                 <button
                   onClick={() => setShowDetailModal(false)}
-                  className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
+                  className="p-1 rounded-lg hover:bg-white/10 text-white/80"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+                  ✕
                 </button>
               </div>
 
@@ -943,31 +934,31 @@ const ReceiptsPage = () => {
                       <tbody className="divide-y divide-slate-100">
                         {selectedReceipt.items?.map((item, idx) => (
                           <tr key={item.id} className="hover:bg-slate-50/50">
-                            <td className="px-4 py-3 text-slate-400 font-mono">{idx + 1}</td>
+                            <td className="px-4 py-3 text-slate-400 font-sans tabular-nums">{idx + 1}</td>
                             <td className="px-4 py-3">
                               <div className="font-semibold text-slate-800">
                                 {item.variant?.product?.product_name || 'N/A'}
                               </div>
-                              <div className="text-xs text-purple-600 font-mono">
+                              <div className="text-xs text-purple-700 font-medium">
                                 {item.variant?.product?.product_code}
                               </div>
                             </td>
                             <td className="px-4 py-3">
-                              <span className="font-mono text-slate-700">{item.variant?.sku}</span>
+                              <span className="font-sans font-medium text-slate-700">{item.variant?.sku}</span>
                               <div className="text-slate-400 text-xs">
                                 Màu: {item.variant?.color} | Size: {item.variant?.size}
                               </div>
                             </td>
-                            <td className="px-4 py-3 text-center font-mono font-medium text-purple-700">
+                            <td className="px-4 py-3 text-center font-bold text-purple-700">
                               {item.shelf_location || 'A-01'}
                             </td>
-                            <td className="px-4 py-3 text-right font-bold text-slate-900">
+                            <td className="px-4 py-3 text-right font-sans font-bold tabular-nums text-slate-900">
                               {item.quantity}
                             </td>
-                            <td className="px-4 py-3 text-right font-mono">
+                            <td className="px-4 py-3 text-right font-sans font-medium tabular-nums">
                               {new Intl.NumberFormat('vi-VN').format(item.unit_price)} đ
                             </td>
-                            <td className="px-4 py-3 text-right font-mono font-bold text-slate-900">
+                            <td className="px-4 py-3 text-right font-sans font-bold tabular-nums text-slate-900">
                               {new Intl.NumberFormat('vi-VN').format(item.total_price)} đ
                             </td>
                           </tr>
@@ -979,10 +970,10 @@ const ReceiptsPage = () => {
                   {/* Summary Footer */}
                   <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 flex items-center justify-between">
                     <span className="text-sm font-semibold text-slate-700">
-                      Tổng số lượng: <span className="text-purple-700">{selectedReceipt.total_quantity} sản phẩm</span>
+                      Tổng số lượng: <span className="text-purple-700 font-sans font-bold tabular-nums">{selectedReceipt.total_quantity} sản phẩm</span>
                     </span>
                     <span className="text-sm font-semibold text-slate-700">
-                      Tổng tiền: <span className="text-lg font-bold text-purple-700 font-mono">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(selectedReceipt.total_amount)}</span>
+                      Tổng tiền: <span className="text-lg font-bold text-purple-700 font-sans tabular-nums">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(selectedReceipt.total_amount)}</span>
                     </span>
                   </div>
                 </div>
@@ -1003,13 +994,13 @@ const ReceiptsPage = () => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleOpenReject(selectedReceipt)}
-                      className="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-sm font-medium transition-colors"
+                      className="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200/80 rounded-xl text-sm font-semibold transition-colors"
                     >
                       Từ chối phiếu
                     </button>
                     <button
                       onClick={() => handleOpenApprove(selectedReceipt)}
-                      className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-medium shadow-md shadow-emerald-500/20 transition-colors"
+                      className="px-5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-sm font-semibold shadow-xs transition-colors"
                     >
                       Duyệt & Nhập vào kho
                     </button>
@@ -1025,28 +1016,28 @@ const ReceiptsPage = () => {
         {/* ============================================================ */}
         {showApproveModal && isManager && receiptToProcess && (
           <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-fadeIn">
-              <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 animate-fadeIn">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/80 flex items-center justify-center mb-4">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Xác nhận duyệt phiếu nhập kho?</h3>
-              <p className="text-sm text-slate-600 mt-2">
+              <h3 className="text-base font-bold text-slate-900">Xác nhận duyệt phiếu nhập kho?</h3>
+              <p className="text-xs text-slate-600 mt-1">
                 Bạn đang duyệt phiếu nhập kho{' '}
-                <span className="font-mono font-bold text-purple-700">{receiptToProcess.receipt_code}</span>.
+                <span className="font-sans font-bold text-purple-700">{receiptToProcess.receipt_code}</span>.
               </p>
               <div className="mt-3 p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-600 space-y-1">
                 <div>• Kho nhập: <span className="font-semibold">{receiptToProcess.warehouse?.warehouse_name}</span></div>
-                <div>• Tổng số lượng: <span className="font-semibold text-emerald-600">{receiptToProcess.total_quantity} sản phẩm</span></div>
+                <div>• Tổng số lượng: <span className="font-sans font-bold tabular-nums text-emerald-700">{receiptToProcess.total_quantity} sản phẩm</span></div>
                 <div>• Thao tác này sẽ <span className="font-bold text-emerald-700">tự động cộng dồn số lượng tồn kho</span> tại kho đích.</div>
               </div>
 
-              <div className="mt-6 flex items-center justify-end gap-3">
+              <div className="mt-6 flex items-center justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setShowApproveModal(false)}
-                  className="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-sm hover:bg-slate-50 transition-colors font-medium"
+                  className="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-xs hover:bg-slate-50 transition-colors font-medium"
                 >
                   Hủy
                 </button>
@@ -1054,7 +1045,7 @@ const ReceiptsPage = () => {
                   type="button"
                   disabled={actionLoading}
                   onClick={handleConfirmApprove}
-                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-medium shadow-md shadow-emerald-500/20 disabled:opacity-50 transition-colors flex items-center gap-2"
+                  className="px-5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-semibold shadow-xs disabled:opacity-50 transition-colors flex items-center gap-2"
                 >
                   {actionLoading && (
                     <svg className="w-4 h-4 animate-spin text-white" fill="none" viewBox="0 0 24 24">
@@ -1074,15 +1065,15 @@ const ReceiptsPage = () => {
         {/* ============================================================ */}
         {showRejectModal && isManager && receiptToProcess && (
           <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-fadeIn">
-              <div className="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mb-4">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 animate-fadeIn">
+              <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-700 border border-rose-200/80 flex items-center justify-center mb-4">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Từ chối duyệt phiếu nhập kho</h3>
-              <p className="text-sm text-slate-600 mt-1">
-                Phiếu <span className="font-mono font-bold text-purple-700">{receiptToProcess.receipt_code}</span> sẽ bị từ chối và không cộng hàng vào tồn kho.
+              <h3 className="text-base font-bold text-slate-900">Từ chối duyệt phiếu nhập kho</h3>
+              <p className="text-xs text-slate-600 mt-1">
+                Phiếu <span className="font-sans font-bold text-purple-700">{receiptToProcess.receipt_code}</span> sẽ bị từ chối và không cộng hàng vào tồn kho.
               </p>
 
               <div className="mt-4">
@@ -1094,15 +1085,15 @@ const ReceiptsPage = () => {
                   placeholder="Ví dụ: Sai số lượng thực tế, sản phẩm bị lỗi bao bì, sai đơn giá nhập..."
                   value={rejectionReason}
                   onChange={(e) => setRejectionReason(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs focus:outline-hidden focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
                 ></textarea>
               </div>
 
-              <div className="mt-6 flex items-center justify-end gap-3">
+              <div className="mt-6 flex items-center justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setShowRejectModal(false)}
-                  className="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-sm hover:bg-slate-50 transition-colors font-medium"
+                  className="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-xs hover:bg-slate-50 transition-colors font-medium"
                 >
                   Hủy
                 </button>
@@ -1110,7 +1101,7 @@ const ReceiptsPage = () => {
                   type="button"
                   disabled={actionLoading}
                   onClick={handleConfirmReject}
-                  className="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-medium shadow-md shadow-rose-500/20 disabled:opacity-50 transition-colors flex items-center gap-2"
+                  className="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold shadow-xs disabled:opacity-50 transition-colors flex items-center gap-2"
                 >
                   {actionLoading && (
                     <svg className="w-4 h-4 animate-spin text-white" fill="none" viewBox="0 0 24 24">

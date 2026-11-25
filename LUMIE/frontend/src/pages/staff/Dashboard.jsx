@@ -9,24 +9,24 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const StatCard = ({ title, value, subtitle, icon, variant = 'purple' }) => {
   const valueColors = {
-    purple: 'text-[#6D28D9]',
-    indigo: 'text-[#4F46E5]',
-    emerald: 'text-[#059669]',
+    purple: 'text-purple-700',
+    indigo: 'text-indigo-600',
+    emerald: 'text-emerald-600',
   };
 
   return (
-    <div className="bg-white rounded-xl border border-purple-50/80 p-4 sm:p-5 shadow-[0_4px_16px_rgba(88,28,135,0.04)] hover:shadow-[0_8px_24px_rgba(88,28,135,0.08)] transition-all duration-200">
+    <div className="bg-white rounded-xl border border-slate-200/80 p-4 sm:p-5 shadow-xs transition-all duration-200">
       <div className="flex items-center justify-between mb-2">
-        <p className="text-xs font-semibold text-[#1E1B4B]">{title}</p>
-        <div className="w-7 h-7 rounded-lg bg-purple-50 text-[#7C3AED] flex items-center justify-center shrink-0">
+        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{title}</p>
+        <div className="w-8 h-8 rounded-lg bg-slate-50 text-slate-600 border border-slate-200/60 flex items-center justify-center shrink-0">
           {icon}
         </div>
       </div>
-      <p className={`text-xl sm:text-2xl font-bold tracking-tight ${valueColors[variant] || valueColors.purple} truncate`}>
+      <p className={`text-xl sm:text-2xl font-bold tracking-tight ${valueColors[variant] || valueColors.purple} truncate tabular-nums`}>
         {value ?? '—'}
       </p>
       {subtitle && (
-        <p className="text-[11px] font-medium text-gray-500 mt-1 truncate">{subtitle}</p>
+        <p className="text-[11px] font-medium text-slate-500 mt-1 truncate">{subtitle}</p>
       )}
     </div>
   );
@@ -41,25 +41,28 @@ const StaffDashboard = () => {
 
   return (
     <MainLayout>
-      <div className="w-full transition-all duration-300">
-        {/* Page Header (Thu nhỏ vừa vặn) */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5 sm:mb-6">
+      <div className="w-full space-y-6 transition-all duration-200">
+        {/* Page Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-slate-200/80">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <h1 className="text-xl sm:text-2xl font-bold text-[#1E1B4B]">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">
                 Xin chào, {user?.full_name?.split(' ').pop() || 'Nhân viên'}
               </h1>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200/60">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                 Đang trực ca
               </span>
             </div>
+            <p className="text-xs text-slate-500">
+              Trang tổng quan vận hành tác vụ kho và tra cứu nhanh dành cho Nhân viên kho.
+            </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
             <Link
               to="/staff/products"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#7C3AED] hover:bg-[#6D28D9] text-white text-xs font-semibold shadow-xs shadow-purple-500/20 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -69,9 +72,9 @@ const StaffDashboard = () => {
 
             <Link
               to="/profile/change-password"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-purple-50/70 text-[#6D28D9] border border-purple-200 text-xs font-medium shadow-2xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold shadow-2xs transition-all cursor-pointer"
             >
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
               <span>Đổi mật khẩu</span>
@@ -81,7 +84,7 @@ const StaffDashboard = () => {
 
         {/* Cảnh báo đổi mật khẩu lần đầu (gọn gàng, tinh tế) */}
         {user?.must_change_password && (
-          <div className="bg-amber-50/90 border border-amber-200/80 rounded-xl p-3.5 sm:p-4 mb-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="bg-amber-50/90 border border-amber-200/80 rounded-xl p-3.5 sm:p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-start sm:items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -104,8 +107,8 @@ const StaffDashboard = () => {
           </div>
         )}
 
-        {/* 3 Thẻ thống kê tổng quan (Kích thước nhỏ gọn, vừa mắt) */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 mb-5 sm:mb-6">
+        {/* 3 Thẻ thống kê tổng quan */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4">
           <StatCard
             title="Vai trò tài khoản"
             value="Nhân viên kho"
@@ -141,21 +144,21 @@ const StaffDashboard = () => {
           />
         </div>
 
-        {/* Khung hồ sơ nhân viên chi tiết (Gọn gàng, thanh thoát) */}
-        <div className="bg-white rounded-xl border border-purple-50/80 p-4 sm:p-5 shadow-[0_4px_16px_rgba(88,28,135,0.04)] mb-5 sm:mb-6">
-          <div className="flex items-center justify-between border-b border-gray-100/80 pb-3 mb-4">
+        {/* Khung hồ sơ nhân viên chi tiết */}
+        <div className="bg-white rounded-xl border border-slate-200/80 p-4 sm:p-5 shadow-xs">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
             <div>
-              <h2 className="text-sm sm:text-base font-bold text-[#1E1B4B]">Hồ sơ nhân sự</h2>
-              <p className="text-[11px] text-gray-400 mt-0.5">Thông tin định danh và phân công làm việc tại chuỗi Lumié</p>
+              <h2 className="text-sm sm:text-base font-bold text-slate-800">Hồ sơ nhân sự</h2>
+              <p className="text-[11px] text-slate-400 mt-0.5">Thông tin định danh và phân công làm việc tại chuỗi Lumié</p>
             </div>
-            <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-semibold bg-purple-50 text-[#6D28D9] border border-purple-100/70">
+            <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
               ID: #{user?.id || '—'}
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4">
-            {/* Avatar chữ cái đầu vừa vặn */}
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#7C3AED] to-[#4C1D95] text-white flex items-center justify-center font-bold text-lg shadow-md shadow-purple-500/20 shrink-0">
+            {/* Avatar chữ cái đầu */}
+            <div className="w-12 h-12 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold text-lg shrink-0">
               {userInitial}
             </div>
             
@@ -191,14 +194,14 @@ const StaffDashboard = () => {
         </div>
 
         {/* Thao tác nhanh cho nhân viên kho */}
-        <div className="bg-white rounded-xl border border-purple-50/80 p-4 sm:p-5 shadow-[0_4px_16px_rgba(88,28,135,0.04)] mb-5">
+        <div className="bg-white rounded-xl border border-slate-200/80 p-4 sm:p-5 shadow-xs mb-5">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-sm sm:text-base font-bold text-[#1E1B4B]">Thao tác nhanh</h2>
-              <p className="text-[11px] text-gray-400 mt-0.5">Lối tắt truy cập các tác vụ kho hàng ngày của nhân viên</p>
+              <h2 className="text-sm sm:text-base font-bold text-slate-800">Thao tác nhanh</h2>
+              <p className="text-[11px] text-slate-400 mt-0.5">Lối tắt truy cập các tác vụ kho hàng ngày của nhân viên</p>
             </div>
-            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-purple-50 text-[#6D28D9] border border-purple-200/60">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#7C3AED]"></span>
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-purple-50 text-purple-700 border border-purple-200/60">
+              <span className="w-1.5 h-1.5 rounded-full bg-purple-600"></span>
               5 tác vụ vận hành
             </span>
           </div>
@@ -207,23 +210,23 @@ const StaffDashboard = () => {
             {/* 1. Tra cứu sản phẩm */}
             <Link
               to="/staff/products"
-              className="group flex items-start gap-3 p-3 rounded-xl border border-purple-100/70 bg-white hover:bg-gradient-to-br hover:from-white hover:to-purple-50/40 hover:border-purple-300 shadow-2xs hover:shadow-xs transition-all duration-200"
+              className="group flex items-start gap-3 p-3 rounded-xl border border-slate-200/80 bg-white hover:bg-slate-50 hover:border-slate-300 shadow-2xs transition-all duration-200"
             >
-              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#1E1B4B] to-[#4338CA] text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+              <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 border border-slate-200 flex items-center justify-center shrink-0 group-hover:text-purple-700 transition-colors">
                 <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-1 mb-0.5">
-                  <h3 className="text-xs sm:text-sm font-bold text-[#1E1B4B] group-hover:text-[#6D28D9] transition-colors whitespace-nowrap">
+                  <h3 className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-purple-700 transition-colors whitespace-nowrap">
                     Tra cứu sản phẩm
                   </h3>
-                  <svg className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#6D28D9] group-hover:translate-x-0.5 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 text-slate-400 group-hover:text-purple-700 group-hover:translate-x-0.5 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
-                <p className="text-[11px] text-gray-500 line-clamp-1">
+                <p className="text-[11px] text-slate-500 line-clamp-1">
                   Tìm kiếm vị trí kệ, tồn kho & mã vạch
                 </p>
               </div>
@@ -232,23 +235,23 @@ const StaffDashboard = () => {
             {/* 2. Tạo phiếu nhập kho */}
             <Link
               to="/inbound/receipts"
-              className="group flex items-start gap-3 p-3 rounded-xl border border-purple-100/70 bg-white hover:bg-gradient-to-br hover:from-white hover:to-purple-50/40 hover:border-purple-300 shadow-2xs hover:shadow-xs transition-all duration-200"
+              className="group flex items-start gap-3 p-3 rounded-xl border border-slate-200/80 bg-white hover:bg-slate-50 hover:border-slate-300 shadow-2xs transition-all duration-200"
             >
-              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#0284C7] to-[#0EA5E9] text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+              <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-700 border border-blue-200/60 flex items-center justify-center shrink-0 transition-colors">
                 <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20" />
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-1 mb-0.5">
-                  <h3 className="text-xs sm:text-sm font-bold text-[#1E1B4B] group-hover:text-[#6D28D9] transition-colors whitespace-nowrap">
+                  <h3 className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-purple-700 transition-colors whitespace-nowrap">
                     Tạo phiếu nhập kho
                   </h3>
-                  <svg className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#6D28D9] group-hover:translate-x-0.5 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 text-slate-400 group-hover:text-purple-700 group-hover:translate-x-0.5 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
-                <p className="text-[11px] text-gray-500 line-clamp-1">
+                <p className="text-[11px] text-slate-500 line-clamp-1">
                   Lập phiếu nhập hàng từ nhà cung cấp
                 </p>
               </div>
@@ -257,23 +260,23 @@ const StaffDashboard = () => {
             {/* 3. Tạo phiếu xuất & chuyển kho */}
             <Link
               to="/outbound"
-              className="group flex items-start gap-3 p-3 rounded-xl border border-purple-100/70 bg-white hover:bg-gradient-to-br hover:from-white hover:to-purple-50/40 hover:border-purple-300 shadow-2xs hover:shadow-xs transition-all duration-200"
+              className="group flex items-start gap-3 p-3 rounded-xl border border-slate-200/80 bg-white hover:bg-slate-50 hover:border-slate-300 shadow-2xs transition-all duration-200"
             >
-              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#EA580C] to-[#F97316] text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+              <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-700 border border-amber-200/60 flex items-center justify-center shrink-0 transition-colors">
                 <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-1 mb-0.5">
-                  <h3 className="text-xs sm:text-sm font-bold text-[#1E1B4B] group-hover:text-[#6D28D9] transition-colors whitespace-nowrap">
+                  <h3 className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-purple-700 transition-colors whitespace-nowrap">
                     Xuất & Điều chuyển
                   </h3>
-                  <svg className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#6D28D9] group-hover:translate-x-0.5 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 text-slate-400 group-hover:text-purple-700 group-hover:translate-x-0.5 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
-                <p className="text-[11px] text-gray-500 line-clamp-1">
+                <p className="text-[11px] text-slate-500 line-clamp-1">
                   Lập phiếu xuất kho & chuyển giữa các kho
                 </p>
               </div>
@@ -282,23 +285,23 @@ const StaffDashboard = () => {
             {/* 4. Theo dõi tồn kho */}
             <Link
               to="/inventory"
-              className="group flex items-start gap-3 p-3 rounded-xl border border-purple-100/70 bg-white hover:bg-gradient-to-br hover:from-white hover:to-purple-50/40 hover:border-purple-300 shadow-2xs hover:shadow-xs transition-all duration-200"
+              className="group flex items-start gap-3 p-3 rounded-xl border border-slate-200/80 bg-white hover:bg-slate-50 hover:border-slate-300 shadow-2xs transition-all duration-200"
             >
-              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#059669] to-[#10B981] text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+              <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200/60 flex items-center justify-center shrink-0 transition-colors">
                 <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-1 mb-0.5">
-                  <h3 className="text-xs sm:text-sm font-bold text-[#1E1B4B] group-hover:text-[#6D28D9] transition-colors whitespace-nowrap">
+                  <h3 className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-purple-700 transition-colors whitespace-nowrap">
                     Theo dõi tồn kho
                   </h3>
-                  <svg className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#6D28D9] group-hover:translate-x-0.5 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 text-slate-400 group-hover:text-purple-700 group-hover:translate-x-0.5 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
-                <p className="text-[11px] text-gray-500 line-clamp-1">
+                <p className="text-[11px] text-slate-500 line-clamp-1">
                   Xem số lượng tồn kho và toàn hệ thống
                 </p>
               </div>
@@ -307,23 +310,23 @@ const StaffDashboard = () => {
             {/* 5. Nhập kết quả kiểm kê */}
             <Link
               to="/audits"
-              className="group flex items-start gap-3 p-3 rounded-xl border border-purple-100/70 bg-white hover:bg-gradient-to-br hover:from-white hover:to-purple-50/40 hover:border-purple-300 shadow-2xs hover:shadow-xs transition-all duration-200"
+              className="group flex items-start gap-3 p-3 rounded-xl border border-slate-200/80 bg-white hover:bg-slate-50 hover:border-slate-300 shadow-2xs transition-all duration-200"
             >
-              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#7C3AED] to-[#A855F7] text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+              <div className="w-9 h-9 rounded-lg bg-purple-50 text-purple-700 border border-purple-200/60 flex items-center justify-center shrink-0 transition-colors">
                 <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-1 mb-0.5">
-                  <h3 className="text-xs sm:text-sm font-bold text-[#1E1B4B] group-hover:text-[#6D28D9] transition-colors whitespace-nowrap">
+                  <h3 className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-purple-700 transition-colors whitespace-nowrap">
                     Kiểm kê tồn kho
                   </h3>
-                  <svg className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#6D28D9] group-hover:translate-x-0.5 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 text-slate-400 group-hover:text-purple-700 group-hover:translate-x-0.5 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
-                <p className="text-[11px] text-gray-500 line-clamp-1">
+                <p className="text-[11px] text-slate-500 line-clamp-1">
                   Nhập số lượng kiểm đếm thực tế
                 </p>
               </div>

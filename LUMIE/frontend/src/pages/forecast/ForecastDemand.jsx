@@ -302,6 +302,22 @@ const ForecastDemand = () => {
       const res = await forecastService.generateSampleData(12);
       setUploadResult(res.data);
       showToast(res.message || 'Khởi tạo dữ liệu mẫu 12 tháng thành công!');
+
+      // Tự động tải file CSV về máy khi sinh dữ liệu 12 tháng
+      const csvStr = res?.data?.csvContent || res?.csvContent;
+      if (csvStr) {
+        const filename = res?.data?.filename || res?.filename || `du_lieu_ban_hang_12_thang_${new Date().toISOString().slice(0, 10)}.csv`;
+        const blob = new Blob([csvStr], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
+
       fetchSalesSummary();
       fetchSalesList();
       if (forecastFilter.product_id) runForecast();
@@ -337,11 +353,11 @@ const ForecastDemand = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-6 max-w-7xl mx-auto pb-12">
+      <div className="space-y-6 w-full pb-12 transition-all duration-200">
         {/* Toast thông báo */}
         {toast.show && (
           <div
-            className={`fixed top-5 right-5 z-50 px-4 py-3 rounded-xl shadow-xl border text-sm font-medium flex items-center gap-2 transition-all duration-300 ${
+            className={`fixed top-5 right-5 z-50 px-4 py-3 rounded-xl shadow-xl border text-xs font-medium flex items-center gap-2 transition-all duration-300 ${
               toast.type === 'error'
                 ? 'bg-rose-50 border-rose-200 text-rose-700'
                 : 'bg-emerald-50 border-emerald-200 text-emerald-800'
@@ -353,77 +369,87 @@ const ForecastDemand = () => {
         )}
 
         {/* HEADER & TABS NAVIGATION */}
-        <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-800 p-6 rounded-2xl text-white shadow-md">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 text-purple-200 text-xs font-semibold uppercase tracking-wider mb-2 border border-purple-400/30">
-                <span>🤖</span>
-                <span>Epic 4.1: AI Demand Forecasting</span>
-              </div>
-              <h1 className="text-2xl font-bold tracking-tight">Dự báo nhu cầu bằng AI</h1>
-              <p className="text-purple-200 text-xs mt-1 max-w-2xl">
-                Mô hình chuỗi thời gian phân cấp Holt-Winters kết hợp phân rã mùa vụ, phân bổ biến thể bằng Largest Remainder Method và kiểm định ngược Backtesting.
-              </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200/80">
+                Thuật toán Chuỗi thời gian AI
+              </span>
+              <span className="text-slate-400 text-xs">• US-34 / US-35 / US-36</span>
             </div>
-
-            {/* Quick action buttons */}
-            <div className="flex items-center gap-2 shrink-0">
-              <button
-                onClick={handleDownloadTemplate}
-                className="px-3.5 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all"
-                title="Tải mẫu CSV chuẩn"
-              >
-                <span>📥</span>
-                <span>Mẫu CSV</span>
-              </button>
-              <button
-                onClick={handleGenerateSampleData}
-                disabled={sampleGenerating}
-                className="px-4 py-2 bg-purple-500 hover:bg-purple-600 disabled:opacity-50 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-all"
-                title="Khởi tạo dữ liệu mẫu 12 tháng chuẩn"
-              >
-                <span>{sampleGenerating ? '⏳' : '⚡'}</span>
-                <span>{sampleGenerating ? 'Đang tạo...' : 'Nạp mẫu 12 tháng'}</span>
-              </button>
-            </div>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">Dự báo nhu cầu bằng AI</h1>
+            <p className="text-slate-500 text-xs mt-1 max-w-3xl leading-relaxed">
+              Mô hình chuỗi thời gian phân cấp Holt-Winters kết hợp phân rã mùa vụ, phân bổ biến thể bằng Largest Remainder Method và kiểm định ngược Backtesting.
+            </p>
           </div>
 
-          {/* TAB HEADERS */}
-          <div className="flex items-center gap-2 mt-6 pt-4 border-t border-purple-700/60 overflow-x-auto">
+          {/* Quick action buttons */}
+          <div className="flex items-center gap-2.5 shrink-0">
             <button
-              onClick={() => setActiveTab('forecast')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shrink-0 ${
-                activeTab === 'forecast'
-                  ? 'bg-white text-purple-900 shadow-md'
-                  : 'text-purple-200 hover:bg-white/10'
-              }`}
+              onClick={handleDownloadTemplate}
+              className="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer"
+              title="Tải mẫu CSV chuẩn"
             >
-              <span>📈</span>
-              <span>US-35: Dự báo SKU & Biến thể</span>
+              <svg className="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <span>Mẫu CSV</span>
             </button>
             <button
-              onClick={() => setActiveTab('sales-data')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shrink-0 ${
-                activeTab === 'sales-data'
-                  ? 'bg-white text-purple-900 shadow-md'
-                  : 'text-purple-200 hover:bg-white/10'
-              }`}
+              onClick={handleGenerateSampleData}
+              disabled={sampleGenerating}
+              className="px-4 py-2 bg-purple-700 hover:bg-purple-800 disabled:opacity-50 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+              title="Khởi tạo dữ liệu mẫu 12 tháng chuẩn"
             >
-              <span>📁</span>
-              <span>US-34: Dữ liệu bán hàng lịch sử</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('backtest')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shrink-0 ${
-                activeTab === 'backtest'
-                  ? 'bg-white text-purple-900 shadow-md'
-                  : 'text-purple-200 hover:bg-white/10'
-              }`}
-            >
-              <span>🎯</span>
-              <span>US-36: Độ chính xác & Backtesting</span>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <span>{sampleGenerating ? 'Đang tạo...' : 'Nạp mẫu 12 tháng'}</span>
             </button>
           </div>
+        </div>
+
+        {/* TAB HEADERS */}
+        <div className="flex items-center gap-2 border-b border-slate-200/80 pb-2 overflow-x-auto">
+          <button
+            onClick={() => setActiveTab('forecast')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 shrink-0 cursor-pointer ${
+              activeTab === 'forecast'
+                ? 'bg-slate-800 text-white shadow-xs'
+                : 'text-slate-600 hover:bg-slate-100'
+            }`}
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
+            <span>Dự báo SKU & Biến thể</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('sales-data')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 shrink-0 cursor-pointer ${
+              activeTab === 'sales-data'
+                ? 'bg-slate-800 text-white shadow-xs'
+                : 'text-slate-600 hover:bg-slate-100'
+            }`}
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+            </svg>
+            <span>Dữ liệu bán hàng lịch sử</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('backtest')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 shrink-0 cursor-pointer ${
+              activeTab === 'backtest'
+                ? 'bg-slate-800 text-white shadow-xs'
+                : 'text-slate-600 hover:bg-slate-100'
+            }`}
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Độ chính xác & Backtesting</span>
+          </button>
         </div>
 
         {/* ============================================================

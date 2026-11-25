@@ -16,25 +16,18 @@ import MainLayout from '../../layouts/MainLayout';
 import warehouseService from '../../services/warehouseService';
 
 const StatCard = ({ title, value, subtitle, icon, variant = 'purple' }) => {
-  const valueColors = {
-    purple: 'text-[#6D28D9]',
-    emerald: 'text-emerald-600',
-    amber: 'text-amber-600',
-    indigo: 'text-indigo-600',
-  };
-
   return (
-    <div className="bg-white rounded-2xl border border-purple-50 p-4 sm:p-5 shadow-[0_4px_20px_rgba(88,28,135,0.04)] hover:shadow-[0_8px_25px_rgba(88,28,135,0.08)] transition-all">
+    <div className="card-base p-4 sm:p-5 border border-slate-200/80 rounded-xl bg-white transition-all hover:border-slate-300">
       <div className="flex items-center justify-between mb-2">
-        <p className="text-xs font-semibold text-gray-500">{title}</p>
-        <div className="w-8 h-8 rounded-xl bg-purple-50 text-[#7C3AED] flex items-center justify-center shrink-0">
+        <p className="text-xs font-medium text-slate-500">{title}</p>
+        <div className="w-8 h-8 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center shrink-0 border border-purple-100">
           {icon}
         </div>
       </div>
-      <p className={`text-2xl font-bold tracking-tight ${valueColors[variant] || valueColors.purple}`}>
+      <p className="text-2xl font-bold tracking-tight font-sans tabular-nums text-slate-900">
         {value ?? '—'}
       </p>
-      {subtitle && <p className="text-[11px] text-gray-400 mt-1 truncate">{subtitle}</p>}
+      {subtitle && <p className="text-[11px] text-slate-400 mt-1 truncate">{subtitle}</p>}
     </div>
   );
 };
@@ -254,36 +247,35 @@ const WarehousesPage = () => {
         {/* Toast thông báo */}
         {notification && (
           <div
-            className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-xl shadow-lg border text-xs font-semibold transition-all duration-300 flex items-center gap-2 ${
+            className={`fixed top-4 right-4 z-50 px-4 py-2.5 rounded-lg shadow-md border text-xs font-medium transition-all duration-300 flex items-center gap-2 ${
               notification.type === 'error'
-                ? 'bg-red-50 border-red-200 text-red-700'
+                ? 'bg-rose-50 border-rose-200 text-rose-800'
                 : 'bg-emerald-50 border-emerald-200 text-emerald-800'
             }`}
           >
-            <span>{notification.type === 'error' ? '⚠️' : '✅'}</span>
             <span>{notification.message}</span>
           </div>
         )}
 
         {/* Tiêu đề trang */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <h1 className="text-xl sm:text-2xl font-bold text-[#1E1B4B]">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
                 Quản lý kho và chi nhánh
               </h1>
-              <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-purple-100 text-[#6D28D9]">
+              <span className="px-2 py-0.5 rounded text-[11px] font-medium badge-info">
                 Chỉ Quản lý
               </span>
             </div>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-slate-500">
               Quản trị toàn bộ danh sách kho bãi, chi nhánh vận hành, nhân sự phân bổ và tồn kho Lumié
             </p>
           </div>
 
           <button
             onClick={handleOpenCreateModal}
-            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#5B21B6] hover:from-[#6D28D9] hover:to-[#4C1D95] text-white text-xs font-bold shadow-md shadow-purple-500/25 transition-all cursor-pointer shrink-0"
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-xs font-medium shadow-xs transition-colors cursor-pointer shrink-0"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -293,7 +285,7 @@ const WarehousesPage = () => {
         </div>
 
         {/* 4 Thẻ thống kê */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-5">
           <StatCard
             title="Tổng số kho & chi nhánh"
             value={totalWarehouses}
@@ -341,10 +333,10 @@ const WarehousesPage = () => {
         </div>
 
         {/* Thanh tìm kiếm & lọc */}
-        <div className="bg-white rounded-2xl border border-purple-50 p-4 shadow-xs mb-5">
+        <div className="card-base p-3 border border-slate-200/80 rounded-xl mb-4 bg-white">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <div className="relative flex-1">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
@@ -354,7 +346,7 @@ const WarehousesPage = () => {
                 placeholder="Tìm kiếm theo mã kho, tên kho, địa chỉ..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 rounded-xl border border-purple-100 text-xs focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/20 focus:border-[#7C3AED]"
+                className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-slate-200 text-xs focus:outline-none focus:ring-1 focus:ring-purple-600 focus:border-purple-600"
               />
             </div>
 
@@ -362,7 +354,7 @@ const WarehousesPage = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3 py-2 rounded-xl border border-purple-100 text-xs font-semibold text-gray-700 bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/20"
+                className="px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 bg-white cursor-pointer focus:outline-none focus:ring-1 focus:ring-purple-600"
               >
                 <option value="">Tất cả trạng thái</option>
                 <option value="ACTIVE">Đang hoạt động (ACTIVE)</option>
@@ -375,7 +367,7 @@ const WarehousesPage = () => {
                     setSearchTerm('');
                     setStatusFilter('');
                   }}
-                  className="px-3 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-gray-600 transition-colors cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-xs font-medium text-slate-600 transition-colors cursor-pointer"
                 >
                   Xóa lọc
                 </button>
@@ -385,107 +377,107 @@ const WarehousesPage = () => {
         </div>
 
         {/* Bảng danh sách kho và chi nhánh */}
-        <div className="bg-white rounded-2xl border border-purple-50 shadow-xs overflow-hidden">
+        <div className="card-base border border-slate-200/80 rounded-xl overflow-hidden bg-white shadow-xs">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-[#FAF8FF] border-b border-gray-100 text-[#1E1B4B] font-bold">
+              <thead className="bg-slate-50/75 border-b border-slate-200/80 text-slate-500 text-[11px] font-semibold uppercase tracking-wider">
                 <tr>
-                  <th className="py-3 px-4">Mã kho</th>
-                  <th className="py-3 px-4">Tên kho / Chi nhánh</th>
-                  <th className="py-3 px-4">Địa chỉ hoạt động</th>
-                  <th className="py-3 px-4">Nhân sự</th>
-                  <th className="py-3 px-4">Tồn kho</th>
-                  <th className="py-3 px-4">Trạng thái</th>
-                  <th className="py-3 px-4 text-right">Thao tác quản lý</th>
+                  <th className="py-2.5 px-4">Mã kho</th>
+                  <th className="py-2.5 px-4">Tên kho / Chi nhánh</th>
+                  <th className="py-2.5 px-4">Địa chỉ hoạt động</th>
+                  <th className="py-2.5 px-4">Nhân sự</th>
+                  <th className="py-2.5 px-4">Tồn kho</th>
+                  <th className="py-2.5 px-4">Trạng thái</th>
+                  <th className="py-2.5 px-4 text-right">Thao tác quản lý</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50">
+              <tbody className="divide-y divide-slate-100">
                 {loading ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-8 text-gray-400">
+                    <td colSpan={7} className="text-center py-8 text-slate-400">
                       Đang tải dữ liệu kho và chi nhánh...
                     </td>
                   </tr>
                 ) : filteredWarehouses.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-8 text-gray-400">
+                    <td colSpan={7} className="text-center py-8 text-slate-400">
                       Không tìm thấy kho/chi nhánh nào phù hợp
                     </td>
                   </tr>
                 ) : (
                   filteredWarehouses.map((wh) => (
-                    <tr key={wh.id} className="hover:bg-purple-50/30 transition-colors">
-                      <td className="py-3 px-4 font-mono font-bold text-[#7C3AED]">
+                    <tr key={wh.id} className="hover:bg-slate-50/60 transition-colors">
+                      <td className="py-3 px-4 font-sans font-semibold text-purple-700 whitespace-nowrap">
                         {wh.warehouse_code}
                       </td>
                       <td className="py-3 px-4">
-                        <div className="font-bold text-[#1E1B4B]">{wh.warehouse_name}</div>
+                        <div className="font-medium text-slate-900">{wh.warehouse_name}</div>
                         {wh.description && (
-                          <div className="text-[11px] text-gray-400 mt-0.5 line-clamp-1">{wh.description}</div>
+                          <div className="text-[11px] text-slate-400 mt-0.5 line-clamp-1">{wh.description}</div>
                         )}
                       </td>
-                      <td className="py-3 px-4 text-gray-600 max-w-xs truncate">
+                      <td className="py-3 px-4 text-slate-600 max-w-xs truncate">
                         {wh.address ? (
-                          <span className="flex items-center gap-1">
-                            <span className="text-purple-500">📍</span>
+                          <span className="flex items-center gap-1.5">
+                            <span className="text-purple-600">📍</span>
                             <span>{wh.address}</span>
                           </span>
                         ) : (
-                          <span className="text-gray-300 italic">Chưa cập nhật</span>
+                          <span className="text-slate-400 italic">Chưa cập nhật</span>
                         )}
                       </td>
-                      <td className="py-3 px-4">
-                        <span className="inline-flex items-center gap-1 font-semibold text-gray-700 bg-purple-50 px-2.5 py-0.5 rounded-md">
-                          <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                      <td className="py-3 px-4 whitespace-nowrap">
+                        <span className="inline-flex items-center gap-1.5 font-sans font-semibold tabular-nums text-slate-700 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded text-[11px]">
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
                           {wh._count?.users || 0} nhân viên
                         </span>
                       </td>
-                      <td className="py-3 px-4">
-                        <span className="inline-flex items-center gap-1 font-semibold text-gray-700 bg-purple-50 px-2.5 py-0.5 rounded-md">
+                      <td className="py-3 px-4 whitespace-nowrap">
+                        <span className="inline-flex items-center gap-1.5 font-sans font-semibold tabular-nums text-slate-700 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded text-[11px]">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                           {wh._count?.inventories || 0} mặt hàng
                         </span>
                       </td>
-                      <td className="py-3 px-4">
+                      <td className="py-3 px-4 whitespace-nowrap">
                         <button
                           type="button"
                           onClick={() => handleToggleStatus(wh)}
                           title={wh.status === 'ACTIVE' ? 'Nhấn để Ngưng hoạt động' : 'Nhấn để Hoạt động lại'}
-                          className="inline-flex items-center gap-1 cursor-pointer transition-transform hover:scale-105 active:scale-95"
+                          className="cursor-pointer"
                         >
                           {wh.status === 'ACTIVE' ? (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 hover:bg-emerald-200 text-emerald-700 border border-emerald-200 shadow-2xs">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span className="badge-success inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-medium">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                               Hoạt động
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-gray-100 hover:bg-gray-200 text-gray-600 border border-gray-300 shadow-2xs">
-                              <span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                            <span className="badge-critical inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-medium">
+                              <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
                               Ngưng hoạt động
                             </span>
                           )}
                         </button>
                       </td>
-                      <td className="py-3 px-4 text-right">
+                      <td className="py-3 px-4 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end gap-1.5">
                           {/* NÚT NGƯNG HOẠT ĐỘNG / HOẠT ĐỘNG LẠI NHANH */}
                           <button
                             onClick={() => handleToggleStatus(wh)}
                             title={wh.status === 'ACTIVE' ? 'Chuyển kho sang Ngưng hoạt động' : 'Cho phép kho hoạt động lại'}
-                            className={`px-2.5 py-1 rounded-lg font-semibold text-[11px] transition-colors cursor-pointer ${
+                            className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors cursor-pointer ${
                               wh.status === 'ACTIVE'
-                                ? 'bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200'
-                                : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200'
+                                ? 'bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200'
+                                : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200'
                             }`}
                           >
-                            {wh.status === 'ACTIVE' ? '⏸Inactive' : '▶ Hoạt động lại'}
+                            {wh.status === 'ACTIVE' ? 'Inactive' : 'Hoạt động lại'}
                           </button>
 
                           {/* NÚT SỬA THÔNG TIN KHO */}
                           <button
                             onClick={() => handleOpenEditModal(wh)}
                             title="Sửa thông tin kho/chi nhánh"
-                            className="px-2.5 py-1 rounded-lg bg-purple-50 hover:bg-purple-100 text-[#7C3AED] font-semibold text-[11px] transition-colors cursor-pointer"
+                            className="px-2.5 py-1 rounded-md bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200/80 font-medium text-[11px] transition-colors cursor-pointer"
                           >
                             Sửa
                           </button>
@@ -494,7 +486,7 @@ const WarehousesPage = () => {
                           <button
                             onClick={() => handleOpenDeleteModal(wh)}
                             title="Xóa kho/chi nhánh (ngưng hoạt động)"
-                            className="px-2.5 py-1 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-[11px] transition-colors cursor-pointer"
+                            className="px-2.5 py-1 rounded-md bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200/80 font-medium text-[11px] transition-colors cursor-pointer"
                           >
                             Xóa
                           </button>
@@ -512,23 +504,23 @@ const WarehousesPage = () => {
         {/* MODAL 1: THÊM KHO/CHI NHÁNH MỚI */}
         {/* ============================================================ */}
         {showCreateModal && (
-          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-purple-100 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-              <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 bg-purple-50/40">
+          <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+            <div className="bg-white rounded-xl max-w-md w-full shadow-lg border border-slate-200/80 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+              <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3 bg-slate-50/50">
                 <div className="flex items-center gap-2">
-                  <span className="p-1 rounded-lg bg-purple-100 text-[#7C3AED]">
+                  <span className="p-1 rounded-lg bg-purple-50 text-purple-700 border border-purple-100">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
                   </span>
-                  <h3 className="text-sm sm:text-base font-bold text-[#1E1B4B]">
+                  <h3 className="text-sm font-semibold text-slate-900">
                     Thêm kho / chi nhánh mới
                   </h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => !submitting && setShowCreateModal(false)}
-                  className="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                  className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
                 >
                   ✕
                 </button>
@@ -537,8 +529,8 @@ const WarehousesPage = () => {
               <form onSubmit={handleCreateSubmit} className="p-4 space-y-3">
                 <div className="grid grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">
-                      Mã kho / chi nhánh <span className="text-red-500">*</span>
+                    <label className="block text-[11px] font-medium text-slate-700 mb-1">
+                      Mã kho / chi nhánh <span className="text-rose-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -548,18 +540,18 @@ const WarehousesPage = () => {
                       onChange={(e) =>
                         setCreateForm({ ...createForm, warehouse_code: e.target.value.toUpperCase() })
                       }
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-mono font-bold"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-sans font-semibold text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">
+                    <label className="block text-[11px] font-medium text-slate-700 mb-1">
                       Trạng thái ban đầu
                     </label>
                     <select
                       value={createForm.status}
                       onChange={(e) => setCreateForm({ ...createForm, status: e.target.value })}
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-semibold text-gray-800"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                     >
                       <option value="ACTIVE">Hoạt động (ACTIVE)</option>
                       <option value="INACTIVE">Ngưng hoạt động (INACTIVE)</option>
@@ -568,8 +560,8 @@ const WarehousesPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">
-                    Tên kho / chi nhánh <span className="text-red-500">*</span>
+                  <label className="block text-[11px] font-medium text-slate-700 mb-1">
+                    Tên kho / chi nhánh <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -577,12 +569,12 @@ const WarehousesPage = () => {
                     placeholder="Ví dụ: Kho Cần Thơ - Chi nhánh 1"
                     value={createForm.warehouse_name}
                     onChange={(e) => setCreateForm({ ...createForm, warehouse_name: e.target.value })}
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-semibold"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">
+                  <label className="block text-[11px] font-medium text-slate-700 mb-1">
                     Địa chỉ chi nhánh / kho hàng
                   </label>
                   <input
@@ -590,33 +582,33 @@ const WarehousesPage = () => {
                     placeholder="Số nhà, đường, quận/huyện, tỉnh/thành phố..."
                     value={createForm.address}
                     onChange={(e) => setCreateForm({ ...createForm, address: e.target.value })}
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Mô tả / Ghi chú</label>
+                  <label className="block text-[11px] font-medium text-slate-700 mb-1">Mô tả / Ghi chú</label>
                   <textarea
                     rows={2}
                     placeholder="Ghi chú về sức chứa, phạm vi điều phối, tuyến vận chuyển..."
                     value={createForm.description}
                     onChange={(e) => setCreateForm({ ...createForm, description: e.target.value })}
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
-                <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
                   <button
                     type="button"
                     onClick={() => setShowCreateModal(false)}
-                    className="px-3.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-gray-700 transition-colors cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
                   >
                     Hủy bỏ
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-4 py-1.5 rounded-lg bg-[#7C3AED] hover:bg-[#6D28D9] text-white text-xs font-bold shadow-md shadow-purple-500/20 disabled:opacity-50 transition-all cursor-pointer"
+                    className="px-4 py-1.5 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-xs font-medium shadow-xs disabled:opacity-50 transition-colors cursor-pointer"
                   >
                     {submitting ? 'Đang tạo...' : 'Lưu kho/chi nhánh'}
                   </button>
@@ -630,23 +622,23 @@ const WarehousesPage = () => {
         {/* MODAL 2: SỬA THÔNG TIN KHO/CHI NHÁNH */}
         {/* ============================================================ */}
         {showEditModal && editForm && (
-          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-purple-100 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-              <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 bg-purple-50/40">
+          <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+            <div className="bg-white rounded-xl max-w-md w-full shadow-lg border border-slate-200/80 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+              <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3 bg-slate-50/50">
                 <div className="flex items-center gap-2">
-                  <span className="p-1 rounded-lg bg-purple-100 text-[#7C3AED]">
+                  <span className="p-1 rounded-lg bg-purple-50 text-purple-700 border border-purple-100">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                     </svg>
                   </span>
-                  <h3 className="text-sm sm:text-base font-bold text-[#1E1B4B]">
+                  <h3 className="text-sm font-semibold text-slate-900">
                     Sửa kho: {editForm.warehouse_code}
                   </h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => !submitting && setShowEditModal(false)}
-                  className="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                  className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
                 >
                   ✕
                 </button>
@@ -655,21 +647,21 @@ const WarehousesPage = () => {
               <form onSubmit={handleEditSubmit} className="p-4 space-y-3">
                 <div className="grid grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Mã kho</label>
+                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Mã kho</label>
                     <input
                       type="text"
                       value={editForm.warehouse_code}
                       onChange={(e) => setEditForm({ ...editForm, warehouse_code: e.target.value.toUpperCase() })}
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-mono font-bold text-[#7C3AED]"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-sans font-semibold text-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-600"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Trạng thái</label>
+                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Trạng thái</label>
                     <select
                       value={editForm.status}
                       onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-bold text-[#7C3AED]"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                     >
                       <option value="ACTIVE">Hoạt động</option>
                       <option value="INACTIVE">Ngưng hoạt động</option>
@@ -678,55 +670,55 @@ const WarehousesPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">
-                    Tên kho / chi nhánh <span className="text-red-500">*</span>
+                  <label className="block text-[11px] font-medium text-slate-700 mb-1">
+                    Tên kho / chi nhánh <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="text"
                     required
                     value={editForm.warehouse_name}
                     onChange={(e) => setEditForm({ ...editForm, warehouse_name: e.target.value })}
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-semibold"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Địa chỉ</label>
+                  <label className="block text-[11px] font-medium text-slate-700 mb-1">Địa chỉ</label>
                   <input
                     type="text"
                     value={editForm.address}
                     onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Mô tả</label>
+                  <label className="block text-[11px] font-medium text-slate-700 mb-1">Mô tả</label>
                   <textarea
                     rows={2}
                     value={editForm.description}
                     onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
-                <div className="p-2.5 rounded-xl bg-purple-50/50 border border-purple-100/60 text-[11px] text-gray-600 flex justify-between">
-                  <span>Nhân viên trực thuộc: <b>{editForm.userCount}</b></span>
-                  <span>Mặt hàng tồn: <b>{editForm.inventoryCount}</b></span>
+                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200/80 text-[11px] text-slate-700 flex justify-between font-sans tabular-nums">
+                  <span>Nhân viên trực thuộc: <b className="font-semibold text-slate-900">{editForm.userCount}</b></span>
+                  <span>Mặt hàng tồn: <b className="font-semibold text-slate-900">{editForm.inventoryCount}</b></span>
                 </div>
 
-                <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
                   <button
                     type="button"
                     onClick={() => setShowEditModal(false)}
-                    className="px-3.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-gray-700 transition-colors cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
                   >
                     Hủy bỏ
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-4 py-1.5 rounded-lg bg-[#7C3AED] hover:bg-[#6D28D9] text-white text-xs font-bold shadow-md shadow-purple-500/20 disabled:opacity-50 transition-all cursor-pointer"
+                    className="px-4 py-1.5 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-xs font-medium shadow-xs disabled:opacity-50 transition-colors cursor-pointer"
                   >
                     {submitting ? 'Đang lưu...' : 'Lưu thay đổi'}
                   </button>
@@ -740,27 +732,30 @@ const WarehousesPage = () => {
         {/* MODAL 3: XÓA KHO/CHI NHÁNH (NGƯNG HOẠT ĐỘNG) */}
         {/* ============================================================ */}
         {showDeleteModal && targetWarehouse && (
-          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-red-100 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+          <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+            <div className="bg-white rounded-xl max-w-md w-full shadow-lg border border-slate-200/80 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
               <div className="p-5 text-center">
-                <div className="w-12 h-12 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-3.5">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-3 border border-rose-100">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                   </svg>
                 </div>
 
-                <h3 className="text-base font-bold text-[#1E1B4B] mb-1">
+                <h3 className="text-sm font-semibold text-slate-900 mb-1">
                   Xác nhận ngưng hoạt động kho/chi nhánh?
                 </h3>
-                <p className="text-xs text-gray-500 mb-4">
-                  Kho: <strong className="text-red-600">{targetWarehouse.warehouse_name}</strong> ({targetWarehouse.warehouse_code})
+                <p className="text-xs text-slate-500 mb-4">
+                  Kho: <strong className="font-semibold text-rose-700">{targetWarehouse.warehouse_name}</strong> ({targetWarehouse.warehouse_code})
                 </p>
 
-                <div className="bg-amber-50 border border-amber-200/70 rounded-xl p-3 text-left text-xs text-amber-900 mb-4 space-y-1">
-                  <p className="font-semibold flex items-center gap-1.5">
-                    <span>⚠️</span> Lưu ý an toàn dữ liệu chuỗi kho:
+                <div className="bg-amber-50/60 border border-amber-200/70 rounded-lg p-3 text-left text-xs text-amber-900 mb-4 space-y-1">
+                  <p className="font-semibold flex items-center gap-1.5 text-amber-800">
+                    <svg className="w-3.5 h-3.5 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    Lưu ý an toàn dữ liệu chuỗi kho:
                   </p>
-                  <p className="text-[11px] text-amber-800">
+                  <p className="text-[11px] text-amber-800 font-sans tabular-nums">
                     • Kho này hiện có <b>{targetWarehouse._count?.users || 0} nhân viên</b> trực thuộc và <b>{targetWarehouse._count?.inventories || 0} bản ghi tồn kho</b>.
                   </p>
                   <p className="text-[11px] text-amber-800">
@@ -768,7 +763,7 @@ const WarehousesPage = () => {
                   </p>
                 </div>
 
-                <div className="flex justify-center gap-2.5">
+                <div className="flex justify-center gap-2">
                   <button
                     type="button"
                     disabled={submitting}
@@ -776,7 +771,7 @@ const WarehousesPage = () => {
                       setShowDeleteModal(false);
                       setTargetWarehouse(null);
                     }}
-                    className="px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-gray-700 transition-colors cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
                   >
                     Hủy bỏ
                   </button>
@@ -784,7 +779,7 @@ const WarehousesPage = () => {
                     type="button"
                     disabled={submitting}
                     onClick={handleDeleteConfirm}
-                    className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/25 transition-all cursor-pointer"
+                    className="px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium shadow-xs transition-colors cursor-pointer"
                   >
                     {submitting ? 'Đang xử lý...' : 'Xác nhận ngưng hoạt động'}
                   </button>

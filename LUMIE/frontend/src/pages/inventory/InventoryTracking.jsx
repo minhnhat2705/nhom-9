@@ -196,11 +196,11 @@ const InventoryTrackingPage = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-6 max-w-7xl mx-auto pb-12">
+      <div className="space-y-6 w-full pb-12 transition-all duration-200">
         {/* Toast thông báo */}
         {toast.show && (
           <div
-            className={`fixed top-5 right-5 z-50 px-4 py-3 rounded-xl shadow-lg border text-sm font-medium flex items-center gap-2 animate-bounce ${
+            className={`fixed top-5 right-5 z-50 px-4 py-3 rounded-xl shadow-lg border text-xs font-medium flex items-center gap-2 animate-bounce ${
               toast.type === 'error'
                 ? 'bg-rose-50 border-rose-200 text-rose-700'
                 : 'bg-emerald-50 border-emerald-200 text-emerald-800'
@@ -212,16 +212,16 @@ const InventoryTrackingPage = () => {
         )}
 
         {/* HEADER & QUICK ACTIONS */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-800 p-6 rounded-2xl text-white shadow-md">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/20 text-purple-100">
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200/80">
                 {isManager ? 'Quyền Quản lý kho' : 'Quyền Nhân viên kho'}
               </span>
-              <span className="text-purple-300 text-xs">• Theo dõi thời gian thực</span>
+              <span className="text-slate-400 text-xs">• Theo dõi thời gian thực</span>
             </div>
-            <h1 className="text-2xl font-bold tracking-tight">Theo dõi tồn kho & Ngưỡng tồn</h1>
-            <p className="text-purple-200 text-sm mt-1">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">Theo dõi tồn kho & Ngưỡng tồn</h1>
+            <p className="text-slate-500 text-xs mt-1 max-w-3xl leading-relaxed">
               Kiểm tra tồn kho chi tiết theo từng kho hoặc toàn hệ thống. Quản lý ngưỡng tồn tối thiểu để tự động cảnh báo hàng sắp hết.
             </p>
           </div>
@@ -232,12 +232,12 @@ const InventoryTrackingPage = () => {
               {selectedIds.length > 0 && (
                 <button
                   onClick={() => setShowBatchModal(true)}
-                  className="px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-medium shadow-sm transition-all flex items-center gap-2"
+                  className="px-3.5 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-semibold shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                   </svg>
-                  Thiết lập ngưỡng ({selectedIds.length} mục)
+                  <span>Thiết lập ngưỡng ({selectedIds.length} mục)</span>
                 </button>
               )}
             </div>
@@ -246,59 +246,59 @@ const InventoryTrackingPage = () => {
 
         {/* STATS CARDS */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
-          <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs">
-            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider block">
+          <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
               {warehouseId === 'ALL' ? 'Tồn kho toàn hệ thống' : 'Tồn kho tại kho chọn'}
             </span>
             <div className="mt-2 flex items-baseline justify-between">
-              <span className="text-2xl font-bold text-slate-900">
+              <span className="text-2xl font-bold text-slate-900 tabular-nums">
                 {stats.total_quantity.toLocaleString('vi-VN')}
               </span>
               <span className="text-xs text-slate-500 font-medium">chiếc</span>
             </div>
-            <div className="text-[11px] text-purple-600 font-medium mt-1">
+            <div className="text-[11px] text-purple-700 font-medium mt-1">
               {stats.total_variants} mặt hàng (SKU)
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs">
-            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider block">Tổng giá trị tồn kho</span>
-            <div className="mt-2 text-xl font-bold text-slate-900 truncate" title={`${stats.total_value.toLocaleString('vi-VN')} đ`}>
+          <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">Tổng giá trị tồn kho</span>
+            <div className="mt-2 text-xl font-bold text-slate-900 truncate tabular-nums" title={`${stats.total_value.toLocaleString('vi-VN')} đ`}>
               {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(stats.total_value)}
             </div>
             <div className="text-[11px] text-slate-400 mt-1">Tính theo giá bán niêm yết</div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl border border-emerald-100 bg-emerald-50/20 shadow-xs">
-            <span className="text-xs font-medium text-emerald-700 uppercase tracking-wider flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <div className="bg-white p-4 rounded-xl border border-emerald-200/80 bg-emerald-50/10 shadow-xs flex flex-col justify-between">
+            <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
               Đủ hàng (&gt; Ngưỡng)
             </span>
-            <div className="mt-2 text-2xl font-bold text-emerald-600">{stats.in_stock_count}</div>
+            <div className="mt-2 text-2xl font-bold text-emerald-600 tabular-nums">{stats.in_stock_count}</div>
             <div className="text-[11px] text-emerald-700/80 mt-1">Đáp ứng tốt nhu cầu bán</div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl border border-amber-200 bg-amber-50/20 shadow-xs">
-            <span className="text-xs font-medium text-amber-700 uppercase tracking-wider flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+          <div className="bg-white p-4 rounded-xl border border-amber-200/80 bg-amber-50/10 shadow-xs flex flex-col justify-between">
+            <span className="text-[11px] font-semibold text-amber-700 uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
               Sắp hết (≤ Ngưỡng)
             </span>
-            <div className="mt-2 text-2xl font-bold text-amber-600">{stats.low_stock_count}</div>
+            <div className="mt-2 text-2xl font-bold text-amber-600 tabular-nums">{stats.low_stock_count}</div>
             <div className="text-[11px] text-amber-700/80 mt-1">Cần lập kế hoạch nhập hàng</div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl border border-rose-200 bg-rose-50/20 shadow-xs col-span-2 md:col-span-1">
-            <span className="text-xs font-medium text-rose-700 uppercase tracking-wider flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-rose-500"></span>
+          <div className="bg-white p-4 rounded-xl border border-rose-200/80 bg-rose-50/10 shadow-xs col-span-2 md:col-span-1 flex flex-col justify-between">
+            <span className="text-[11px] font-semibold text-rose-700 uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
               Hết hàng (Tồn = 0)
             </span>
-            <div className="mt-2 text-2xl font-bold text-rose-600">{stats.out_of_stock_count}</div>
+            <div className="mt-2 text-2xl font-bold text-rose-600 tabular-nums">{stats.out_of_stock_count}</div>
             <div className="text-[11px] text-rose-700/80 mt-1">Cần nhập kho khẩn cấp</div>
           </div>
         </div>
 
         {/* BỘ LỌC TÌM KIẾM & CHỌN KHO */}
-        <div className="bg-white p-5 rounded-2xl border border-purple-100 shadow-xs space-y-4">
+        <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
             {/* Tìm kiếm */}
             <div className="lg:col-span-4">
@@ -312,19 +312,19 @@ const InventoryTrackingPage = () => {
                     setSearch(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-sm focus:border-purple-600 focus:ring-2 focus:ring-purple-100 outline-hidden"
+                  className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-xs font-medium focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none"
                 />
-                <svg className="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
             </div>
 
-            {/* CHỌN KHO HOẶC TOÀN HỆ THỐNG (CẢ QUẢN LÝ VÀ NHÂN VIÊN ĐỀU DÙNG ĐƯỢC) */}
+            {/* CHỌN KHO HOẶC TOÀN HỆ THỐNG */}
             <div className="lg:col-span-3">
-              <label className="block text-[11px] font-semibold text-purple-700 uppercase mb-1 flex items-center justify-between">
+              <label className="block text-[11px] font-semibold text-slate-500 uppercase mb-1 flex items-center justify-between">
                 <span>Kho xem tồn kho</span>
-                <span className="text-[10px] text-purple-500 font-normal">Tất cả hoặc từng kho</span>
+                <span className="text-[10px] text-slate-400 font-normal">Tất cả hoặc từng kho</span>
               </label>
               <select
                 value={warehouseId}
@@ -332,12 +332,12 @@ const InventoryTrackingPage = () => {
                   setWarehouseId(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="w-full px-3 py-2 rounded-xl border border-purple-200 bg-purple-50/30 text-sm font-semibold text-purple-900 focus:border-purple-600 outline-hidden cursor-pointer"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-medium text-slate-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none cursor-pointer"
               >
-                <option value="ALL">🌐 Toàn hệ thống (Tổng tất cả 5 kho)</option>
+                <option value="ALL">Toàn hệ thống (Tổng tất cả 5 kho)</option>
                 {meta.warehouses.map((w) => (
                   <option key={w.id} value={w.id}>
-                    📦 {w.warehouse_name} ({w.warehouse_code})
+                    {w.warehouse_name} ({w.warehouse_code})
                   </option>
                 ))}
               </select>
@@ -352,12 +352,12 @@ const InventoryTrackingPage = () => {
                   setStockStatus(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:border-purple-600 outline-hidden cursor-pointer"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-medium text-slate-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none cursor-pointer"
               >
                 <option value="ALL">Tất cả tình trạng</option>
-                <option value="IN_STOCK">🟢 Đủ hàng (&gt; Ngưỡng)</option>
-                <option value="LOW_STOCK">🟠 Sắp hết (≤ Ngưỡng)</option>
-                <option value="OUT_OF_STOCK">🔴 Hết hàng (0 chiếc)</option>
+                <option value="IN_STOCK">Đủ hàng (&gt; Ngưỡng)</option>
+                <option value="LOW_STOCK">Sắp hết (≤ Ngưỡng)</option>
+                <option value="OUT_OF_STOCK">Hết hàng (0 chiếc)</option>
               </select>
             </div>
 
@@ -370,7 +370,7 @@ const InventoryTrackingPage = () => {
                   setCategoryId(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:border-purple-600 outline-hidden cursor-pointer"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-medium text-slate-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none cursor-pointer"
               >
                 <option value="ALL">Tất cả danh mục</option>
                 {meta.categories.map((c) => (
@@ -386,7 +386,7 @@ const InventoryTrackingPage = () => {
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="w-full py-2 px-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold rounded-xl transition-colors"
+                className="w-full py-2 px-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold rounded-xl transition-colors cursor-pointer border border-slate-200"
                 title="Đặt lại toàn bộ bộ lọc"
               >
                 Đặt lại
@@ -396,24 +396,24 @@ const InventoryTrackingPage = () => {
         </div>
 
         {/* BẢNG DỮ LIỆU TỒN KHO & NGƯỠNG TỒN */}
-        <div className="bg-white rounded-2xl border border-purple-100 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <h2 className="text-base font-bold text-slate-800">
+        <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+          <div className="px-5 py-3.5 border-b border-slate-200/80 flex flex-wrap items-center justify-between gap-3 bg-slate-50/50">
+            <div className="flex items-center gap-2.5">
+              <h2 className="text-sm font-bold text-slate-800">
                 Danh sách biến thể tồn kho ({pagination.total} mặt hàng)
               </h2>
-              <span className="text-xs px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 font-medium">
+              <span className="text-[11px] px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-200/60 font-medium">
                 {warehouseId === 'ALL' ? 'Toàn bộ 5 kho' : meta.warehouses.find((w) => w.id === parseInt(warehouseId, 10))?.warehouse_name}
               </span>
             </div>
 
             {/* Sắp xếp */}
             <div className="flex items-center gap-2 text-xs">
-              <span className="text-slate-400">Sắp xếp:</span>
+              <span className="text-slate-500 font-medium">Sắp xếp:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-2.5 py-1 border border-slate-200 rounded-lg text-xs font-medium text-slate-700"
+                className="px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs font-medium text-slate-700 bg-white outline-none cursor-pointer focus:border-purple-500"
               >
                 <option value="sku_asc">Mã SKU (A - Z)</option>
                 <option value="quantity_asc">Tồn kho (Thấp đến cao)</option>
@@ -426,43 +426,48 @@ const InventoryTrackingPage = () => {
 
           {loading ? (
             <div className="p-16 text-center text-slate-400">
-              <div className="w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto mb-3"></div>
-              Đang tải dữ liệu tồn kho...
+              <div className="w-7 h-7 border-2 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto mb-3"></div>
+              <div className="text-xs font-medium">Đang tải dữ liệu tồn kho...</div>
             </div>
           ) : items.length === 0 ? (
             <div className="p-16 text-center text-slate-500">
-              <div className="text-4xl mb-2">📦</div>
-              <p className="font-semibold text-slate-700">Không tìm thấy sản phẩm nào</p>
+              <svg className="w-10 h-10 mx-auto text-slate-300 mb-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+              </svg>
+              <p className="font-semibold text-slate-700 text-sm">Không tìm thấy sản phẩm nào</p>
               <p className="text-xs text-slate-400 mt-1">Thử thay đổi từ khóa tìm kiếm hoặc đặt lại bộ lọc</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm text-slate-600">
-                <thead className="bg-slate-50/80 text-xs uppercase font-semibold text-slate-500 border-b border-slate-100">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead className="bg-slate-50/90 text-[12px] font-semibold text-slate-500 border-b border-slate-200/80">
                   <tr>
                     {isManager && (
-                      <th className="p-4 w-10 text-center">
+                      <th className="py-3 px-3 w-10 text-center sticky left-0 z-20 bg-slate-50 border-r border-slate-200/60">
                         <input
                           type="checkbox"
                           checked={isAllPageSelected}
                           onChange={handleSelectAllOnPage}
-                          className="rounded text-purple-600 focus:ring-purple-500"
+                          className="rounded text-purple-600 focus:ring-purple-500 cursor-pointer"
                           title="Chọn tất cả trang này"
                         />
                       </th>
                     )}
-                    <th className="px-4 py-3.5">Sản phẩm</th>
-                    <th className="px-4 py-3.5">Biến thể / Mã vạch</th>
-                    <th className="px-4 py-3.5">Phân bổ tồn kho</th>
-                    <th className="px-4 py-3.5 text-right whitespace-nowrap">Số lượng tồn</th>
-                    <th className="px-4 py-3.5 text-center whitespace-nowrap">
-                      <span className="inline-flex items-center gap-1 text-purple-700">
+                    <th className="py-3 px-3 min-w-[240px] sticky left-10 z-20 bg-slate-50 border-r border-slate-200/60 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.05)]">
+                      Sản phẩm
+                    </th>
+                    <th className="py-3 px-3 min-w-[140px]">Biến thể / Mã vạch</th>
+                    <th className="py-3 px-3 min-w-[240px]">Phân bổ tồn kho</th>
+                    <th className="py-3 px-3 min-w-[120px] text-right whitespace-nowrap">Số lượng tồn</th>
+                    <th className="py-3 px-3 min-w-[130px] text-center whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1 text-slate-700 font-semibold">
                         Ngưỡng tối thiểu
-                        <span className="text-[10px] bg-purple-100 text-purple-800 px-1.5 py-0.2 rounded font-mono">min_stock</span>
                       </span>
                     </th>
-                    <th className="px-4 py-3.5 text-center whitespace-nowrap">Tình trạng</th>
-                    <th className="px-4 py-3.5 text-right whitespace-nowrap">Thao tác</th>
+                    <th className="py-3 px-3 min-w-[110px] text-center whitespace-nowrap">Tình trạng</th>
+                    <th className="py-3 px-3 min-w-[120px] text-right whitespace-nowrap sticky right-0 z-20 bg-slate-50 border-l border-slate-200/60 shadow-[-2px_0_4px_-2px_rgba(0,0,0,0.05)]">
+                      Thao tác
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -474,25 +479,25 @@ const InventoryTrackingPage = () => {
                     return (
                       <tr
                         key={it.id}
-                        className={`hover:bg-purple-50/30 transition-colors ${
-                          isSelected ? 'bg-purple-50/50' : ''
+                        className={`group hover:bg-slate-50/70 transition-colors ${
+                          isSelected ? 'bg-purple-50/40' : ''
                         }`}
                       >
                         {isManager && (
-                          <td className="p-4 text-center">
+                          <td className="py-3.5 px-3 text-center sticky left-0 z-10 bg-white group-hover:bg-slate-50/70 border-r border-slate-200/60 transition-colors">
                             <input
                               type="checkbox"
                               checked={isSelected}
                               onChange={() => handleToggleSelectId(it.id)}
-                              className="rounded text-purple-600 focus:ring-purple-500"
+                              className="rounded text-purple-600 focus:ring-purple-500 cursor-pointer"
                             />
                           </td>
                         )}
 
-                        {/* Sản phẩm */}
-                        <td className="px-4 py-3.5">
+                        {/* Sản phẩm (Sticky Left) */}
+                        <td className="py-3.5 px-3 sticky left-10 z-10 bg-white group-hover:bg-slate-50/70 border-r border-slate-200/60 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.05)] transition-colors">
                           <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-xl bg-purple-50 border border-purple-100 overflow-hidden shrink-0 flex items-center justify-center">
+                            <div className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center">
                               {it.product.image_url ? (
                                 <img
                                   src={it.product.image_url}
@@ -504,30 +509,30 @@ const InventoryTrackingPage = () => {
                                   }}
                                 />
                               ) : (
-                                <span className="text-xs text-purple-400 font-bold">SP</span>
+                                <span className="text-[10px] text-slate-400 font-bold">SP</span>
                               )}
                             </div>
-                            <div>
+                            <div className="min-w-0">
                               <div className="flex items-center gap-1.5">
-                                <span className="text-xs font-mono font-bold text-purple-700">
+                                <span className="text-[11px] font-semibold text-purple-700">
                                   {it.product.product_code}
                                 </span>
-                                <span className="text-[10px] text-slate-400">• {it.product.category?.category_name}</span>
+                                <span className="text-[10px] text-slate-400 truncate">• {it.product.category?.category_name}</span>
                               </div>
-                              <div className="font-semibold text-slate-800 text-sm line-clamp-1" title={it.product.name}>
+                              <div className="font-semibold text-slate-800 text-xs truncate max-w-[200px]" title={it.product.name}>
                                 {it.product.name}
                               </div>
-                              <div className="text-[11px] text-slate-400 font-medium">
-                                Thương hiệu: <span className="text-slate-600">{it.product.brand}</span>
+                              <div className="text-[11px] text-slate-500">
+                                Thương hiệu: <span className="text-slate-700 font-medium">{it.product.brand}</span>
                               </div>
                             </div>
                           </div>
                         </td>
 
                         {/* Biến thể & Mã vạch */}
-                        <td className="px-4 py-3.5">
-                          <div className="font-mono text-xs font-semibold text-slate-800">{it.sku}</div>
-                          <div className="text-[11px] font-mono text-slate-500 mt-0.5">{it.barcode}</div>
+                        <td className="py-3.5 px-3">
+                          <div className="text-xs font-semibold text-slate-800">{it.sku}</div>
+                          <div className="text-[11px] text-slate-500 mt-0.5">{it.barcode}</div>
                           <div className="flex items-center gap-1 mt-1 text-[11px]">
                             <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-medium">
                               Size {it.size}
@@ -539,20 +544,20 @@ const InventoryTrackingPage = () => {
                         </td>
 
                         {/* Phân bổ tồn kho theo kho */}
-                        <td className="px-4 py-3.5">
+                        <td className="py-3.5 px-3">
                           {warehouseId === 'ALL' ? (
                             <div className="space-y-1">
-                              <div className="flex flex-wrap gap-1 max-w-[240px]">
+                              <div className="flex flex-wrap gap-1 min-w-[240px]">
                                 {it.inventories.length > 0 ? (
                                   it.inventories.map((inv) => (
                                     <span
                                       key={inv.id}
-                                      className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-medium border border-slate-200/60"
+                                      className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-medium border border-slate-200/60 whitespace-nowrap"
                                       title={`${inv.warehouse_name} - Vị trí: ${inv.shelf_location}`}
                                     >
-                                      <span className="font-mono font-bold">{inv.warehouse_code}:</span>
-                                      <span className="text-purple-700 font-bold">{inv.quantity}</span>
-                                      <span className="text-[10px] text-slate-400 font-mono">({inv.shelf_location})</span>
+                                      <span className="font-bold text-slate-800">{inv.warehouse_code}:</span>
+                                      <span className="text-purple-700 font-bold tabular-nums">{inv.quantity}</span>
+                                      <span className="text-[10px] text-slate-400">({inv.shelf_location})</span>
                                     </span>
                                   ))
                                 ) : (
@@ -562,47 +567,47 @@ const InventoryTrackingPage = () => {
                             </div>
                           ) : (
                             <div>
-                              <div className="text-xs font-semibold text-slate-700">
-                                Vị trí kệ: <span className="font-mono text-purple-700 font-bold">{it.shelf_location}</span>
+                              <div className="text-xs font-medium text-slate-700">
+                                Vị trí kệ: <span className="text-purple-700 font-bold">{it.shelf_location}</span>
                               </div>
-                              <div className="text-[11px] text-slate-400 mt-0.5">
-                                Giá niêm yết: {it.selling_price.toLocaleString('vi-VN')} đ
+                              <div className="text-[11px] text-slate-500 mt-0.5 tabular-nums">
+                                Giá niêm yết: <span className="font-semibold text-slate-800">{it.selling_price.toLocaleString('vi-VN')} đ</span>
                               </div>
                             </div>
                           )}
                         </td>
 
                         {/* Số lượng tồn */}
-                        <td className="px-4 py-3.5 text-right">
+                        <td className="py-3.5 px-3 text-right">
                           <div
-                            className={`text-base font-bold font-mono ${
+                            className={`text-sm font-bold tabular-nums ${
                               isOut ? 'text-rose-600' : isLow ? 'text-amber-600' : 'text-slate-900'
                             }`}
                           >
                             {it.current_quantity.toLocaleString('vi-VN')} chiếc
                           </div>
-                          <div className="text-[11px] text-slate-400 font-mono mt-0.5">
+                          <div className="text-[11px] text-slate-400 tabular-nums mt-0.5">
                             {new Intl.NumberFormat('vi-VN').format(it.total_value)} đ
                           </div>
                         </td>
 
                         {/* Ngưỡng tồn tối thiểu (min_stock) */}
-                        <td className="px-4 py-3.5 text-center whitespace-nowrap">
-                          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-purple-50/70 border border-purple-100 text-purple-900 font-mono font-bold text-xs whitespace-nowrap">
+                        <td className="py-3.5 px-3 text-center whitespace-nowrap">
+                          <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-slate-100 border border-slate-200/80 text-slate-800 font-bold text-xs whitespace-nowrap tabular-nums">
                             <span>{it.min_stock}</span>
-                            <span className="text-[10px] text-purple-500 font-normal">chiếc</span>
+                            <span className="text-[10px] text-slate-500 font-normal">chiếc</span>
                           </div>
                           {isLow && (
-                            <div className="text-[10px] text-amber-600 font-semibold mt-1 whitespace-nowrap">
+                            <div className="text-[10px] text-amber-600 font-semibold mt-1 whitespace-nowrap tabular-nums">
                               Thiếu: {it.min_stock - it.current_quantity} chiếc
                             </div>
                           )}
                         </td>
 
                         {/* Tình trạng tồn */}
-                        <td className="px-4 py-3.5 text-center whitespace-nowrap">
+                        <td className="py-3.5 px-3 text-center whitespace-nowrap">
                           <span
-                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border whitespace-nowrap ${
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border whitespace-nowrap ${
                               isOut
                                 ? 'bg-rose-50 text-rose-700 border-rose-200'
                                 : isLow
@@ -619,13 +624,13 @@ const InventoryTrackingPage = () => {
                           </span>
                         </td>
 
-                        {/* Thao tác */}
-                        <td className="px-4 py-3.5 text-right whitespace-nowrap">
+                        {/* Thao tác (Sticky Right) */}
+                        <td className="py-3.5 px-3 text-right whitespace-nowrap sticky right-0 z-10 bg-white group-hover:bg-slate-50/70 border-l border-slate-200/60 shadow-[-2px_0_4px_-2px_rgba(0,0,0,0.05)] transition-colors">
                           <div className="flex items-center justify-end gap-1.5 whitespace-nowrap">
-                            {/* Nút xem chi tiết kho (Cả Quản lý & Nhân viên) */}
+                            {/* Nút xem chi tiết kho (CẢ QUẢN LÝ VÀ NHÂN VIÊN) */}
                             <button
                               onClick={() => setViewingVariant(it)}
-                              className="p-1.5 text-slate-500 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors shrink-0"
+                              className="p-1.5 text-slate-500 hover:text-purple-700 hover:bg-slate-100 rounded-lg transition-colors shrink-0 cursor-pointer"
                               title="Xem chi tiết các kho"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -634,14 +639,14 @@ const InventoryTrackingPage = () => {
                               </svg>
                             </button>
 
-                            {/* CHỨC NĂNG 2: THIẾT LẬP NGƯỠNG TỒN (CHỈ DÀNH CHO QUẢN LÝ, CẤM NHÂN VIÊN) */}
+                            {/* CHỨC NĂNG 2: THIẾT LẬP NGƯỠNG TỒN (CHỈ QUẢN LÝ) */}
                             {isManager && (
                               <button
                                 onClick={() => handleOpenEditThreshold(it)}
-                                className="px-2.5 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg text-xs font-semibold transition-colors inline-flex items-center gap-1.5 border border-purple-200 whitespace-nowrap shrink-0"
+                                className="px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold transition-colors inline-flex items-center gap-1 border border-slate-200 shadow-2xs whitespace-nowrap shrink-0 cursor-pointer"
                                 title="Thiết lập ngưỡng tồn tối thiểu cho biến thể này"
                               >
-                                <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                                 </svg>
                                 <span>Đổi ngưỡng</span>
@@ -705,23 +710,23 @@ const InventoryTrackingPage = () => {
         {/* ============================================================ */}
         {editingVariant && isManager && (
           <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-purple-100 animate-in fade-in zoom-in-95">
-              <div className="px-6 py-4 bg-gradient-to-r from-purple-800 to-indigo-800 text-white flex items-center justify-between">
+            <div className="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95">
+              <div className="px-5 py-3.5 bg-slate-900 text-white flex items-center justify-between">
                 <div>
-                  <h3 className="text-base font-bold">Thiết lập ngưỡng tồn tối thiểu</h3>
-                  <p className="text-xs text-purple-200">Chức năng phân quyền riêng cho Quản lý kho</p>
+                  <h3 className="text-sm font-bold">Thiết lập ngưỡng tồn tối thiểu</h3>
+                  <p className="text-[11px] text-slate-400">Chức năng phân quyền riêng cho Quản lý kho</p>
                 </div>
                 <button
                   onClick={() => setEditingVariant(null)}
-                  className="p-1 rounded-lg hover:bg-white/10 text-white/80"
+                  className="p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white cursor-pointer"
                 >
                   ✕
                 </button>
               </div>
 
-              <form onSubmit={handleSaveThreshold} className="p-6 space-y-4">
-                <div className="bg-purple-50/60 p-3 rounded-xl border border-purple-100 flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-lg bg-white border border-purple-200 overflow-hidden shrink-0 flex items-center justify-center">
+              <form onSubmit={handleSaveThreshold} className="p-5 space-y-4">
+                <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/80 flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-lg bg-white border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center">
                     <img
                       src={editingVariant.product.image_url}
                       alt=""
@@ -733,16 +738,16 @@ const InventoryTrackingPage = () => {
                     />
                   </div>
                   <div>
-                    <div className="text-xs font-mono font-bold text-purple-700">{editingVariant.sku}</div>
-                    <div className="text-sm font-bold text-slate-800 line-clamp-1">{editingVariant.product.name}</div>
-                    <div className="text-xs text-slate-500">
+                    <div className="text-xs font-semibold text-purple-700">{editingVariant.sku}</div>
+                    <div className="text-xs font-bold text-slate-800 line-clamp-1">{editingVariant.product.name}</div>
+                    <div className="text-[11px] text-slate-500 tabular-nums">
                       Tồn hiện tại: <span className="font-bold text-slate-700">{editingVariant.current_quantity} chiếc</span> | Ngưỡng cũ: <span className="font-bold text-purple-700">{editingVariant.min_stock}</span>
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">
+                  <label className="block text-[11px] font-semibold text-slate-700 uppercase mb-1.5">
                     Ngưỡng tồn tối thiểu mới (min_stock) <span className="text-rose-500">*</span>
                   </label>
                   <div className="relative">
@@ -754,9 +759,9 @@ const InventoryTrackingPage = () => {
                       value={newMinStock}
                       onChange={(e) => setNewMinStock(e.target.value)}
                       placeholder="Nhập số lượng ngưỡng tồn..."
-                      className="w-full px-3 py-2.5 rounded-xl border border-slate-300 font-mono text-base font-bold text-slate-800 focus:border-purple-600 focus:ring-2 focus:ring-purple-100 outline-hidden"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-bold text-slate-800 tabular-nums focus:border-purple-600 focus:ring-2 focus:ring-purple-100 outline-none"
                     />
-                    <span className="absolute right-3 top-3 text-xs text-slate-400 font-medium">chiếc</span>
+                    <span className="absolute right-3 top-2.5 text-xs text-slate-400 font-medium">chiếc</span>
                   </div>
                   <p className="text-[11px] text-slate-500 mt-2">
                     💡 <strong>Cơ chế tự động:</strong> Khi số lượng tồn kho của biến thể này $\le$ ngưỡng đã đặt, hệ thống sẽ tự động gán nhãn <span className="text-amber-600 font-semibold">"Sắp hết"</span> để cảnh báo bổ sung hàng kịp thời.
@@ -768,17 +773,17 @@ const InventoryTrackingPage = () => {
                     type="button"
                     disabled={actionLoading}
                     onClick={() => setEditingVariant(null)}
-                    className="px-4 py-2 rounded-xl border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50"
+                    className="px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 cursor-pointer"
                   >
                     Hủy bỏ
                   </button>
                   <button
                     type="submit"
                     disabled={actionLoading}
-                    className="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold shadow-sm flex items-center gap-2"
+                    className="px-4 py-2 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-xs font-semibold shadow-xs flex items-center gap-1.5 cursor-pointer"
                   >
                     {actionLoading && <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>}
-                    Lưu ngưỡng tồn
+                    <span>Lưu ngưỡng tồn</span>
                   </button>
                 </div>
               </form>
@@ -791,23 +796,23 @@ const InventoryTrackingPage = () => {
         {/* ============================================================ */}
         {showBatchModal && isManager && (
           <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-purple-100">
-              <div className="px-6 py-4 bg-gradient-to-r from-amber-600 to-purple-800 text-white flex items-center justify-between">
+            <div className="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden border border-slate-200">
+              <div className="px-5 py-3.5 bg-slate-900 text-white flex items-center justify-between">
                 <div>
-                  <h3 className="text-base font-bold">Thiết lập ngưỡng tồn hàng loạt</h3>
-                  <p className="text-xs text-amber-200">Đang áp dụng cho {selectedIds.length} biến thể đã chọn</p>
+                  <h3 className="text-sm font-bold">Thiết lập ngưỡng tồn hàng loạt</h3>
+                  <p className="text-[11px] text-slate-400">Đang áp dụng cho {selectedIds.length} biến thể đã chọn</p>
                 </div>
                 <button
                   onClick={() => setShowBatchModal(false)}
-                  className="p-1 rounded-lg hover:bg-white/10 text-white/80"
+                  className="p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white cursor-pointer"
                 >
                   ✕
                 </button>
               </div>
 
-              <form onSubmit={handleSaveBatchThreshold} className="p-6 space-y-4">
+              <form onSubmit={handleSaveBatchThreshold} className="p-5 space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase mb-1.5">
+                  <label className="block text-[11px] font-semibold text-slate-700 uppercase mb-1.5">
                     Ngưỡng tồn tối thiểu áp dụng chung <span className="text-rose-500">*</span>
                   </label>
                   <div className="relative">
@@ -818,9 +823,9 @@ const InventoryTrackingPage = () => {
                       required
                       value={batchMinStock}
                       onChange={(e) => setBatchMinStock(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-xl border border-slate-300 font-mono text-base font-bold text-slate-800 focus:border-purple-600 focus:ring-2 focus:ring-purple-100 outline-hidden"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-bold text-slate-800 tabular-nums focus:border-purple-600 focus:ring-2 focus:ring-purple-100 outline-none"
                     />
-                    <span className="absolute right-3 top-3 text-xs text-slate-400 font-medium">chiếc</span>
+                    <span className="absolute right-3 top-2.5 text-xs text-slate-400 font-medium">chiếc</span>
                   </div>
                   <p className="text-xs text-slate-500 mt-2">
                     Tất cả {selectedIds.length} biến thể được chọn sẽ được đồng bộ ngưỡng tồn tối thiểu thành <strong>{batchMinStock || 0} chiếc</strong>.
@@ -832,17 +837,17 @@ const InventoryTrackingPage = () => {
                     type="button"
                     disabled={actionLoading}
                     onClick={() => setShowBatchModal(false)}
-                    className="px-4 py-2 rounded-xl border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50"
+                    className="px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 cursor-pointer"
                   >
                     Hủy bỏ
                   </button>
                   <button
                     type="submit"
                     disabled={actionLoading}
-                    className="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold shadow-sm flex items-center gap-2"
+                    className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-xs flex items-center gap-1.5 cursor-pointer"
                   >
                     {actionLoading && <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>}
-                    Áp dụng cho {selectedIds.length} mục
+                    <span>Áp dụng cho {selectedIds.length} mục</span>
                   </button>
                 </div>
               </form>
@@ -855,25 +860,25 @@ const InventoryTrackingPage = () => {
         {/* ============================================================ */}
         {viewingVariant && (
           <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-purple-100">
-              <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
+            <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full overflow-hidden border border-slate-200">
+              <div className="px-5 py-3.5 bg-slate-900 text-white flex items-center justify-between">
                 <div>
-                  <h3 className="text-base font-bold">Chi tiết phân bổ tồn kho các chi nhánh</h3>
-                  <p className="text-xs text-slate-400">
+                  <h3 className="text-sm font-bold">Chi tiết phân bổ tồn kho các chi nhánh</h3>
+                  <p className="text-[11px] text-slate-400">
                     SKU: {viewingVariant.sku} | Barcode: {viewingVariant.barcode}
                   </p>
                 </div>
                 <button
                   onClick={() => setViewingVariant(null)}
-                  className="p-1 rounded-lg hover:bg-white/10 text-white/80"
+                  className="p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white cursor-pointer"
                 >
                   ✕
                 </button>
               </div>
 
-              <div className="p-6 space-y-4">
-                <div className="flex items-center gap-3 p-3 bg-purple-50/50 rounded-xl border border-purple-100">
-                  <div className="w-14 h-14 rounded-lg bg-white border border-purple-200 overflow-hidden shrink-0 flex items-center justify-center">
+              <div className="p-5 space-y-4">
+                <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                  <div className="w-12 h-12 rounded-lg bg-white border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center">
                     <img
                       src={viewingVariant.product.image_url}
                       alt=""
@@ -884,16 +889,16 @@ const InventoryTrackingPage = () => {
                       }}
                     />
                   </div>
-                  <div className="flex-1">
-                    <div className="text-xs text-purple-600 font-bold uppercase">{viewingVariant.product.category?.category_name}</div>
-                    <div className="text-base font-bold text-slate-900">{viewingVariant.product.name}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[10px] text-purple-700 font-bold uppercase">{viewingVariant.product.category?.category_name}</div>
+                    <div className="text-sm font-bold text-slate-900 truncate">{viewingVariant.product.name}</div>
                     <div className="text-xs text-slate-500 mt-0.5">
-                      Size: <strong>{viewingVariant.size}</strong> | Màu: <strong>{viewingVariant.color}</strong> | Ngưỡng tồn: <strong>{viewingVariant.min_stock} chiếc</strong>
+                      Size: <strong className="text-slate-700">{viewingVariant.size}</strong> | Màu: <strong className="text-slate-700">{viewingVariant.color}</strong> | Ngưỡng tồn: <strong className="text-slate-700 tabular-nums">{viewingVariant.min_stock} chiếc</strong>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-xs text-slate-400">Tổng toàn hệ thống</div>
-                    <div className="text-xl font-bold font-mono text-purple-700">
+                  <div className="text-right shrink-0">
+                    <div className="text-[11px] text-slate-400">Tổng toàn hệ thống</div>
+                    <div className="text-lg font-bold text-purple-700 tabular-nums">
                       {viewingVariant.current_quantity} chiếc
                     </div>
                   </div>
@@ -901,7 +906,7 @@ const InventoryTrackingPage = () => {
 
                 <div className="border border-slate-200 rounded-xl overflow-hidden">
                   <table className="w-full text-left text-xs text-slate-600">
-                    <thead className="bg-slate-50 font-semibold text-slate-500 border-b border-slate-200">
+                    <thead className="bg-slate-50/80 font-semibold text-slate-500 border-b border-slate-200">
                       <tr>
                         <th className="p-3">Kho / Chi nhánh</th>
                         <th className="p-3 text-center">Vị trí kệ</th>
@@ -913,13 +918,13 @@ const InventoryTrackingPage = () => {
                       {viewingVariant.inventories.length > 0 ? (
                         viewingVariant.inventories.map((inv) => (
                           <tr key={inv.id} className="hover:bg-slate-50/50">
-                            <td className="p-3 font-medium text-slate-800">
+                            <td className="p-3 font-semibold text-slate-800">
                               {inv.warehouse_name} ({inv.warehouse_code})
                             </td>
-                            <td className="p-3 text-center font-mono font-bold text-purple-700">
+                            <td className="p-3 text-center font-semibold text-purple-700">
                               {inv.shelf_location}
                             </td>
-                            <td className="p-3 text-right font-mono font-bold text-slate-900 text-sm">
+                            <td className="p-3 text-right font-bold text-slate-900 text-xs tabular-nums">
                               {inv.quantity} chiếc
                             </td>
                             <td className="p-3 text-center">
@@ -951,7 +956,7 @@ const InventoryTrackingPage = () => {
                 <div className="pt-2 flex justify-end">
                   <button
                     onClick={() => setViewingVariant(null)}
-                    className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-semibold"
+                    className="px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-semibold cursor-pointer"
                   >
                     Đóng cửa sổ
                   </button>

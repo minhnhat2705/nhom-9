@@ -419,12 +419,12 @@ const CategoriesPage = () => {
         )}
 
         {/* Tiêu đề trang & Nút hành động */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-[#1E1B4B] tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
               Quản lý danh mục và nhà cung cấp
             </h1>
-            <p className="text-xs sm:text-sm text-gray-500 mt-1">
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">
               Hệ thống phân loại sản phẩm thời trang và đối tác cung ứng dành riêng cho Quản lý kho Lumié
             </p>
           </div>
@@ -432,7 +432,7 @@ const CategoriesPage = () => {
           {activeTab === 'categories' ? (
             <button
               onClick={handleOpenCreateModal}
-              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#4F46E5] hover:from-[#6D28D9] hover:to-[#4338CA] text-white text-xs sm:text-sm font-bold shadow-md shadow-purple-500/20 transition-all cursor-pointer"
+              className="btn-primary inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold shrink-0 cursor-pointer"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -442,7 +442,7 @@ const CategoriesPage = () => {
           ) : (
             <button
               onClick={handleOpenCreateSupplierModal}
-              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#4F46E5] hover:from-[#6D28D9] hover:to-[#4338CA] text-white text-xs sm:text-sm font-bold shadow-md shadow-purple-500/20 transition-all cursor-pointer"
+              className="btn-primary inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold shrink-0 cursor-pointer"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -454,39 +454,39 @@ const CategoriesPage = () => {
 
         {/* 4 Thẻ thống kê */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div className="p-4 bg-white rounded-2xl border border-purple-50 shadow-xs">
-            <p className="text-[11px] font-medium text-gray-500">Tổng số danh mục</p>
-            <p className="text-xl sm:text-2xl font-bold text-[#1E1B4B] mt-1">{totalCategories}</p>
-            <p className="text-[10px] text-purple-600 mt-0.5">Phân loại hàng hóa</p>
+          <div className="card-base p-4">
+            <p className="text-[11px] font-medium text-slate-500">Tổng số danh mục</p>
+            <p className="text-xl sm:text-2xl font-sans font-bold tabular-nums text-slate-900 mt-1">{totalCategories}</p>
+            <p className="text-[10px] text-purple-700 mt-0.5">Phân loại hàng hóa</p>
           </div>
 
-          <div className="p-4 bg-white rounded-2xl border border-purple-50 shadow-xs">
-            <p className="text-[11px] font-medium text-gray-500">Danh mục hoạt động</p>
-            <p className="text-xl sm:text-2xl font-bold text-emerald-600 mt-1">{activeCategories}</p>
-            <p className="text-[10px] text-gray-400 mt-0.5">Sẵn sàng nhập hàng</p>
+          <div className="card-base p-4">
+            <p className="text-[11px] font-medium text-slate-500">Danh mục hoạt động</p>
+            <p className="text-xl sm:text-2xl font-sans font-bold tabular-nums text-emerald-600 mt-1">{activeCategories}</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">Sẵn sàng nhập hàng</p>
           </div>
 
-          <div className="p-4 bg-white rounded-2xl border border-purple-50 shadow-xs">
-            <p className="text-[11px] font-medium text-gray-500">Nhà cung cấp / Đối tác</p>
-            <p className="text-xl sm:text-2xl font-bold text-[#7C3AED] mt-1">{totalSuppliers}</p>
-            <p className="text-[10px] text-gray-400 mt-0.5">Thương hiệu thời trang</p>
+          <div className="card-base p-4">
+            <p className="text-[11px] font-medium text-slate-500">Nhà cung cấp / Đối tác</p>
+            <p className="text-xl sm:text-2xl font-sans font-bold tabular-nums text-purple-700 mt-1">{totalSuppliers}</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">Thương hiệu thời trang</p>
           </div>
 
-          <div className="p-4 bg-white rounded-2xl border border-purple-50 shadow-xs">
-            <p className="text-[11px] font-medium text-gray-500">Sản phẩm đã phân loại</p>
-            <p className="text-xl sm:text-2xl font-bold text-[#4F46E5] mt-1">{totalClassifiedProducts}</p>
-            <p className="text-[10px] text-gray-400 mt-0.5">Thuộc các danh mục</p>
+          <div className="card-base p-4">
+            <p className="text-[11px] font-medium text-slate-500">Sản phẩm đã phân loại</p>
+            <p className="text-xl sm:text-2xl font-sans font-bold tabular-nums text-slate-900 mt-1">{totalClassifiedProducts}</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">Thuộc các danh mục</p>
           </div>
         </div>
 
         {/* Thanh chuyển Tab */}
-        <div className="flex border-b border-gray-200">
+        <div className="flex border-b border-slate-200/80">
           <button
             onClick={() => setActiveTab('categories')}
-            className={`flex items-center gap-2 py-3 px-4 text-xs sm:text-sm font-bold border-b-2 transition-colors cursor-pointer ${
+            className={`flex items-center gap-2 py-3 px-4 text-xs sm:text-sm font-semibold border-b-2 transition-colors cursor-pointer ${
               activeTab === 'categories'
-                ? 'border-[#7C3AED] text-[#7C3AED]'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+                ? 'border-purple-600 text-purple-700'
+                : 'border-transparent text-slate-500 hover:text-slate-700'
             }`}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -497,10 +497,10 @@ const CategoriesPage = () => {
 
           <button
             onClick={() => setActiveTab('suppliers')}
-            className={`flex items-center gap-2 py-3 px-4 text-xs sm:text-sm font-bold border-b-2 transition-colors cursor-pointer ${
+            className={`flex items-center gap-2 py-3 px-4 text-xs sm:text-sm font-semibold border-b-2 transition-colors cursor-pointer ${
               activeTab === 'suppliers'
-                ? 'border-[#7C3AED] text-[#7C3AED]'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+                ? 'border-purple-600 text-purple-700'
+                : 'border-transparent text-slate-500 hover:text-slate-700'
             }`}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -516,9 +516,9 @@ const CategoriesPage = () => {
         {activeTab === 'categories' && (
           <div className="space-y-4">
             {/* Bộ lọc & Tìm kiếm danh mục */}
-            <div className="bg-white p-3.5 rounded-2xl border border-purple-50 shadow-xs flex flex-col sm:flex-row gap-3 items-center justify-between">
+            <div className="card-base p-3.5 flex flex-col sm:flex-row gap-3 items-center justify-between">
               <div className="relative w-full sm:w-80">
-                <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
@@ -528,7 +528,7 @@ const CategoriesPage = () => {
                   placeholder="Tìm theo mã, tên danh mục, dãy kệ..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#7C3AED]"
+                  className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-slate-200 text-xs focus:outline-none focus:border-purple-600"
                 />
               </div>
 
@@ -536,7 +536,7 @@ const CategoriesPage = () => {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-3 py-1.5 rounded-xl border border-gray-200 text-xs text-gray-700 focus:outline-none focus:border-[#7C3AED]"
+                  className="px-3 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-700 focus:outline-none focus:border-purple-600 bg-white"
                 >
                   <option value="">Tất cả trạng thái</option>
                   <option value="ACTIVE">Đang hoạt động</option>
@@ -548,7 +548,7 @@ const CategoriesPage = () => {
                       setSearchTerm('');
                       setStatusFilter('');
                     }}
-                    className="text-xs text-purple-600 hover:underline cursor-pointer"
+                    className="text-xs text-purple-700 hover:underline cursor-pointer"
                   >
                     Xóa lọc
                   </button>
@@ -557,10 +557,10 @@ const CategoriesPage = () => {
             </div>
 
             {/* Bảng Danh mục */}
-            <div className="bg-white rounded-2xl border border-purple-50 shadow-xs overflow-hidden">
+            <div className="card-base overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#FAF8FF] border-b border-gray-100 text-[#1E1B4B] font-bold">
+                  <thead className="bg-slate-50 border-b border-slate-200/80 text-slate-600 font-semibold uppercase tracking-wider text-[11px]">
                     <tr>
                       <th className="py-3 px-4">Mã DM</th>
                       <th className="py-3 px-4">Tên danh mục</th>
@@ -571,36 +571,35 @@ const CategoriesPage = () => {
                       <th className="py-3 px-4 text-right">Thao tác quản lý</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-50">
+                  <tbody className="divide-y divide-slate-100">
                     {loading ? (
                       <tr>
-                        <td colSpan={7} className="text-center py-8 text-gray-400">
+                        <td colSpan={7} className="text-center py-8 text-slate-400">
                           Đang tải dữ liệu danh mục...
                         </td>
                       </tr>
                     ) : filteredCategories.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="text-center py-8 text-gray-400">
+                        <td colSpan={7} className="text-center py-8 text-slate-400">
                           Không tìm thấy danh mục nào phù hợp
                         </td>
                       </tr>
                     ) : (
                       filteredCategories.map((cat) => (
-                        <tr key={cat.id} className="hover:bg-purple-50/30 transition-colors">
-                          <td className="py-3 px-4 font-mono font-bold text-[#7C3AED]">
+                        <tr key={cat.id} className="hover:bg-slate-50/70 transition-colors">
+                          <td className="py-3 px-4 font-semibold text-purple-700">
                             {cat.category_code}
                           </td>
-                          <td className="py-3 px-4 font-semibold text-[#1E1B4B]">
+                          <td className="py-3 px-4 font-semibold text-slate-900">
                             {cat.category_name}
                           </td>
                           <td className="py-3 px-4">
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-md font-bold text-[11px] bg-purple-100 text-[#6D28D9]">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-md font-bold text-[11px] bg-purple-50 text-purple-700 border border-purple-200">
                               Dãy {cat.rack_zone || '—'}
                             </span>
                           </td>
                           <td className="py-3 px-4">
-                            <span className="inline-flex items-center gap-1 font-semibold text-gray-700">
-                              <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
+                            <span className="font-sans font-semibold tabular-nums text-slate-700">
                               {cat._count?.products || 0} sản phẩm
                             </span>
                           </td>
@@ -609,22 +608,20 @@ const CategoriesPage = () => {
                               type="button"
                               onClick={() => handleToggleCategoryStatus(cat)}
                               title={cat.status === 'ACTIVE' ? 'Nhấn để Tạm ngưng danh mục' : 'Nhấn để Hoạt động lại danh mục'}
-                              className="inline-flex items-center gap-1 cursor-pointer transition-transform hover:scale-105 active:scale-95"
+                              className="inline-flex items-center gap-1 cursor-pointer"
                             >
                               {cat.status === 'ACTIVE' ? (
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 hover:bg-emerald-200 text-emerald-700 border border-emerald-200 shadow-2xs">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span className="badge-success text-[10px]">
                                   Hoạt động
                                 </span>
                               ) : (
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-gray-100 hover:bg-gray-200 text-gray-600 border border-gray-300 shadow-2xs">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                                <span className="badge-critical text-[10px]">
                                   Tạm ngưng
                                 </span>
                               )}
                             </button>
                           </td>
-                          <td className="py-3 px-4 text-gray-500 max-w-xs truncate">
+                          <td className="py-3 px-4 text-slate-500 max-w-xs truncate">
                             {cat.description || '—'}
                           </td>
                           <td className="py-3 px-4 text-right">
@@ -633,19 +630,19 @@ const CategoriesPage = () => {
                               <button
                                 onClick={() => handleToggleCategoryStatus(cat)}
                                 title={cat.status === 'ACTIVE' ? 'Chuyển danh mục sang Tạm ngưng' : 'Cho phép danh mục hoạt động lại'}
-                                className={`px-2.5 py-1 rounded-lg font-semibold text-[11px] transition-colors cursor-pointer ${
+                                className={`px-2.5 py-1 rounded-lg font-medium text-[11px] transition-colors cursor-pointer border ${
                                   cat.status === 'ACTIVE'
-                                    ? 'bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200'
-                                    : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200'
+                                    ? 'bg-amber-50 hover:bg-amber-100 text-amber-700 border-amber-200'
+                                    : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-200'
                                 }`}
                               >
-                                {cat.status === 'ACTIVE' ? '⏸ Tạm ngưng' : '▶ Hoạt động lại'}
+                                {cat.status === 'ACTIVE' ? 'Tạm ngưng' : 'Hoạt động lại'}
                               </button>
                               {/* NÚT SỬA DANH MỤC */}
                               <button
                                 onClick={() => handleOpenEditModal(cat)}
                                 title="Sửa danh mục sản phẩm"
-                                className="px-2.5 py-1 rounded-lg bg-purple-50 hover:bg-purple-100 text-[#7C3AED] font-semibold text-[11px] transition-colors cursor-pointer"
+                                className="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-purple-700 font-medium text-[11px] transition-colors cursor-pointer"
                               >
                                 Sửa
                               </button>
@@ -653,7 +650,7 @@ const CategoriesPage = () => {
                               <button
                                 onClick={() => handleOpenDeleteModal(cat)}
                                 title="Xóa danh mục sản phẩm"
-                                className="px-2.5 py-1 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-[11px] transition-colors cursor-pointer"
+                                className="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-medium text-[11px] transition-colors cursor-pointer"
                               >
                                 Xóa
                               </button>
@@ -675,9 +672,9 @@ const CategoriesPage = () => {
         {activeTab === 'suppliers' && (
           <div className="space-y-4">
             {/* Bộ lọc & Tìm kiếm nhà cung cấp */}
-            <div className="bg-white p-3.5 rounded-2xl border border-purple-50 shadow-xs flex flex-col sm:flex-row gap-3 items-center justify-between">
+            <div className="card-base p-3.5 flex flex-col sm:flex-row gap-3 items-center justify-between">
               <div className="relative w-full sm:w-96">
-                <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
@@ -687,7 +684,7 @@ const CategoriesPage = () => {
                   placeholder="Tìm theo mã NCC, tên nhà cung cấp, thương hiệu, người liên hệ, SĐT..."
                   value={supplierSearch}
                   onChange={(e) => setSupplierSearch(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#7C3AED]"
+                  className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-slate-200 text-xs focus:outline-none focus:border-purple-600"
                 />
               </div>
 
@@ -695,7 +692,7 @@ const CategoriesPage = () => {
                 <select
                   value={supplierStatusFilter}
                   onChange={(e) => setSupplierStatusFilter(e.target.value)}
-                  className="px-3 py-1.5 rounded-xl border border-gray-200 text-xs text-gray-700 focus:outline-none focus:border-[#7C3AED]"
+                  className="px-3 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-700 focus:outline-none focus:border-purple-600 bg-white"
                 >
                   <option value="">Tất cả trạng thái</option>
                   <option value="ACTIVE">Đang hợp tác</option>
@@ -707,7 +704,7 @@ const CategoriesPage = () => {
                       setSupplierSearch('');
                       setSupplierStatusFilter('');
                     }}
-                    className="text-xs text-purple-600 hover:underline cursor-pointer"
+                    className="text-xs text-purple-700 hover:underline cursor-pointer"
                   >
                     Xóa lọc
                   </button>
@@ -716,10 +713,10 @@ const CategoriesPage = () => {
             </div>
 
             {/* Bảng Nhà cung cấp */}
-            <div className="bg-white rounded-2xl border border-purple-50 shadow-xs overflow-hidden">
+            <div className="card-base overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#FAF8FF] border-b border-gray-100 text-[#1E1B4B] font-bold">
+                  <thead className="bg-slate-50 border-b border-slate-200/80 text-slate-600 font-semibold uppercase tracking-wider text-[11px]">
                     <tr>
                       <th className="py-3 px-4">Mã NCC</th>
                       <th className="py-3 px-4">Tên nhà cung cấp</th>
@@ -731,7 +728,7 @@ const CategoriesPage = () => {
                       <th className="py-3 px-4 text-right">Thao tác quản lý</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-50">
+                  <tbody className="divide-y divide-slate-100">
                     {loading ? (
                       <tr>
                         <td colSpan={8} className="text-center py-8 text-gray-400">
@@ -746,49 +743,26 @@ const CategoriesPage = () => {
                       </tr>
                     ) : (
                       filteredSuppliers.map((sup) => (
-                        <tr key={sup.id} className="hover:bg-purple-50/30 transition-colors">
-                          <td className="py-3 px-4 font-mono font-bold text-[#7C3AED]">
+                        <tr key={sup.id} className="hover:bg-slate-50/70 transition-colors">
+                          <td className="py-3 px-4 font-semibold text-purple-700">
                             {sup.supplier_code}
                           </td>
-                          <td className="py-3 px-4 font-semibold text-[#1E1B4B]">
+                          <td className="py-3 px-4 font-semibold text-slate-900">
                             {sup.supplier_name}
                           </td>
-                          <td className="py-3 px-4">
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-md font-bold text-[11px] bg-purple-100 text-[#7C3AED]">
-                              {sup.brand_name || sup.supplier_name}
-                            </span>
+                          <td className="py-3 px-4 text-slate-700 font-medium">
+                            {sup.brand_name || '—'}
                           </td>
                           <td className="py-3 px-4">
-                            {sup.contact_person || sup.phone ? (
-                              <div className="space-y-0.5">
-                                {sup.contact_person && (
-                                  <p className="font-medium text-gray-800">{sup.contact_person}</p>
-                                )}
-                                {sup.phone && (
-                                  <p className="text-gray-500 font-mono text-[11px]">{sup.phone}</p>
-                                )}
-                              </div>
-                            ) : (
-                              <span className="text-gray-400">—</span>
-                            )}
+                            <span className="text-slate-900 font-medium block">{sup.contact_person || '—'}</span>
+                            <span className="text-slate-500 font-sans tabular-nums text-[11px]">{sup.phone || '—'}</span>
                           </td>
                           <td className="py-3 px-4 max-w-xs truncate">
-                            {sup.email || sup.address ? (
-                              <div className="space-y-0.5">
-                                {sup.email && (
-                                  <p className="text-purple-600 text-[11px] truncate">{sup.email}</p>
-                                )}
-                                {sup.address && (
-                                  <p className="text-gray-500 text-[11px] truncate">{sup.address}</p>
-                                )}
-                              </div>
-                            ) : (
-                              <span className="text-gray-400">—</span>
-                            )}
+                            <span className="text-slate-700 block truncate">{sup.email || '—'}</span>
+                            <span className="text-slate-500 text-[11px] truncate block" title={sup.address}>{sup.address || '—'}</span>
                           </td>
                           <td className="py-3 px-4">
-                            <span className="inline-flex items-center gap-1 font-semibold text-gray-700">
-                              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span className="font-sans font-semibold tabular-nums text-purple-700">
                               {sup._count?.products || 0} sản phẩm
                             </span>
                           </td>
@@ -796,17 +770,15 @@ const CategoriesPage = () => {
                             <button
                               type="button"
                               onClick={() => handleToggleSupplierStatus(sup)}
-                              title={sup.status === 'ACTIVE' ? 'Nhấn để Tạm ngưng nhà cung cấp' : 'Nhấn để Hoạt động lại nhà cung cấp'}
-                              className="inline-flex items-center gap-1 cursor-pointer transition-transform hover:scale-105 active:scale-95"
+                              title={sup.status === 'ACTIVE' ? 'Nhấn để Tạm ngưng nhà cung cấp' : 'Nhấn để Hợp tác lại nhà cung cấp'}
+                              className="inline-flex items-center gap-1 cursor-pointer"
                             >
                               {sup.status === 'ACTIVE' ? (
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 hover:bg-emerald-200 text-emerald-700 border border-emerald-200 shadow-2xs">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span className="badge-success text-[10px]">
                                   Hoạt động
                                 </span>
                               ) : (
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-gray-100 hover:bg-gray-200 text-gray-600 border border-gray-300 shadow-2xs">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                                <span className="badge-critical text-[10px]">
                                   Tạm ngưng
                                 </span>
                               )}
@@ -818,19 +790,19 @@ const CategoriesPage = () => {
                               <button
                                 onClick={() => handleToggleSupplierStatus(sup)}
                                 title={sup.status === 'ACTIVE' ? 'Chuyển nhà cung cấp sang Tạm ngưng' : 'Cho phép nhà cung cấp hoạt động lại'}
-                                className={`px-2.5 py-1 rounded-lg font-semibold text-[11px] transition-colors cursor-pointer ${
+                                className={`px-2.5 py-1 rounded-lg font-medium text-[11px] transition-colors cursor-pointer border ${
                                   sup.status === 'ACTIVE'
-                                    ? 'bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200'
-                                    : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200'
+                                    ? 'bg-amber-50 hover:bg-amber-100 text-amber-700 border-amber-200'
+                                    : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-200'
                                 }`}
                               >
-                                {sup.status === 'ACTIVE' ? '⏸ Tạm ngưng' : '▶ Hoạt động lại'}
+                                {sup.status === 'ACTIVE' ? 'Tạm ngưng' : 'Hoạt động lại'}
                               </button>
                               {/* NÚT SỬA NHÀ CUNG CẤP */}
                               <button
                                 onClick={() => handleOpenEditSupplierModal(sup)}
                                 title="Sửa thông tin nhà cung cấp"
-                                className="px-2.5 py-1 rounded-lg bg-purple-50 hover:bg-purple-100 text-[#7C3AED] font-semibold text-[11px] transition-colors cursor-pointer"
+                                className="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-purple-700 font-medium text-[11px] transition-colors cursor-pointer"
                               >
                                 Sửa
                               </button>
@@ -838,7 +810,7 @@ const CategoriesPage = () => {
                               <button
                                 onClick={() => handleOpenDeleteSupplierModal(sup)}
                                 title="Xóa nhà cung cấp"
-                                className="px-2.5 py-1 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-[11px] transition-colors cursor-pointer"
+                                className="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-medium text-[11px] transition-colors cursor-pointer"
                               >
                                 Xóa
                               </button>
@@ -858,23 +830,18 @@ const CategoriesPage = () => {
         {/* MODAL 1: THÊM DANH MỤC SẢN PHẨM (CHỈ DÀNH CHO QUẢN LÝ) */}
         {/* ============================================================ */}
         {showCreateModal && (
-          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-purple-100 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-              <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 bg-purple-50/40">
+          <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+            <div className="bg-white rounded-2xl max-w-md w-full shadow-xl border border-slate-200/80 flex flex-col overflow-hidden animate-fadeIn">
+              <div className="flex items-center justify-between border-b border-slate-200/80 px-4 py-3 bg-white">
                 <div className="flex items-center gap-2">
-                  <span className="p-1 rounded-lg bg-purple-100 text-[#7C3AED]">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                  </span>
-                  <h3 className="text-sm sm:text-base font-bold text-[#1E1B4B]">
+                  <h3 className="text-sm sm:text-base font-bold text-slate-900">
                     Thêm danh mục sản phẩm mới
                   </h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => !submitting && setShowCreateModal(false)}
-                  className="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                  className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
                 >
                   ✕
                 </button>
@@ -882,8 +849,8 @@ const CategoriesPage = () => {
 
               <form onSubmit={handleCreateSubmit} className="p-4 space-y-3">
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">
-                    Mã danh mục <span className="text-red-500">*</span>
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-0.5">
+                    Mã danh mục <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -893,16 +860,16 @@ const CategoriesPage = () => {
                     onChange={(e) =>
                       setCreateForm({ ...createForm, category_code: e.target.value.toUpperCase() })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-mono font-bold"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold uppercase focus:ring-1 focus:ring-purple-600"
                   />
-                  <p className="text-[10px] text-gray-400 mt-0.5">
+                  <p className="text-[10px] text-slate-400 mt-0.5">
                     Viết hoa không dấu, dùng để định danh phân loại
                   </p>
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">
-                    Tên danh mục sản phẩm <span className="text-red-500">*</span>
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-0.5">
+                    Tên danh mục sản phẩm <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -912,12 +879,12 @@ const CategoriesPage = () => {
                     onChange={(e) =>
                       setCreateForm({ ...createForm, category_name: e.target.value })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-semibold"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-0.5">
                     Khu vực kệ lưu kho (Rack Zone)
                   </label>
                   <select
@@ -925,7 +892,7 @@ const CategoriesPage = () => {
                     onChange={(e) =>
                       setCreateForm({ ...createForm, rack_zone: e.target.value })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-bold text-[#6D28D9]"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-bold text-purple-700 focus:ring-1 focus:ring-purple-600"
                   >
                     {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'].map((z) => (
                       <option key={z} value={z}>
@@ -936,7 +903,7 @@ const CategoriesPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Mô tả danh mục</label>
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-0.5">Mô tả danh mục</label>
                   <textarea
                     rows={2}
                     placeholder="Ghi chú về phân loại chất liệu, nhóm trang phục..."
@@ -944,12 +911,12 @@ const CategoriesPage = () => {
                     onChange={(e) =>
                       setCreateForm({ ...createForm, description: e.target.value })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-0.5">
                     Trạng thái ban đầu
                   </label>
                   <select
@@ -957,25 +924,25 @@ const CategoriesPage = () => {
                     onChange={(e) =>
                       setCreateForm({ ...createForm, status: e.target.value })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-semibold text-gray-800"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 focus:ring-1 focus:ring-purple-600"
                   >
                     <option value="ACTIVE">Hoạt động (ACTIVE)</option>
                     <option value="INACTIVE">Tạm ngưng (INACTIVE)</option>
                   </select>
                 </div>
 
-                <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                <div className="flex justify-end gap-2 pt-2 border-t border-slate-200/80">
                   <button
                     type="button"
                     onClick={() => setShowCreateModal(false)}
-                    className="px-3.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-gray-700 transition-colors cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-medium text-slate-700 transition-colors cursor-pointer"
                   >
                     Hủy bỏ
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-4 py-1.5 rounded-lg bg-[#7C3AED] hover:bg-[#6D28D9] text-white text-xs font-bold shadow-md shadow-purple-500/20 disabled:opacity-50 transition-all cursor-pointer"
+                    className="px-4 py-1.5 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-xs font-medium shadow-xs disabled:opacity-50 transition-colors cursor-pointer"
                   >
                     {submitting ? 'Đang lưu...' : 'Lưu danh mục'}
                   </button>
@@ -989,23 +956,18 @@ const CategoriesPage = () => {
         {/* MODAL 2: SỬA DANH MỤC SẢN PHẨM (CHỈ DÀNH CHO QUẢN LÝ) */}
         {/* ============================================================ */}
         {showEditModal && editForm && (
-          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-purple-100 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-              <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 bg-purple-50/40">
+          <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+            <div className="bg-white rounded-2xl max-w-md w-full shadow-xl border border-slate-200/80 flex flex-col overflow-hidden animate-fadeIn">
+              <div className="flex items-center justify-between border-b border-slate-200/80 px-4 py-3 bg-white">
                 <div className="flex items-center gap-2">
-                  <span className="p-1 rounded-lg bg-purple-100 text-[#7C3AED]">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                    </svg>
-                  </span>
-                  <h3 className="text-sm sm:text-base font-bold text-[#1E1B4B]">
+                  <h3 className="text-sm sm:text-base font-bold text-slate-900">
                     Sửa danh mục: {editForm.category_code}
                   </h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => !submitting && setShowEditModal(false)}
-                  className="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                  className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
                 >
                   ✕
                 </button>
@@ -1013,18 +975,18 @@ const CategoriesPage = () => {
 
               <form onSubmit={handleEditSubmit} className="p-4 space-y-3">
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Mã danh mục</label>
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-0.5">Mã danh mục</label>
                   <input
                     type="text"
                     disabled
                     value={editForm.category_code}
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-gray-200 bg-gray-50 text-xs font-mono font-bold text-gray-500 cursor-not-allowed"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-500 cursor-not-allowed"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">
-                    Tên danh mục sản phẩm <span className="text-red-500">*</span>
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-0.5">
+                    Tên danh mục sản phẩm <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -1033,12 +995,12 @@ const CategoriesPage = () => {
                     onChange={(e) =>
                       setEditForm({ ...editForm, category_name: e.target.value })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-semibold"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-0.5">
                     Khu vực kệ lưu kho (Rack Zone)
                   </label>
                   <select
@@ -1046,7 +1008,7 @@ const CategoriesPage = () => {
                     onChange={(e) =>
                       setEditForm({ ...editForm, rack_zone: e.target.value })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-bold text-[#6D28D9]"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-bold text-purple-700 focus:ring-1 focus:ring-purple-600"
                   >
                     {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'].map((z) => (
                       <option key={z} value={z}>
@@ -1057,13 +1019,13 @@ const CategoriesPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Trạng thái</label>
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-0.5">Trạng thái</label>
                   <select
                     value={editForm.status}
                     onChange={(e) =>
                       setEditForm({ ...editForm, status: e.target.value })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs focus:ring-1 focus:ring-purple-600"
                   >
                     <option value="ACTIVE">Hoạt động (ACTIVE)</option>
                     <option value="INACTIVE">Tạm ngưng (INACTIVE)</option>
@@ -1071,29 +1033,29 @@ const CategoriesPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Mô tả danh mục</label>
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-0.5">Mô tả danh mục</label>
                   <textarea
                     rows={2}
                     value={editForm.description}
                     onChange={(e) =>
                       setEditForm({ ...editForm, description: e.target.value })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
-                <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                <div className="flex justify-end gap-2 pt-2 border-t border-slate-200/80">
                   <button
                     type="button"
                     onClick={() => setShowEditModal(false)}
-                    className="px-3.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-gray-700 transition-colors cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-medium text-slate-700 transition-colors cursor-pointer"
                   >
                     Hủy bỏ
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-4 py-1.5 rounded-lg bg-[#7C3AED] hover:bg-[#6D28D9] text-white text-xs font-bold shadow-md shadow-purple-500/20 disabled:opacity-50 transition-all cursor-pointer"
+                    className="px-4 py-1.5 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-xs font-medium shadow-xs disabled:opacity-50 transition-colors cursor-pointer"
                   >
                     {submitting ? 'Đang lưu...' : 'Lưu thay đổi'}
                   </button>
@@ -1107,34 +1069,34 @@ const CategoriesPage = () => {
         {/* MODAL 3: XÓA DANH MỤC SẢN PHẨM (CHỈ DÀNH CHO QUẢN LÝ) */}
         {/* ============================================================ */}
         {showDeleteModal && targetCategory && (
-          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
-            <div className="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-red-100 animate-in fade-in zoom-in-95 duration-150">
-              <div className="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center mb-3">
+          <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+            <div className="bg-white rounded-2xl max-w-sm w-full p-5 shadow-xl border border-slate-200/80 animate-fadeIn">
+              <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mb-3 border border-rose-200">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
               </div>
 
-              <h3 className="text-base font-bold text-[#1E1B4B] mb-1">
+              <h3 className="text-base font-bold text-slate-900 mb-1">
                 Xóa danh mục sản phẩm
               </h3>
 
-              <p className="text-xs text-gray-600 mb-3 leading-relaxed">
-                Bạn có chắc chắn muốn xóa danh mục <span className="font-bold text-[#1E1B4B]">"{targetCategory.category_name}"</span> ({targetCategory.category_code})?
+              <p className="text-xs text-slate-600 mb-3 leading-relaxed">
+                Bạn có chắc chắn muốn xóa danh mục <span className="font-semibold text-slate-900">"{targetCategory.category_name}"</span> ({targetCategory.category_code})?
               </p>
 
               {/* Kiểm tra ràng buộc sản phẩm */}
               {(targetCategory._count?.products || 0) > 0 ? (
-                <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 mb-4 text-xs text-amber-800 space-y-1">
+                <div className="p-3 bg-amber-50 rounded-xl border border-amber-200/80 mb-4 text-xs text-amber-800 space-y-1">
                   <p className="font-bold flex items-center gap-1">
-                    <span>⚠️</span> Không thể xóa danh mục này
+                    Không thể xóa danh mục này
                   </p>
                   <p className="text-[11px] leading-relaxed">
                     Danh mục đang chứa <strong>{targetCategory._count.products} sản phẩm</strong> liên kết. Để bảo toàn dữ liệu kho hàng, bạn cần chuyển hoặc xóa hết sản phẩm thuộc danh mục này trước.
                   </p>
                 </div>
               ) : (
-                <div className="p-3 bg-red-50 rounded-xl border border-red-100 mb-4 text-xs text-red-700">
+                <div className="p-3 bg-rose-50 rounded-xl border border-rose-200/80 mb-4 text-xs text-rose-700">
                   <p className="text-[11px] leading-relaxed">
                     Hành động này sẽ xóa vĩnh viễn danh mục khỏi hệ thống và không thể hoàn tác.
                   </p>
@@ -1145,7 +1107,7 @@ const CategoriesPage = () => {
                 <button
                   type="button"
                   onClick={() => setShowDeleteModal(false)}
-                  className="px-3.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-gray-700 transition-colors cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-medium text-slate-700 transition-colors cursor-pointer"
                 >
                   Đóng
                 </button>
@@ -1154,7 +1116,7 @@ const CategoriesPage = () => {
                     type="button"
                     disabled={submitting}
                     onClick={handleDeleteConfirm}
-                    className="px-4 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-500/20 disabled:opacity-50 transition-all cursor-pointer"
+                    className="px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium shadow-xs disabled:opacity-50 transition-colors cursor-pointer"
                   >
                     {submitting ? 'Đang xóa...' : 'Xác nhận xóa'}
                   </button>
@@ -1168,23 +1130,23 @@ const CategoriesPage = () => {
         {/* MODAL 4: THÊM NHÀ CUNG CẤP (CHỈ DÀNH CHO QUẢN LÝ) */}
         {/* ============================================================ */}
         {showCreateSupplierModal && (
-          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-purple-100 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-              <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 bg-purple-50/40">
+          <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+            <div className="bg-white rounded-xl max-w-md w-full shadow-lg border border-slate-200/80 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+              <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3 bg-slate-50/50">
                 <div className="flex items-center gap-2">
-                  <span className="p-1 rounded-lg bg-purple-100 text-[#7C3AED]">
+                  <span className="p-1 rounded-lg bg-purple-50 text-purple-700 border border-purple-100">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
                   </span>
-                  <h3 className="text-sm sm:text-base font-bold text-[#1E1B4B]">
+                  <h3 className="text-sm font-semibold text-slate-900">
                     Thêm nhà cung cấp mới
                   </h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => !submitting && setShowCreateSupplierModal(false)}
-                  className="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                  className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
                 >
                   ✕
                 </button>
@@ -1193,8 +1155,8 @@ const CategoriesPage = () => {
               <form onSubmit={handleCreateSupplierSubmit} className="p-4 space-y-3">
                 <div className="grid grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">
-                      Mã NCC <span className="text-red-500">*</span>
+                    <label className="block text-[11px] font-medium text-slate-700 mb-1">
+                      Mã NCC <span className="text-rose-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -1204,12 +1166,12 @@ const CategoriesPage = () => {
                       onChange={(e) =>
                         setCreateSupplierForm({ ...createSupplierForm, supplier_code: e.target.value.toUpperCase() })
                       }
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-mono font-bold"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-sans font-semibold text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">
+                    <label className="block text-[11px] font-medium text-slate-700 mb-1">
                       Thương hiệu đại diện
                     </label>
                     <input
@@ -1219,14 +1181,14 @@ const CategoriesPage = () => {
                       onChange={(e) =>
                         setCreateSupplierForm({ ...createSupplierForm, brand_name: e.target.value })
                       }
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-semibold"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">
-                    Tên nhà cung cấp <span className="text-red-500">*</span>
+                  <label className="block text-[11px] font-medium text-slate-700 mb-1">
+                    Tên nhà cung cấp <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -1236,13 +1198,13 @@ const CategoriesPage = () => {
                     onChange={(e) =>
                       setCreateSupplierForm({ ...createSupplierForm, supplier_name: e.target.value })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-semibold"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Người liên hệ</label>
+                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Người liên hệ</label>
                     <input
                       type="text"
                       placeholder="Nguyễn Văn Đại diện"
@@ -1250,12 +1212,12 @@ const CategoriesPage = () => {
                       onChange={(e) =>
                         setCreateSupplierForm({ ...createSupplierForm, contact_person: e.target.value })
                       }
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Số điện thoại</label>
+                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Số điện thoại</label>
                     <input
                       type="tel"
                       placeholder="0912345678"
@@ -1263,13 +1225,13 @@ const CategoriesPage = () => {
                       onChange={(e) =>
                         setCreateSupplierForm({ ...createSupplierForm, phone: e.target.value })
                       }
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-mono"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-sans tabular-nums text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Email liên hệ</label>
+                  <label className="block text-[11px] font-medium text-slate-700 mb-1">Email liên hệ</label>
                   <input
                     type="email"
                     placeholder="contact@supplier.vn"
@@ -1277,12 +1239,12 @@ const CategoriesPage = () => {
                     onChange={(e) =>
                       setCreateSupplierForm({ ...createSupplierForm, email: e.target.value })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Địa chỉ trụ sở / kho</label>
+                  <label className="block text-[11px] font-medium text-slate-700 mb-1">Địa chỉ trụ sở / kho</label>
                   <textarea
                     rows={2}
                     placeholder="Số nhà, đường, quận/huyện, tỉnh/thành phố..."
@@ -1290,12 +1252,12 @@ const CategoriesPage = () => {
                     onChange={(e) =>
                       setCreateSupplierForm({ ...createSupplierForm, address: e.target.value })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">
+                  <label className="block text-[11px] font-medium text-slate-700 mb-1">
                     Trạng thái hợp tác ban đầu
                   </label>
                   <select
@@ -1303,25 +1265,25 @@ const CategoriesPage = () => {
                     onChange={(e) =>
                       setCreateSupplierForm({ ...createSupplierForm, status: e.target.value })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-semibold text-gray-800"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                   >
                     <option value="ACTIVE">Đang hợp tác (ACTIVE)</option>
                     <option value="INACTIVE">Tạm ngưng (INACTIVE)</option>
                   </select>
                 </div>
 
-                <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
                   <button
                     type="button"
                     onClick={() => setShowCreateSupplierModal(false)}
-                    className="px-3.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-gray-700 transition-colors cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
                   >
                     Hủy bỏ
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-4 py-1.5 rounded-lg bg-[#7C3AED] hover:bg-[#6D28D9] text-white text-xs font-bold shadow-md shadow-purple-500/20 disabled:opacity-50 transition-all cursor-pointer"
+                    className="px-4 py-1.5 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-xs font-medium shadow-xs disabled:opacity-50 transition-colors cursor-pointer"
                   >
                     {submitting ? 'Đang lưu...' : 'Lưu nhà cung cấp'}
                   </button>
@@ -1335,23 +1297,23 @@ const CategoriesPage = () => {
         {/* MODAL 5: SỬA THÔNG TIN NHÀ CUNG CẤP (CHỈ DÀNH CHO QUẢN LÝ) */}
         {/* ============================================================ */}
         {showEditSupplierModal && editSupplierForm && (
-          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-purple-100 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-              <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 bg-purple-50/40">
+          <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+            <div className="bg-white rounded-xl max-w-md w-full shadow-lg border border-slate-200/80 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+              <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3 bg-slate-50/50">
                 <div className="flex items-center gap-2">
-                  <span className="p-1 rounded-lg bg-purple-100 text-[#7C3AED]">
+                  <span className="p-1 rounded-lg bg-purple-50 text-purple-700 border border-purple-100">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                     </svg>
                   </span>
-                  <h3 className="text-sm sm:text-base font-bold text-[#1E1B4B]">
+                  <h3 className="text-sm font-semibold text-slate-900">
                     Sửa NCC: {editSupplierForm.supplier_code}
                   </h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => !submitting && setShowEditSupplierModal(false)}
-                  className="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                  className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
                 >
                   ✕
                 </button>
@@ -1360,23 +1322,23 @@ const CategoriesPage = () => {
               <form onSubmit={handleEditSupplierSubmit} className="p-4 space-y-3">
                 <div className="grid grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Mã NCC</label>
+                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Mã NCC</label>
                     <input
                       type="text"
                       disabled
                       value={editSupplierForm.supplier_code}
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-gray-200 bg-gray-50 text-xs font-mono font-bold text-gray-500 cursor-not-allowed"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-xs font-sans font-semibold text-slate-500 cursor-not-allowed"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Trạng thái</label>
+                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Trạng thái</label>
                     <select
                       value={editSupplierForm.status}
                       onChange={(e) =>
                         setEditSupplierForm({ ...editSupplierForm, status: e.target.value })
                       }
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-bold text-[#7C3AED]"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                     >
                       <option value="ACTIVE">Hoạt động (ACTIVE)</option>
                       <option value="INACTIVE">Tạm ngưng (INACTIVE)</option>
@@ -1385,8 +1347,8 @@ const CategoriesPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">
-                    Tên nhà cung cấp <span className="text-red-500">*</span>
+                  <label className="block text-[11px] font-medium text-slate-700 mb-1">
+                    Tên nhà cung cấp <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -1395,84 +1357,84 @@ const CategoriesPage = () => {
                     onChange={(e) =>
                       setEditSupplierForm({ ...editSupplierForm, supplier_name: e.target.value })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-semibold"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Thương hiệu đại diện</label>
+                  <label className="block text-[11px] font-medium text-slate-700 mb-1">Thương hiệu đại diện</label>
                   <input
                     type="text"
                     value={editSupplierForm.brand_name}
                     onChange={(e) =>
                       setEditSupplierForm({ ...editSupplierForm, brand_name: e.target.value })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Người liên hệ</label>
+                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Người liên hệ</label>
                     <input
                       type="text"
                       value={editSupplierForm.contact_person}
                       onChange={(e) =>
                         setEditSupplierForm({ ...editSupplierForm, contact_person: e.target.value })
                       }
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Số điện thoại</label>
+                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Số điện thoại</label>
                     <input
                       type="tel"
                       value={editSupplierForm.phone}
                       onChange={(e) =>
                         setEditSupplierForm({ ...editSupplierForm, phone: e.target.value })
                       }
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs font-mono"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-sans tabular-nums text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Email liên hệ</label>
+                  <label className="block text-[11px] font-medium text-slate-700 mb-1">Email liên hệ</label>
                   <input
                     type="email"
                     value={editSupplierForm.email}
                     onChange={(e) =>
                       setEditSupplierForm({ ...editSupplierForm, email: e.target.value })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Địa chỉ trụ sở / kho</label>
+                  <label className="block text-[11px] font-medium text-slate-700 mb-1">Địa chỉ trụ sở / kho</label>
                   <textarea
                     rows={2}
                     value={editSupplierForm.address}
                     onChange={(e) =>
                       setEditSupplierForm({ ...editSupplierForm, address: e.target.value })
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-purple-600"
                   />
                 </div>
 
-                <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
                   <button
                     type="button"
                     onClick={() => setShowEditSupplierModal(false)}
-                    className="px-3.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-gray-700 transition-colors cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
                   >
                     Hủy bỏ
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-4 py-1.5 rounded-lg bg-[#7C3AED] hover:bg-[#6D28D9] text-white text-xs font-bold shadow-md shadow-purple-500/20 disabled:opacity-50 transition-all cursor-pointer"
+                    className="px-4 py-1.5 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-xs font-medium shadow-xs disabled:opacity-50 transition-colors cursor-pointer"
                   >
                     {submitting ? 'Đang lưu...' : 'Lưu thay đổi'}
                   </button>
@@ -1486,34 +1448,37 @@ const CategoriesPage = () => {
         {/* MODAL 6: XÓA NHÀ CUNG CẤP (CHỈ DÀNH CHO QUẢN LÝ) */}
         {/* ============================================================ */}
         {showDeleteSupplierModal && targetSupplier && (
-          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
-            <div className="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-red-100 animate-in fade-in zoom-in-95 duration-150">
-              <div className="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center mb-3">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+            <div className="bg-white rounded-xl max-w-sm w-full p-5 shadow-lg border border-slate-200/80 animate-in fade-in zoom-in-95 duration-150">
+              <div className="w-9 h-9 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mb-3 border border-rose-100">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
               </div>
 
-              <h3 className="text-base font-bold text-[#1E1B4B] mb-1">
+              <h3 className="text-sm font-semibold text-slate-900 mb-1">
                 Xóa nhà cung cấp
               </h3>
 
-              <p className="text-xs text-gray-600 mb-3 leading-relaxed">
-                Bạn có chắc chắn muốn xóa đối tác <span className="font-bold text-[#1E1B4B]">"{targetSupplier.supplier_name}"</span> ({targetSupplier.supplier_code})?
+              <p className="text-xs text-slate-600 mb-3 leading-relaxed">
+                Bạn có chắc chắn muốn xóa đối tác <span className="font-semibold text-slate-900">"{targetSupplier.supplier_name}"</span> ({targetSupplier.supplier_code})?
               </p>
 
               {/* Ràng buộc sản phẩm phụ thuộc */}
               {(targetSupplier._count?.products || 0) > 0 ? (
-                <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 mb-4 text-xs text-amber-800 space-y-1">
-                  <p className="font-bold flex items-center gap-1">
-                    <span>⚠️</span> Không thể xóa nhà cung cấp này
+                <div className="p-3 bg-amber-50/60 rounded-lg border border-amber-200/70 mb-4 text-xs text-amber-800 space-y-1">
+                  <p className="font-semibold flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    Không thể xóa nhà cung cấp này
                   </p>
-                  <p className="text-[11px] leading-relaxed">
-                    Nhà cung cấp đang có <strong>{targetSupplier._count.products} sản phẩm</strong> trực thuộc trong kho. Bạn cần chuyển hoặc xóa các sản phẩm này trước khi xóa nhà cung cấp.
+                  <p className="text-[11px] leading-relaxed text-amber-700">
+                    Nhà cung cấp đang có <strong className="font-semibold">{targetSupplier._count.products} sản phẩm</strong> trực thuộc trong kho. Bạn cần chuyển hoặc xóa các sản phẩm này trước khi xóa nhà cung cấp.
                   </p>
                 </div>
               ) : (
-                <div className="p-3 bg-red-50 rounded-xl border border-red-100 mb-4 text-xs text-red-700">
+                <div className="p-3 bg-rose-50/60 rounded-lg border border-rose-200/70 mb-4 text-xs text-rose-700">
                   <p className="text-[11px] leading-relaxed">
                     Hành động này sẽ xóa vĩnh viễn nhà cung cấp khỏi hệ thống và không thể hoàn tác.
                   </p>
@@ -1524,7 +1489,7 @@ const CategoriesPage = () => {
                 <button
                   type="button"
                   onClick={() => setShowDeleteSupplierModal(false)}
-                  className="px-3.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-gray-700 transition-colors cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
                 >
                   Đóng
                 </button>
@@ -1533,7 +1498,7 @@ const CategoriesPage = () => {
                     type="button"
                     disabled={submitting}
                     onClick={handleDeleteSupplierConfirm}
-                    className="px-4 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-500/20 disabled:opacity-50 transition-all cursor-pointer"
+                    className="px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium shadow-xs disabled:opacity-50 transition-colors cursor-pointer"
                   >
                     {submitting ? 'Đang xóa...' : 'Xác nhận xóa'}
                   </button>
